@@ -15,7 +15,7 @@ This library abstracts those features into a generic HTTP component.
 ### Features
 
 ✓ Uses the native [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) API  
-✓ Smart deduping of requests  
+✓ Smart [deduping of requests](./docs/guides/request-deduplication.md)  
 ✓ Powerful and customizable response caching  
 ✓ Support for parallel requests  
 ✓ Small footprint (~2kb gzipped)

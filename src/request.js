@@ -154,7 +154,8 @@ export default class Request extends React.Component {
   };
 }
 
-const AbortSignalCtr = AbortSignal || function() {};
+const globalObj = typeof self !== 'undefined' ? self : this;
+const AbortSignalCtr = globalObj.AbortSignal || function() {};
 
 Request.propTypes = {
   requestName: PropTypes.string,
@@ -211,10 +212,11 @@ Request.propTypes = {
     'no-referrer-when-downgrade',
     'origin',
     'origin-when-cross-origin',
-    'unsafe-url'
+    'unsafe-url',
+    ''
   ]),
   integrity: PropTypes.string,
-  keepalive: PropTypes.boolean,
+  keepalive: PropTypes.bool,
   signal: PropTypes.instanceOf(AbortSignalCtr)
 };
 
@@ -223,5 +225,7 @@ Request.defaultProps = {
   type: 'json',
   onResponse: () => {},
   transformResponse: data => data,
-  fetchPolicy: 'cache-first'
+  fetchPolicy: 'cache-first',
+  referrerPolicy: '',
+  integrity: ''
 };

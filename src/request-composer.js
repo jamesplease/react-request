@@ -48,6 +48,6 @@ export default function RequestComposer({ requests = [], render }) {
 }
 
 RequestComposer.propTypes = {
-  render: PropTypes.function,
+  render: PropTypes.func,
   requests: PropTypes.array
 };

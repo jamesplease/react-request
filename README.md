@@ -40,7 +40,9 @@ yarn add react-request
 * [API](#api)
   * [\<Fetch/\>](#fetch-)
   * [\<FetchComposer/\>](#fetchcomposer-)
-* [FAQ ⇗](./FAQ.md)
+* [Guides ⇗](./docs/guides/INDEX.md)
+  * [Request Deduplication ⇗](./docs/guides/request-deduplication.md)
+* [FAQ ⇗](./docs/FAQ.md)
 * [Acknowledgements](#acknowledgements)
 
 ### Getting Started

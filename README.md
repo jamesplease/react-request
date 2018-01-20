@@ -4,9 +4,9 @@ A library for making HTTP requests with React. Inspired by React Apollo.
 
 ### Motivation
 
-React Apollo exposes a higher-order component for Apollo. It is responsible for making
-network requests for you. Although Apollo is built specifically for GraphQL,
-many of the features of React Apollo are not unique to GraphQL.
+React Apollo exports a higher-order component that makes network requests for
+you. Although Apollo is designed to work specifically with GraphQL, many of the
+features of React Apollo make sense for generic HTTP requests.
 
 This component abstracts those features into a generic HTTP component.
 
@@ -62,8 +62,8 @@ class App extends Component {
 }
 ```
 
-> Note: this example will shadow the `window.Request` constructor. Most people do not
-> use that, but you may prefer to use another name, such as `Req`, instead.
+> Note: this example will shadow the `window.Request` constructor. Most people
+> do not use that, but you may prefer to use another name, such as `Req`, instead.
 
 ### API
 
@@ -72,4 +72,5 @@ Documentation coming soon.
 ### Acknowledgements
 
 This library was inspired by [Apollo](https://www.apollographql.com). The
-library [Holen](https://github.com/tkh44/holen) was referenced during the creation of this library.
+library [Holen](https://github.com/tkh44/holen) was referenced during the
+creation of this library.

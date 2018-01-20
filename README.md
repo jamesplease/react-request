@@ -266,6 +266,20 @@ This prop is identical to the Apollo prop.
 
 (The API will be listed here shortly).
 
+#### `<FetchComposer />`
+
+A component that simplifies making parallel requests.
+
+##### `requests`
+
+An array of `Fetch` components. Use any of the above props, but leave out `render`.
+
+> Note: if you pass a `render` prop, it will be ignored.
+
+##### `render`
+
+A function that is called with the array of responses from `requests`.
+
 ### Acknowledgements
 
 This library was inspired by [Apollo](https://www.apollographql.com). The

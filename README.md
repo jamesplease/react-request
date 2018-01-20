@@ -12,9 +12,11 @@ This component abstracts those features into a generic HTTP component.
 
 ### Features
 
-✓ Deduplication of network requests  
-✓ Smart caching features  
-✓ Polling (coming soon)
+✓ Uses the native [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) API  
+✓ Smart deduping of requests  
+✓ Powerful and customizable response caching  
+✓ Polling (coming soon)  
+✓ Small footprint (~2kb gzipped)
 
 ### Installation
 

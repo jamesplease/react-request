@@ -79,24 +79,24 @@ export default class Request extends React.Component {
 
     const requestKey = getRequestKey({ url, method, body, type });
 
-    const updateState = ({ error, response }) => {
+    const onResponseReceived = ({ error, response }) => {
       if (this.willUnmount) {
         return;
       }
 
+      const data =
+        response && response.data
+          ? this.props.transformResponse(response.data)
+          : null;
+
       this.setState(
         {
-          data:
-            response && response.data
-              ? this.props.transformResponse(response.data)
-              : null,
+          data,
           error,
-          fetching: false,
-          response
+          response,
+          fetching: false
         },
-        () => {
-          this.props.onResponse(error, response);
-        }
+        () => this.props.onResponse(error, response)
       );
     };
 
@@ -104,7 +104,7 @@ export default class Request extends React.Component {
       const cachedResponse = responseCache[requestKey];
 
       if (cachedResponse) {
-        updateState({ response: cachedResponse });
+        onResponseReceived({ response: cachedResponse });
 
         if (fetchPolicy === 'cache-first') {
           return Promise.resolve(cachedResponse);
@@ -113,7 +113,7 @@ export default class Request extends React.Component {
         const cacheError = new Error(
           `Response for "${requestName}" not found in cache.`
         );
-        updateState({ error: cacheError });
+        onResponseReceived({ error: cacheError });
         return Promise.resolve(cacheError);
       }
     }
@@ -143,11 +143,11 @@ export default class Request extends React.Component {
           return;
         }
 
-        updateState({ response: res });
+        onResponseReceived({ response: res });
         return res;
       },
       error => {
-        updateState({ error });
+        onResponseReceived({ error });
         return error;
       }
     );

@@ -40,12 +40,12 @@ yarn add react-request
 Here's a simple example of using React Request.
 
 ```js
-import { Request } from 'react-request';
+import { Fetch } from 'react-request';
 
 class App extends Component {
   render() {
     return (
-      <Request
+      <Fetch
         url="https://jsonplaceholder.typicode.com/posts/1"
         render={({ fetching, error, data }) => {
           if (fetching) {
@@ -69,24 +69,19 @@ class App extends Component {
 }
 ```
 
-> Note: the name given to this library in the above example will shadow the
-> [`Request`](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request)
-> constructor. Most people do not use the Request constructor directly, but if
-> you prefer it you can use another name, such as `Req`, instead.
-
 Need to make multiple requests? We got you.
 
 ```js
-import { RequestComposer } from 'react-request';
+import { FetchComposer } from 'react-request';
 
 class App extends Component {
   render() {
     return (
-      <RequestComposer
+      <FetchComposer
         requests={[
-          <Request url="https://jsonplaceholder.typicode.com/posts/1" />,
-          <Request url="https://jsonplaceholder.typicode.com/posts/2" />,
-          <Request url="https://jsonplaceholder.typicode.com/posts/3" />
+          <Fetch url="https://jsonplaceholder.typicode.com/posts/1" />,
+          <Fetch url="https://jsonplaceholder.typicode.com/posts/2" />,
+          <Fetch url="https://jsonplaceholder.typicode.com/posts/3" />
         ]}
         render={([postOne, postTwo, postThree]) => {
           return (

@@ -1,5 +1,5 @@
-import { Request } from '../src';
+import { Fetch } from '../src';
 
 test('Placeholder test', () => {
-  expect(Request).toBeTruthy();
+  expect(Fetch).toBeTruthy();
 });

@@ -11,7 +11,7 @@ function getRequestKey({ url, method, type, body }) {
   return [url, method, type, body].join('||');
 }
 
-export default class Request extends React.Component {
+export default class Fetch extends React.Component {
   render() {
     const { render, requestName } = this.props;
     const { fetching, response, data, error } = this.state;
@@ -184,7 +184,7 @@ export default class Request extends React.Component {
 const globalObj = typeof self !== 'undefined' ? self : this;
 const AbortSignalCtr = globalObj.AbortSignal || function() {};
 
-Request.propTypes = {
+Fetch.propTypes = {
   requestName: PropTypes.string,
   children: PropTypes.func,
   fetchPolicy: PropTypes.oneOf([
@@ -248,7 +248,7 @@ Request.propTypes = {
   signal: PropTypes.instanceOf(AbortSignalCtr)
 };
 
-Request.defaultProps = {
+Fetch.defaultProps = {
   type: 'json',
   onResponse: () => {},
   transformResponse: data => data,

@@ -1,4 +1,4 @@
-import Request from './request';
-import RequestComposer from './request-composer';
+import Fetch from './fetch';
+import FetchComposer from './fetch-composer';
 
-export { Request, RequestComposer };
+export { Fetch, FetchComposer };

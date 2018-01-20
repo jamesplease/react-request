@@ -16,7 +16,7 @@ request components:
 import React from 'react';
 import { Request } from 'react-request';
 import headers from './utils/default-request-headers';
-import httpAnalytics from './utils/http-analytics;
+import httpAnalytics from './utils/http-analytics';
 
 export function ReadBook({ bookId, render }) {
   return (
@@ -60,9 +60,12 @@ export default class App extends Component {
     return (
       <div>
         <h1>Welcome to My App</h1>
-        <ReadBook bookId={bookId} render={result => {
-          // Use the result here
-        }}>
+        <ReadBook
+          bookId={bookId}
+          render={result => {
+            // Use the result here
+          }}
+        />
       </div>
     );
   }

@@ -17,6 +17,7 @@ This library abstracts those features into a generic HTTP component.
 ✓ Uses the native [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) API  
 ✓ Smart deduping of requests  
 ✓ Powerful and customizable response caching  
+✓ Compose requests  
 ✓ Polling (coming soon)  
 ✓ Small footprint (~2kb gzipped)
 
@@ -39,7 +40,7 @@ yarn add react-request
 Here's a simple example of using React Request.
 
 ```js
-import Request from 'react-request';
+import { Request } from 'react-request';
 
 class App extends Component {
   render() {
@@ -72,6 +73,47 @@ class App extends Component {
 > [`Request`](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request)
 > constructor. Most people do not use the Request constructor directly, but if
 > you prefer it you can use another name, such as `Req`, instead.
+
+Need to make multiple requests? We got you.
+
+```js
+import { RequestComposer } from 'react-request';
+
+class App extends Component {
+  render() {
+    return (
+      <RequestComposer
+        requests={[
+          <Request url="https://jsonplaceholder.typicode.com/posts/1" />,
+          <Request url="https://jsonplaceholder.typicode.com/posts/2" />,
+          <Request url="https://jsonplaceholder.typicode.com/posts/3" />
+        ]}
+        render={([postOne, postTwo, postThree]) => {
+          return (
+            <div>
+              <div>
+                {postOne.fetching && 'Loading post 1'}
+                {!postOne.fetching && 'Post 1 has been fetched'}
+              </div>
+              <div>
+                {postTwo.fetching && 'Loading post 2'}
+                {!postTwo.fetching && 'Post 2 has been fetched'}
+              </div>
+              <div>
+                {postThree.fetching && 'Loading post 3'}
+                {!postThree.fetching && 'Post 3 has been fetched'}
+              </div>
+            </div>
+          );
+        }}
+      />
+    );
+  }
+}
+```
+
+These examples just scratch the surface of what you can do with React Request.
+Check out the API reference below for more.
 
 ### API
 

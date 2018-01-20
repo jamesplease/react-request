@@ -7,11 +7,11 @@ import fetchDedupe from './fetch-dedupe';
 // The value of each key is a Response instance
 const responseCache = {};
 
-function getRequestKey({ url, method, type, body }) {
-  return [url, method, type, body].join('||');
+function getRequestKey({ url, method, contentType, body }) {
+  return [url, method, contentType, body].join('||');
 }
 
-export default class Request extends React.Component {
+export default class Fetch extends React.Component {
   render() {
     const { render, requestName } = this.props;
     const { fetching, response, data, error } = this.state;
@@ -32,23 +32,48 @@ export default class Request extends React.Component {
     }
   }
 
-  state = {
-    requestName: this.props.requestName,
-    fetching: !this.props.lazy,
-    response: null,
-    data: null,
-    error: null
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      requestName: props.requestName,
+      fetching: !this.isLazy(),
+      response: null,
+      data: null,
+      error: null
+    };
+  }
+
+  isLazy = props => {
+    const { lazy, method } = props || this.props;
+
+    const uppercaseMethod = method.toUpperCase();
+
+    let laziness;
+
+    // We default to being lazy for "write" requests,
+    // such as POST, PATCH, DELETE, and so on.
+    if (typeof lazy === 'undefined') {
+      laziness =
+        uppercaseMethod !== 'GET' &&
+        uppercaseMethod !== 'HEAD' &&
+        uppercaseMethod !== 'OPTIONS';
+    } else {
+      laziness = lazy;
+    }
+
+    return laziness;
   };
 
   componentDidMount() {
-    if (!this.props.lazy) {
+    if (!this.isLazy()) {
       this.fetchData();
     }
   }
 
   componentWillReceiveProps(nextProps) {
     // only refresh when keys with primitive types change
-    const refreshProps = ['url', 'method', 'type', 'body'];
+    const refreshProps = ['url', 'method', 'contentType', 'body'];
     if (refreshProps.some(key => this.props[key] !== nextProps[key])) {
       this.fetchData(nextProps);
     }
@@ -68,7 +93,7 @@ export default class Request extends React.Component {
       credentials,
       headers,
       method,
-      type,
+      contentType,
       mode,
       cache,
       redirect,
@@ -79,7 +104,7 @@ export default class Request extends React.Component {
       signal
     } = Object.assign({}, this.props, options);
 
-    const requestKey = getRequestKey({ url, method, body, type });
+    const requestKey = getRequestKey({ url, method, body, contentType });
 
     const onResponseReceived = ({ error, response }) => {
       if (this.willUnmount) {
@@ -137,7 +162,7 @@ export default class Request extends React.Component {
 
     this.setState({ fetching: true });
 
-    return fetchDedupe(url, init, { requestKey, type }).then(
+    return fetchDedupe(url, init, { requestKey, contentType }).then(
       res => {
         responseCache[requestKey] = res;
 
@@ -159,9 +184,8 @@ export default class Request extends React.Component {
 const globalObj = typeof self !== 'undefined' ? self : this;
 const AbortSignalCtr = globalObj.AbortSignal || function() {};
 
-Request.propTypes = {
+Fetch.propTypes = {
   requestName: PropTypes.string,
-  children: PropTypes.func,
   fetchPolicy: PropTypes.oneOf([
     'cache-first',
     'cache-and-network',
@@ -169,7 +193,13 @@ Request.propTypes = {
     'cache-only'
   ]),
   onResponse: PropTypes.func,
-  type: PropTypes.oneOf(['json', 'text', 'blob', 'arrayBuffer', 'formData']),
+  contentType: PropTypes.oneOf([
+    'json',
+    'text',
+    'blob',
+    'arrayBuffer',
+    'formData'
+  ]),
   transformResponse: PropTypes.func,
   lazy: PropTypes.bool,
 
@@ -223,12 +253,11 @@ Request.propTypes = {
   signal: PropTypes.instanceOf(AbortSignalCtr)
 };
 
-Request.defaultProps = {
-  type: 'json',
+Fetch.defaultProps = {
+  contentType: 'json',
   onResponse: () => {},
   transformResponse: data => data,
   fetchPolicy: 'cache-first',
-  lazy: false,
 
   method: 'get',
   referrerPolicy: '',

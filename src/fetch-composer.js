@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default function RequestComposer({ requests = [], render }) {
+export default function FetchComposer({ requests = [], render }) {
   if (typeof render !== 'function') {
     return null;
   }
@@ -20,7 +20,6 @@ export default function RequestComposer({ requests = [], render }) {
       return render(responses);
     }
 
-    // This is the index of the Request component within `requests`
     const requestIndex = childrenRequests.length - 1;
     const request = requests[requestIndex];
 
@@ -47,7 +46,7 @@ export default function RequestComposer({ requests = [], render }) {
   return chainRequests(reversedRequests);
 }
 
-RequestComposer.propTypes = {
+FetchComposer.propTypes = {
   render: PropTypes.func,
   requests: PropTypes.array
 };

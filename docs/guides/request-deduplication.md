@@ -18,20 +18,8 @@ solution in place that solves the problem described above that is called
 
 ### How does it work
 
-We generate a request "key" based off of the props that you pass to `Fetch`. Only
-one request for a given key can be in flight at a single time.
-
-When the response is received, every component with the same request key will receive
-the response.
-
-### How is the request key generated?
-
-The key is composed of these pieces of information:
-
-* `url`
-* `method`
-* `contentType`
-* `body`
+Request deduplication is possible due to request keys. Refer to
+[the guide on request keys](./request-keys.md) for more.
 
 ### Examples
 

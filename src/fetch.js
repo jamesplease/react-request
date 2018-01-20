@@ -82,7 +82,7 @@ export default class Fetch extends React.Component {
     this.willUnmount = true;
   }
 
-  fetchData = (options, ignoreCache) => {
+  fetchData = options => {
     const { fetchPolicy, requestName } = this.props;
 
     const {
@@ -126,7 +126,7 @@ export default class Fetch extends React.Component {
       );
     };
 
-    if (fetchPolicy !== 'network-only' || ignoreCache) {
+    if (fetchPolicy !== 'network-only') {
       const cachedResponse = responseCache[requestKey];
 
       if (cachedResponse) {

@@ -34,14 +34,16 @@ export default class Request extends React.Component {
 
   state = {
     requestName: this.props.requestName,
-    fetching: true,
+    fetching: !this.props.lazy,
     response: null,
     data: null,
     error: null
   };
 
   componentDidMount() {
-    this.fetchData();
+    if (!this.props.lazy) {
+      this.fetchData();
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -169,6 +171,7 @@ Request.propTypes = {
   onResponse: PropTypes.func,
   type: PropTypes.oneOf(['json', 'text', 'blob', 'arrayBuffer', 'formData']),
   transformResponse: PropTypes.func,
+  lazy: PropTypes.bool,
 
   url: PropTypes.string.isRequired,
   body: PropTypes.any,
@@ -221,11 +224,13 @@ Request.propTypes = {
 };
 
 Request.defaultProps = {
-  method: 'get',
   type: 'json',
   onResponse: () => {},
   transformResponse: data => data,
   fetchPolicy: 'cache-first',
+  lazy: false,
+
+  method: 'get',
   referrerPolicy: '',
   integrity: '',
   referrer: 'about:client'

@@ -1,4 +1,4 @@
-# Differences with Fetch
+# Differences with `fetch()`
 
 Whenever possible, we try to follow standard usage of the
 [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch)

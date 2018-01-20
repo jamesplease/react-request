@@ -43,7 +43,7 @@ yarn add react-request
 * [Guides ⇗](./docs/guides/INDEX.md)
   * [Using the `lazy` Prop ⇗](./docs/guides/using-the-lazy-prop.md)
   * [Aborting ⇗](./docs/guides/aborting.md)
-  * [Differences with Fetch ⇗](./docs/guides/differences-with-fetch.md)
+  * [Differences with `fetch()` ⇗](./docs/guides/differences-with-fetch.md)
   * [Request Keys ⇗](./docs/guides/request-keys.md)
   * [Request Deduplication ⇗](./docs/guides/request-deduplication.md)
   * [Best Practices ⇗](./docs/guides/best-practices.md)

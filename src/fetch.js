@@ -72,7 +72,6 @@ export default class Fetch extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // only refresh when keys with primitive types change
     const refreshProps = ['url', 'method', 'contentType', 'body'];
     if (refreshProps.some(key => this.props[key] !== nextProps[key])) {
       this.fetchData(nextProps);

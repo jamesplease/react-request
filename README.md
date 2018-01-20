@@ -18,7 +18,6 @@ This library abstracts those features into a generic HTTP component.
 ✓ Smart deduping of requests  
 ✓ Powerful and customizable response caching  
 ✓ Support for parallel requests  
-✓ Polling (coming soon)  
 ✓ Small footprint (~2kb gzipped)
 
 ### Installation

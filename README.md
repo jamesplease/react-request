@@ -1,6 +1,6 @@
 # React Request
 
-A library for making requests with React. Inspired by React Apollo.
+A library for making HTTP requests with React. Inspired by React Apollo.
 
 ### Motivation
 
@@ -12,8 +12,8 @@ This component abstracts those features into a generic HTTP component.
 
 ### Features
 
-✓ Deduplication of network requests
-✓ Smart caching features
+✓ Deduplication of network requests  
+✓ Smart caching features  
 ✓ Polling (coming soon)
 
 ### Installation
@@ -68,3 +68,8 @@ class App extends Component {
 ### API
 
 Documentation coming soon.
+
+### Acknowledgements
+
+This library was inspired by [Apollo](https://www.apollographql.com). The
+library [Holen](https://github.com/tkh44/holen) was referenced during the creation of this library.

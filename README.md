@@ -114,7 +114,7 @@ Check out the API reference below for more.
 
 This library has two exports:
 
-* `Fetch`:
+* `Fetch`: A component for making a single HTTP request
 * `FetchComposer`: A component for making parallel HTTP requests
 
 #### `<Fetch />`

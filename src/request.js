@@ -32,16 +32,41 @@ export default class Request extends React.Component {
     }
   }
 
-  state = {
-    requestName: this.props.requestName,
-    fetching: !this.props.lazy,
-    response: null,
-    data: null,
-    error: null
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      requestName: props.requestName,
+      fetching: !this.isLazy(),
+      response: null,
+      data: null,
+      error: null
+    };
+  }
+
+  isLazy = props => {
+    const { lazy, method } = props || this.props;
+
+    const uppercaseMethod = method.toUpperCase();
+
+    let laziness;
+
+    // We default to being lazy for "write" requests,
+    // such as POST, PATCH, DELETE, and so on.
+    if (typeof lazy === 'undefined') {
+      laziness =
+        uppercaseMethod !== 'GET' &&
+        uppercaseMethod !== 'HEAD' &&
+        uppercaseMethod !== 'OPTIONS';
+    } else {
+      laziness = lazy;
+    }
+
+    return laziness;
   };
 
   componentDidMount() {
-    if (!this.props.lazy) {
+    if (!this.isLazy()) {
       this.fetchData();
     }
   }
@@ -228,7 +253,6 @@ Request.defaultProps = {
   onResponse: () => {},
   transformResponse: data => data,
   fetchPolicy: 'cache-first',
-  lazy: false,
 
   method: 'get',
   referrerPolicy: '',

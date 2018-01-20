@@ -227,5 +227,6 @@ Request.defaultProps = {
   transformResponse: data => data,
   fetchPolicy: 'cache-first',
   referrerPolicy: '',
-  integrity: ''
+  integrity: '',
+  referrer: 'about:client'
 };

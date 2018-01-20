@@ -1,0 +1,86 @@
+# Best Practices
+
+Here are some tips for using React Request.
+
+### Making "request components"
+
+HTTP requests require a lot of configuration, which can make your
+application code messy. One way to clean this up is to make
+"request components" that simplify the API to make a request.
+
+For instance, if your application manages books, you may have these
+request components:
+
+```jsx
+// books.js
+import React from 'react';
+import { Request } from 'react-request';
+import headers from './utils/default-request-headers';
+import httpAnalytics from './utils/http-analytics;
+
+export function ReadBook({ bookId, render }) {
+  return (
+    <Request
+      url={`/books/${bookId}`}
+      headers={headers}
+      credentials="same-origin"
+      render={render}
+      onResponse={httpAnalytics.responseReceived}
+    />
+  );
+}
+
+export function DeleteBook({ bookId, render }) {
+  return (
+    <Request
+      url={`/books/${bookId}`}
+      headers={headers}
+      method="DELETE"
+      credentials="same-origin"
+      render={render}
+      onResponse={httpAnalytics.responseReceived}
+    />
+  );
+}
+```
+
+This makes it so you only need to specify things like credentials,
+headers, and analytics in a single place.
+
+You can use these components in your application like so:
+
+```jsx
+import React, { Component } from 'react';
+import { readBook } from './request-components/books';
+
+export default class App extends Component {
+  render() {
+    const { bookId } = this.props;
+
+    return (
+      <div>
+        <h1>Welcome to My App</h1>
+        <ReadBook bookId={bookId} render={result => {
+          // Use the result here
+        }}>
+      </div>
+    );
+  }
+}
+```
+
+If you've used [Redux](https://redux.js.org) for HTTP requests in the past, then you can think of the
+"request components" as fulfilling a similar role as action creators.
+
+### Directory Structure
+
+We recommend organizing your request components by their resource type. For instance, if your app manages
+books, authors, and publishers, you might have:
+
+```
+/src
+  /request-components
+    books.js
+    authors.js
+    publishers.js
+```

@@ -41,6 +41,7 @@ yarn add react-request
   * [\<Fetch/\>](#fetch-)
   * [\<FetchComposer/\>](#fetchcomposer-)
 * [Guides ⇗](./docs/guides/INDEX.md)
+  * [Best Practices ⇗](./docs/guides/best-practices.md)
   * [Request Deduplication ⇗](./docs/guides/request-deduplication.md)
 * [FAQ ⇗](./docs/FAQ.md)
 * [Acknowledgements](#acknowledgements)

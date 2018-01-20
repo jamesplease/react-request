@@ -16,7 +16,7 @@ This component abstracts those features into a generic HTTP component.
 ✓ Smart deduping of requests  
 ✓ Powerful and customizable response caching  
 ✓ Polling (coming soon)  
-✓ Tiny footprint
+✓ Small footprint (~2kb gzipped)
 
 ### Installation
 

@@ -42,6 +42,7 @@ yarn add react-request
   * [\<FetchComposer/\>](#fetchcomposer-)
 * [Guides ⇗](./docs/guides/INDEX.md)
   * [Best Practices ⇗](./docs/guides/best-practices.md)
+  * [Using the `lazy` Prop ⇗](./docs/guides/using-the-lazy-prop.md)
   * [Request Deduplication ⇗](./docs/guides/request-deduplication.md)
 * [FAQ ⇗](./docs/FAQ.md)
 * [Acknowledgements](#acknowledgements)

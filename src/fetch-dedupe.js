@@ -28,7 +28,6 @@ export default function fetchDedupe(input, init, { requestKey, type }) {
 
   const handlers = requests[requestKey];
   const requestInFlight = Boolean(handlers.length);
-
   const requestHandler = {};
   const req = new Promise((resolve, reject) => {
     requestHandler.resolve = resolve;

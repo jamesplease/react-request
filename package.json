@@ -8,14 +8,11 @@
     "clean": "rimraf dist es tmp lib",
     "test": "jest",
     "prepublish": "in-publish && npm run build || not-in-publish",
-    "build":
-      "npm run clean && npm run build:umd && npm run build:umd:min && npm run build:es && npm run build:commonjs",
+    "build": "npm run clean && npm run build:umd && npm run build:umd:min && npm run build:es && npm run build:commonjs",
     "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
     "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
-    "build:umd":
-      "cross-env NODE_ENV=development BABEL_ENV=build rollup -c -i src/index.js -o dist/react-request.js",
-    "build:umd:min":
-      "cross-env NODE_ENV=production BABEL_ENV=buildProd rollup -c -i src/index.js -o dist/react-request.min.js"
+    "build:umd": "cross-env NODE_ENV=development BABEL_ENV=build rollup -c -i src/index.js -o dist/react-request.js",
+    "build:umd:min": "cross-env NODE_ENV=production BABEL_ENV=buildProd rollup -c -i src/index.js -o dist/react-request.min.js"
   },
   "repository": {
     "type": "git",
@@ -44,7 +41,11 @@
   "bugs": {
     "url": "https://github.com/jmeas/react-request/issues"
   },
-  "files": ["dist", "lib", "es"],
+  "files": [
+    "dist",
+    "lib",
+    "es"
+  ],
   "peerDependencies": {
     "react": "^15.0.0 || ^16.0.0"
   },

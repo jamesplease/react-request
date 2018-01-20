@@ -38,8 +38,8 @@ yarn add react-request
 
 * [Getting Started](#getting-started)
 * [API](#api)
-  * [Fetch](#fetch-)
-  * [FetchComposer](#fetchcomposer-)
+  * [\<Fetch/\>](#fetch-)
+  * [\<FetchComposer/\>](#fetchcomposer-)
 * [FAQ ⇗](./FAQ.md)
 * [Acknowledgements](#acknowledgements)
 

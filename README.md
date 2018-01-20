@@ -35,6 +35,15 @@ or [yarn](https://yarnpkg.com/):
 yarn add react-request
 ```
 
+### Documentation
+
+* [Getting Started](#getting-started)
+* [API](#api)
+  * [Fetch](#fetch-)
+  * [FetchComposer](#fetchcomposer-)
+* [FAQ ⇗](./FAQ.md)
+* [Acknowledgements](#acknowledgements)
+
 ### Getting Started
 
 Here's a quick look at what using React Request is like:

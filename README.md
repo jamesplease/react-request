@@ -28,9 +28,7 @@ yarn add react-request
 
 ### Getting Started
 
-This is a simple example of using the component. It uses
-a freely-avaiable API, so you can put it into your application
-and test it out.
+Here's a simple example of using React Request.
 
 ```js
 import Request from 'react-request';

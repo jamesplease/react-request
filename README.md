@@ -17,7 +17,7 @@ This library abstracts those features into a generic HTTP component.
 ✓ Uses the native [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) API  
 ✓ Smart deduping of requests  
 ✓ Powerful and customizable response caching  
-✓ Compose requests  
+✓ Support for parallel requests  
 ✓ Polling (coming soon)  
 ✓ Small footprint (~2kb gzipped)
 
@@ -37,7 +37,7 @@ yarn add react-request
 
 ### Getting Started
 
-Here's a simple example of using React Request.
+Here's a quick look at what using React Request is like:
 
 ```js
 import { Fetch } from 'react-request';
@@ -120,7 +120,9 @@ This library has two exports:
 #### `<Fetch />`
 
 A component for making a single HTTP request. It accepts every value of `init` and `input`
-from the `fetch()` API as a prop, in addition to a few other things.
+from the
+[`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch)
+API as a prop, in addition to a few other things.
 
 Props from the `fetch()` method are:
 
@@ -142,42 +144,35 @@ To learn more about the valid options for these props, refer to the
 [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch)
 documentation.
 
-An example demonstrating some common values is:
+Here's an example demonstrating some of the most commonly-used props:
 
 ```jsx
 <Fetch
   url="/posts/2"
-  method="PATCH"
+  method="patch"
   credentials="same-origin"
   headers={{
     'csrf-token': myCsrfToken
   }}
   body={JSON.stringify({ title: 'New post' })}
   render={({ fetch }) => {
-    <button onClick={() => fetch()}>
-      Update Post
-    </div>
+    <button onClick={() => fetch()}>Update Post</button>;
   }}
 />
 ```
 
-In addition to the `fetch()` props, there are a handful of other props.
-
-##### `contentType`
-
-The content type of the response body. Defaults to `json`. Valid options are the methods
-on [Body](https://developer.mozilla.org/en-US/docs/Web/API/Body).
+In addition to the `fetch()` props, there are a number of other useful props.
 
 ##### `render`
 
-The "render prop" of this component. It is called with one argument, `result`, an object
-with the following keys:
+The [render prop](https://cdb.reacttraining.com/use-a-render-prop-50de598f11ce) of this component.
+It is called with one argument, `result`, an object with the following keys:
 
 * `fetching`: A Boolean representing whether or not a request is currently in flight for this component
 * `error`: A Boolean representing if a network error occurred. Note that HTTP "error" status codes do not
   cause `error` to be `true`; only failed or aborted network requests do.
 * `response`: An instance of [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response). The
-  `body` will already be read, and made available to you via `response.data`.
+  `body` will already be read, and made available to you as `response.data`.
 * `data`: An alias of `response.data`
 * `fetch`: A function that makes the HTTP request. See notes below.
 * `requestName`: The name of the request (see `requestName` below)
@@ -197,10 +192,10 @@ There are three common use cases for the `fetch` prop:
 Whether or not the request will be called when the component mounts. The default value
 is based on the request method that you use.
 
-| Method              | Default value |
-| ------------------- | ------------- |
-| GET, HEAD, OPTIONS  | `false`       |
-| POST, PATCH, DELETE | `true`        |
+| Method                   | Default value |
+| ------------------------ | ------------- |
+| GET, HEAD, OPTIONS       | `false`       |
+| POST, PUT, PATCH, DELETE | `true`        |
 
 ##### `onResponse`
 
@@ -240,7 +235,7 @@ hook to transform the data before it is passed into `render`.
       {!fetching && !error && response.status === 200 && (
         <div>
           <h1>{data.title}</h1>
-          <div>{data.content}</h1>
+          <div>{data.content}</div>
         </div>
       )}
     </div>
@@ -248,9 +243,14 @@ hook to transform the data before it is passed into `render`.
 />
 ```
 
+##### `contentType`
+
+The content type of the response body. Defaults to `json`. Valid values are the methods
+on [Body](https://developer.mozilla.org/en-US/docs/Web/API/Body).
+
 ##### `requestName`
 
-A name to give this request which can help with debugging purposes. The request name is
+A name to give this request, which can help with debugging purposes. The request name is
 analogous to a function name in JavaScript. Although we could use anonymous functions
 everywhere, we tend to give them names to help humans read and debug the code.
 
@@ -265,6 +265,8 @@ This determines how the request interacts with the cache. For documentation, ref
 This prop is identical to the Apollo prop.
 
 (The API will be listed here shortly).
+
+---
 
 #### `<FetchComposer />`
 

@@ -7,8 +7,8 @@ import fetchDedupe from './fetch-dedupe';
 // The value of each key is a Response instance
 const responseCache = {};
 
-function getRequestKey({ url, method, type, body }) {
-  return [url, method, type, body].join('||');
+function getRequestKey({ url, method, contentType, body }) {
+  return [url, method, contentType, body].join('||');
 }
 
 export default class Fetch extends React.Component {
@@ -73,7 +73,7 @@ export default class Fetch extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     // only refresh when keys with primitive types change
-    const refreshProps = ['url', 'method', 'type', 'body'];
+    const refreshProps = ['url', 'method', 'contentType', 'body'];
     if (refreshProps.some(key => this.props[key] !== nextProps[key])) {
       this.fetchData(nextProps);
     }
@@ -93,7 +93,7 @@ export default class Fetch extends React.Component {
       credentials,
       headers,
       method,
-      type,
+      contentType,
       mode,
       cache,
       redirect,
@@ -104,7 +104,7 @@ export default class Fetch extends React.Component {
       signal
     } = Object.assign({}, this.props, options);
 
-    const requestKey = getRequestKey({ url, method, body, type });
+    const requestKey = getRequestKey({ url, method, body, contentType });
 
     const onResponseReceived = ({ error, response }) => {
       if (this.willUnmount) {
@@ -162,7 +162,7 @@ export default class Fetch extends React.Component {
 
     this.setState({ fetching: true });
 
-    return fetchDedupe(url, init, { requestKey, type }).then(
+    return fetchDedupe(url, init, { requestKey, contentType }).then(
       res => {
         responseCache[requestKey] = res;
 
@@ -186,7 +186,6 @@ const AbortSignalCtr = globalObj.AbortSignal || function() {};
 
 Fetch.propTypes = {
   requestName: PropTypes.string,
-  children: PropTypes.func,
   fetchPolicy: PropTypes.oneOf([
     'cache-first',
     'cache-and-network',
@@ -194,7 +193,13 @@ Fetch.propTypes = {
     'cache-only'
   ]),
   onResponse: PropTypes.func,
-  type: PropTypes.oneOf(['json', 'text', 'blob', 'arrayBuffer', 'formData']),
+  contentType: PropTypes.oneOf([
+    'json',
+    'text',
+    'blob',
+    'arrayBuffer',
+    'formData'
+  ]),
   transformResponse: PropTypes.func,
   lazy: PropTypes.bool,
 
@@ -249,7 +254,7 @@ Fetch.propTypes = {
 };
 
 Fetch.defaultProps = {
-  type: 'json',
+  contentType: 'json',
   onResponse: () => {},
   transformResponse: data => data,
   fetchPolicy: 'cache-first',

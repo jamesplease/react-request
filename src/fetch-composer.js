@@ -20,7 +20,6 @@ export default function FetchComposer({ requests = [], render }) {
       return render(responses);
     }
 
-    // This is the index of the Request component within `requests`
     const requestIndex = childrenRequests.length - 1;
     const request = requests[requestIndex];
 

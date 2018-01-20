@@ -1,0 +1,44 @@
+{
+  "name": "react-request",
+  "version": "0.0.1",
+  "description": "A component for HTTP requests in React",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jmeas/react-request.git"
+  },
+  "keywords": [
+    "react",
+    "http",
+    "https",
+    "request",
+    "requests",
+    "response",
+    "xhr",
+    "xmlhttprequest",
+    "fetch",
+    "cors",
+    "json",
+    "api",
+    "data",
+    "rest",
+    "restful",
+    "crud"
+  ],
+  "author": "James Smith <jamesplease2@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jmeas/react-request/issues"
+  },
+  "files": ["dist", "lib", "es"],
+  "peerDependencies": {
+    "react": "^15.0.0 || ^16.0.0"
+  },
+  "devDependencies": {
+    "react": "^16.2.0"
+  },
+  "dependencies": {
+    "prop-types": "^15.6.0"
+  }
+}

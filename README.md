@@ -16,8 +16,8 @@ This library abstracts those features into a generic HTTP component.
 
 ✓ Uses the native [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) API  
 ✓ Smart [deduping of requests](./docs/guides/request-deduplication.md)  
-✓ Powerful and customizable [response caching](./docs/guides/response-caching.md)  
-✓ Support for parallel requests  
+✓ Customizable [response caching](./docs/guides/response-caching.md)  
+✓ Expressive API for parallel requests  
 ✓ Small footprint (~2kb gzipped)
 
 ### Installation
@@ -58,6 +58,7 @@ yarn add react-request
 Here's a quick look at what using React Request is like:
 
 ```js
+import React, { Component } from 'react';
 import { Fetch } from 'react-request';
 
 class App extends Component {
@@ -90,6 +91,7 @@ class App extends Component {
 Need to make multiple requests? We got you.
 
 ```js
+import React, { Component } from 'react';
 import { FetchComposer } from 'react-request';
 
 class App extends Component {
@@ -98,24 +100,17 @@ class App extends Component {
       <FetchComposer
         requests={[
           <Fetch url="https://jsonplaceholder.typicode.com/posts/1" />,
-          <Fetch url="https://jsonplaceholder.typicode.com/posts/2" />,
-          <Fetch url="https://jsonplaceholder.typicode.com/posts/3" />
+          <Fetch
+            url="https://jsonplaceholder.typicode.com/posts/1"
+            method="DELETE"
+          />
         ]}
-        render={([postOne, postTwo, postThree]) => {
+        render={([readPost, deletePost]) => {
           return (
             <div>
-              <div>
-                {postOne.fetching && 'Loading post 1'}
-                {!postOne.fetching && 'Post 1 has been fetched'}
-              </div>
-              <div>
-                {postTwo.fetching && 'Loading post 2'}
-                {!postTwo.fetching && 'Post 2 has been fetched'}
-              </div>
-              <div>
-                {postThree.fetching && 'Loading post 3'}
-                {!postThree.fetching && 'Post 3 has been fetched'}
-              </div>
+              {readPost.fetching && 'Loading post 1'}
+              {!readPost.fetching && 'Post 1 is not being fetched'}
+              <button onClick={() => deletePost.fetch()}>Delete Post 1</button>
             </div>
           );
         }}
@@ -142,7 +137,7 @@ from the
 [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch)
 API as a prop, in addition to a few other things.
 
-Props from the `fetch()` method are:
+The props that come from the `fetch()` method are:
 
 * `url`
 * `method`: defaults to `"GET"`
@@ -215,6 +210,16 @@ is based on the request method that you use.
 | GET, HEAD, OPTIONS       | `false`       |
 | POST, PUT, PATCH, DELETE | `true`        |
 
+```jsx
+<Fetch
+  url="/books"
+  lazy
+  render={({ fetch }) => {
+    <button onClick={() => fetch()}>Fetch books</div>;
+  }}
+/>
+```
+
 ##### `onResponse`
 
 A function that is called when a request is received. Receives two arguments: `error` and `response`.
@@ -266,6 +271,23 @@ hook to transform the data before it is passed into `render`.
 The content type of the response body. Defaults to `json`. Valid values are the methods
 on [Body](https://developer.mozilla.org/en-US/docs/Web/API/Body).
 
+```jsx
+// If you have an endpoint that just returns raw text, you can convert it into
+// an object using `contentType` and `transformData`.
+<Fetch
+  url="/countries/2"
+  contentType="text"
+  transformData={countryName => {
+    return {
+      countryName
+    };
+  }}
+  render={({ data }) => {
+    <div>{data.countryName}</div>;
+  }}
+/>
+```
+
 ##### `requestName`
 
 A name to give this request, which can help with debugging purposes. The request name is
@@ -305,6 +327,40 @@ An array of `Fetch` components. Use any of the above props, but leave out `rende
 ##### `render`
 
 A function that is called with the array of responses from `requests`.
+
+```js
+import React, { Component } from 'react';
+import { FetchComposer } from 'react-request';
+
+class App extends Component {
+  render() {
+    const { bookId, authorId } = this.props;
+
+    return (
+      <FetchComposer
+        requests={[
+          <Fetch url={`/books/${bookId}`} />,
+          <Fetch url={`/authors/${authorId}`} />,
+          <Fetch url={`/books/${bookId}`} method="DELETE" />
+        ]}
+        render={([readBook, readAuthor, deleteBook]) => {
+          return (
+            <div>
+              {readBook.fetching && 'Fetching book'}
+              {readAuthor.fetching && 'Fetching author'}
+              {!readBook.fetching && 'Book not being fetched'}
+              {!readAuthor.fetching && 'Author not being fetched'}
+              <button onClick={() => deleteBook.fetch()}>
+                Delete this book
+              </button>
+            </div>
+          );
+        }}
+      />
+    );
+  }
+}
+```
 
 ### Acknowledgements
 

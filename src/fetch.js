@@ -26,7 +26,7 @@ export default class Fetch extends React.Component {
           response: response,
           data: data,
           error: error,
-          fetch: this.fetchData
+          fetch: opts => this.fetchData(opts, true)
         }) || null
       );
     }
@@ -72,8 +72,10 @@ export default class Fetch extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const refreshProps = ['url', 'method', 'responseType', 'body'];
-    if (refreshProps.some(key => this.props[key] !== nextProps[key])) {
+    const currentRequestKey = getRequestKey(this.props);
+    const nextRequestKey = getRequestKey(nextProps);
+
+    if (currentRequestKey !== nextRequestKey) {
       this.fetchData(nextProps);
     }
   }
@@ -82,7 +84,7 @@ export default class Fetch extends React.Component {
     this.willUnmount = true;
   }
 
-  fetchData = options => {
+  fetchData = (options, ignoreCache) => {
     const { fetchPolicy, requestName } = this.props;
 
     const {
@@ -129,8 +131,7 @@ export default class Fetch extends React.Component {
     const uppercaseMethod = method.toUpperCase();
     const isReadRequest = uppercaseMethod === 'GET';
 
-    // This conditional is where we manage interactions with the cache.
-    if (fetchPolicy !== 'network-only' && isReadRequest) {
+    if (fetchPolicy !== 'network-only' && isReadRequest && !ignoreCache) {
       const cachedResponse = responseCache[requestKey];
 
       if (cachedResponse) {

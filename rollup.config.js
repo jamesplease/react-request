@@ -12,6 +12,7 @@ var config = {
   globals: {
     react: 'React'
   },
+  context: 'this',
   plugins: [
     nodeResolve({
       jsnext: true

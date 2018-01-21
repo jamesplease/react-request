@@ -184,10 +184,12 @@ It is called with one argument, `result`, an object with the following keys:
 
 * `fetching`: A Boolean representing whether or not a request is currently in flight for this component
 * `error`: A Boolean representing if a network error occurred. Note that HTTP "error" status codes do not
-  cause `error` to be `true`; only failed or aborted network requests do.
+  cause `error` to be `true`; only failed or aborted network requests do. For more, see the
+  ["Using Fetch" MDN guide](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Checking_that_the_fetch_was_successful).
 * `response`: An instance of [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response). The
-  `body` will already be read, and made available to you as `response.data`.
-* `data`: An alias of `response.data`
+  [`body`](https://developer.mozilla.org/en-US/docs/Web/API/Body) will already be read, and made
+  available to you as `response.data`.
+* `data`: An alias of `response.data`.
 * `fetch`: A function that makes the HTTP request. See notes below.
 * `requestName`: The name of the request (see `requestName` below)
 
@@ -223,7 +225,8 @@ is based on the request method that you use.
 
 ##### `onResponse`
 
-A function that is called when a request is received. Receives two arguments: `error` and `response`.
+A function that is called every time a response is received. Receives two arguments: `error` and `response`.
+This could be used for analytics or syncing response data with a store such as [Redux](https://github.com/reactjs/redux/).
 
 ```jsx
 <Fetch
@@ -299,6 +302,8 @@ everywhere, we tend to give them names to help humans read and debug the code.
 <Fetch url={`/posts/${postId}`} requestName="readPost" />
 ```
 
+> Note: This feature is analogous to the [operation name](http://graphql.org/learn/queries/#operation-name) in GraphQL.
+
 ##### `fetchPolicy`
 
 This determines how the request interacts with the cache. Valid options are:
@@ -311,7 +316,7 @@ This determines how the request interacts with the cache. Valid options are:
 For documentation on this prop, refer to the [response caching guide](./docs/guides/response-caching.md).
 
 > This prop behaves identically to the Apollo prop
-> [with the same name](<(https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-fetchPolicy)>).
+> [with the same name](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-fetchPolicy).
 
 ---
 

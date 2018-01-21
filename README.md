@@ -311,7 +311,7 @@ This determines how the request interacts with the cache. Valid options are:
 For documentation on this prop, refer to the [response caching guide](./docs/guides/response-caching.md).
 
 > This prop behaves identically to the Apollo prop
-> [with the same name](<(https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-fetchPolicy)>).
+> [with the same name](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-fetchPolicy).
 
 ---
 

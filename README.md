@@ -46,8 +46,10 @@ yarn add react-request
   * [Differences with `fetch()` ⇗](./docs/guides/differences-with-fetch.md)
   * [Differences with React Apollo](./docs/guides/differences-with-react-apollo.md)
   * [Request Keys ⇗](./docs/guides/request-keys.md)
+  * [Response Caching ⇗](./docs/guides/response-caching.md)
   * [Request Deduplication ⇗](./docs/guides/request-deduplication.md)
   * [Best Practices ⇗](./docs/guides/best-practices.md)
+  * [Integration with Technologies ⇗](./docs/guides/integration-with-technologies.md)
 * [FAQ ⇗](./docs/FAQ.md)
 * [Acknowledgements](#acknowledgements)
 
@@ -276,11 +278,17 @@ everywhere, we tend to give them names to help humans read and debug the code.
 
 ##### `fetchPolicy`
 
-This determines how the request interacts with the cache. For documentation, refer to the
-[Apollo documentation](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-fetchPolicy).
-This prop is identical to the Apollo prop.
+This determines how the request interacts with the cache. Valid options are:
 
-(The API will be listed here shortly).
+* `"cache-first"`
+* `"cache-and-network"`
+* `"network-only"`
+* `"cache-only"`
+
+For documentation on this prop, refer to the [response caching guide](./docs/guides/response-caching.md).
+
+> This prop behaves identically to the Apollo prop
+> [with the same name](<(https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-fetchPolicy)>).
 
 ---
 

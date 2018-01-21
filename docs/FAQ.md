@@ -10,7 +10,7 @@ We were skeptical at first, too, but it turns out that many of the complex thing
 component lifecycle. You can remove a considerable amount of code from your application by declaratively specifying how you want
 your requests to behave through JSX.
 
-#### What if I just want a regular fetch component, without the deduplication and other "extra" features from Redux Request?
+#### What if I just want a regular fetch component, without the deduplication and other "extra" features from React Request?
 
 Take a look at [Holen](https://github.com/tkh44/holen).
 

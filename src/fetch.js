@@ -126,7 +126,11 @@ export default class Fetch extends React.Component {
       );
     };
 
-    if (fetchPolicy !== 'network-only') {
+    const uppercaseMethod = method.toUpperCase();
+    const isReadRequest = uppercaseMethod === 'GET';
+
+    // This conditional is where we manage interactions with the cache.
+    if (fetchPolicy !== 'network-only' && isReadRequest) {
       const cachedResponse = responseCache[requestKey];
 
       if (cachedResponse) {
@@ -163,7 +167,9 @@ export default class Fetch extends React.Component {
 
     return fetchDedupe(url, init, { requestKey, contentType }).then(
       res => {
-        responseCache[requestKey] = res;
+        if (isReadRequest) {
+          responseCache[requestKey] = res;
+        }
 
         if (this.willUnmount) {
           return;

@@ -12,7 +12,7 @@ always straightforward to pass data down a deeply-nested component tree.
 The problem with the second approach is that if both components mount at the same time, then
 two identical requests will be fired off. This isn't efficient.
 
-With Request Resource, we encourage you to use the second system. We have a
+With React Request, we encourage you to use the second system. We have a
 solution in place that solves the problem described above that is called
 **request deduplication**.
 

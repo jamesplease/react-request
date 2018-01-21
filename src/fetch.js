@@ -72,8 +72,10 @@ export default class Fetch extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const refreshProps = ['url', 'method', 'responseType', 'body'];
-    if (refreshProps.some(key => this.props[key] !== nextProps[key])) {
+    const currentRequestKey = getRequestKey(this.props);
+    const nextRequestKey = getRequestKey(nextProps);
+
+    if (currentRequestKey !== nextRequestKey) {
       this.fetchData(nextProps);
     }
   }

@@ -267,17 +267,17 @@ hook to transform the data before it is passed into `render`.
 />
 ```
 
-##### `contentType`
+##### `responseType`
 
 The content type of the response body. Defaults to `json`. Valid values are the methods
 on [Body](https://developer.mozilla.org/en-US/docs/Web/API/Body).
 
 ```jsx
 // If you have an endpoint that just returns raw text, you can convert it into
-// an object using `contentType` and `transformData`.
+// an object using `responseType` and `transformData`.
 <Fetch
   url="/countries/2"
-  contentType="text"
+  responseType="text"
   transformData={countryName => {
     return {
       countryName

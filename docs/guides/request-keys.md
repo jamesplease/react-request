@@ -14,7 +14,7 @@ The key is composed of these pieces of information:
 
 * `url`
 * `method`
-* `contentType`
+* `responseType`
 * `body`
 
 ### How is it used

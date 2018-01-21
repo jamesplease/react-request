@@ -21,7 +21,7 @@ function resolveRequest({ requestKey, res, err }) {
   requests[requestKey] = null;
 }
 
-export default function fetchDedupe(input, init, { requestKey, contentType }) {
+export default function fetchDedupe(input, init, { requestKey, responseType }) {
   if (!requests[requestKey]) {
     requests[requestKey] = [];
   }
@@ -45,7 +45,7 @@ export default function fetchDedupe(input, init, { requestKey, contentType }) {
       // The response body is a ReadableStream. ReadableStreams can only be read a single
       // time, so we must handle that in a central location, here, before resolving
       // the fetch.
-      res[contentType]().then(data => {
+      res[responseType]().then(data => {
         res.data = data;
         resolveRequest({ requestKey, res });
       });

@@ -7,8 +7,8 @@ import fetchDedupe from './fetch-dedupe';
 // The value of each key is a Response instance
 const responseCache = {};
 
-function getRequestKey({ url, method, contentType, body }) {
-  return [url, method, contentType, body].join('||');
+function getRequestKey({ url, method, responseType, body }) {
+  return [url, method, responseType, body].join('||');
 }
 
 export default class Fetch extends React.Component {
@@ -72,7 +72,7 @@ export default class Fetch extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const refreshProps = ['url', 'method', 'contentType', 'body'];
+    const refreshProps = ['url', 'method', 'responseType', 'body'];
     if (refreshProps.some(key => this.props[key] !== nextProps[key])) {
       this.fetchData(nextProps);
     }
@@ -92,7 +92,7 @@ export default class Fetch extends React.Component {
       credentials,
       headers,
       method,
-      contentType,
+      responseType,
       mode,
       cache,
       redirect,
@@ -103,7 +103,7 @@ export default class Fetch extends React.Component {
       signal
     } = Object.assign({}, this.props, options);
 
-    const requestKey = getRequestKey({ url, method, body, contentType });
+    const requestKey = getRequestKey({ url, method, body, responseType });
 
     const onResponseReceived = ({ error, response }) => {
       if (this.willUnmount) {
@@ -165,7 +165,7 @@ export default class Fetch extends React.Component {
 
     this.setState({ fetching: true });
 
-    return fetchDedupe(url, init, { requestKey, contentType }).then(
+    return fetchDedupe(url, init, { requestKey, responseType }).then(
       res => {
         if (isReadRequest) {
           responseCache[requestKey] = res;
@@ -198,7 +198,7 @@ Fetch.propTypes = {
     'cache-only'
   ]),
   onResponse: PropTypes.func,
-  contentType: PropTypes.oneOf([
+  responseType: PropTypes.oneOf([
     'json',
     'text',
     'blob',
@@ -259,7 +259,7 @@ Fetch.propTypes = {
 };
 
 Fetch.defaultProps = {
-  contentType: 'json',
+  responseType: 'json',
   onResponse: () => {},
   transformResponse: data => data,
   fetchPolicy: 'cache-first',

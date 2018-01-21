@@ -41,6 +41,7 @@ yarn add react-request
   * [\<Fetch/\>](#fetch-)
   * [\<FetchComposer/\>](#fetchcomposer-)
 * [Guides ⇗](./docs/guides/INDEX.md)
+  * [Why JSX? ⇗](./docs/guides/why-jsx.md)
   * [Using the `lazy` Prop ⇗](./docs/guides/using-the-lazy-prop.md)
   * [Aborting ⇗](./docs/guides/aborting.md)
   * [Differences with `fetch()` ⇗](./docs/guides/differences-with-fetch.md)
@@ -215,7 +216,7 @@ is based on the request method that you use.
   url="/books"
   lazy
   render={({ fetch }) => {
-    <button onClick={() => fetch()}>Fetch books</div>;
+    <button onClick={() => fetch()}>Fetch books</button>;
   }}
 />
 ```

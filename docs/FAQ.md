@@ -10,6 +10,8 @@ We were skeptical at first, too, but it turns out that many of the complex thing
 component lifecycle. You can remove a considerable amount of code from your application by declaratively specifying how you want
 your requests to behave through JSX.
 
+We wrote [a guide](./guides/why-jsx.md) that goes into this question in greater detail.
+
 #### If a request is made when the component mounts, how does that work for POST, PATCH, or DELETE requests?
 
 The default behavior is that requests are only made on mount for `GET` requests when the component mounts, but

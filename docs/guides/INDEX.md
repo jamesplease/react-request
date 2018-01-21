@@ -2,6 +2,7 @@
 
 These guides provide tips and additional information that can help you use React Request.
 
+* [Why JSX?](./why-jsx.md)
 * [Using the `lazy` Prop](./using-the-lazy-prop.md)
 * [Aborting](./aborting.md)
 * [Differences with `fetch()`](./differences-with-fetch.md)

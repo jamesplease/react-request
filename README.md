@@ -51,6 +51,7 @@ yarn add react-request
   * [Request Deduplication ⇗](./docs/guides/request-deduplication.md)
   * [Best Practices ⇗](./docs/guides/best-practices.md)
   * [Integration with Technologies ⇗](./docs/guides/integration-with-technologies.md)
+* [Examples ⇗](./docs/examples.md)
 * [FAQ ⇗](./docs/FAQ.md)
 * [Acknowledgements](#acknowledgements)
 

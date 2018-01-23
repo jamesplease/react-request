@@ -1,5 +1,10 @@
 # React Request
 
+[![Travis build status](http://img.shields.io/travis/jmeas/react-request.svg?style=flat)](https://travis-ci.org/jmeas/react-request)
+[![npm version](https://img.shields.io/npm/v/react-request.svg)](https://www.npmjs.com/package/react-request)
+[![Test Coverage](https://codeclimate.com/github/jmeas/react-request/badges/coverage.svg)](https://codeclimate.com/github/jmeas/react-request)
+[![gzip size](http://img.badgesize.io/https://unpkg.com/react-request/dist/react-request.min.js?compression=gzip)](https://unpkg.com/react-request/dist/react-request.min.js)
+
 A library for making HTTP requests with React. Inspired by React Apollo.
 
 ### Motivation

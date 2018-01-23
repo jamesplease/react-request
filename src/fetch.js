@@ -13,7 +13,7 @@ function getRequestKey({ url, method, responseType, body }) {
 
 export default class Fetch extends React.Component {
   render() {
-    const { render, requestName } = this.props;
+    const { render, requestName, url } = this.props;
     const { fetching, response, data, error } = this.state;
 
     if (!render) {
@@ -22,6 +22,7 @@ export default class Fetch extends React.Component {
       return (
         render({
           requestName,
+          url,
           fetching: fetching,
           response: response,
           data: data,

@@ -192,6 +192,7 @@ It is called with one argument, `result`, an object with the following keys:
   available to you as `response.data`.
 * `data`: An alias of `response.data`.
 * `fetch`: A function that makes the HTTP request. See notes below.
+* `url`: The URL that was passed into `<Fetch />`.
 * `requestName`: The name of the request (see `requestName` below)
 
 There are three common use cases for the `fetch` prop:

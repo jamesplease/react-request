@@ -22,17 +22,7 @@ This library abstracts those features into a generic HTTP component.
 
 ### Installation
 
-Install using [npm](https://www.npmjs.com):
-
-```
-npm install react-request
-```
-
-or [yarn](https://yarnpkg.com/):
-
-```
-yarn add react-request
-```
+This package is not currently distributed on npm, but it will be shortly.
 
 ### Documentation
 

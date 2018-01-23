@@ -72,6 +72,7 @@
     "rollup-plugin-uglify": "^2.0.1"
   },
   "dependencies": {
-    "prop-types": "^15.6.0"
+    "prop-types": "^15.6.0",
+    "react-composer": "^2.0.0"
   }
 }

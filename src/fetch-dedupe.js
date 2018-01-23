@@ -3,6 +3,16 @@
 // array is pushed to.
 const requests = {};
 
+export function getRequestKey({ url, method, responseType, body }) {
+  return [url, method, responseType, body].join('||');
+}
+
+// Returns `true` if a request with `requestKey` is in flight,
+// and `false` otherwise.
+export function isRequestInFlight(requestKey) {
+  return Boolean(requests[requestKey]);
+}
+
 // This loops through all of the handlers for the request and either
 // resolves or rejects them.
 function resolveRequest({ requestKey, res, err }) {
@@ -21,7 +31,7 @@ function resolveRequest({ requestKey, res, err }) {
   requests[requestKey] = null;
 }
 
-export default function fetchDedupe(
+export function fetchDedupe(
   input,
   init,
   { requestKey, responseType, dedupe = true }

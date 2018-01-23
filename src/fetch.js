@@ -1,15 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import fetchDedupe from './fetch-dedupe';
+import { getRequestKey, fetchDedupe } from './fetch-dedupe';
 
 // This object is our cache
 // The keys of the object are requestKeys
 // The value of each key is a Response instance
 const responseCache = {};
-
-function getRequestKey({ url, method, responseType, body }) {
-  return [url, method, responseType, body].join('||');
-}
 
 export default class Fetch extends React.Component {
   render() {

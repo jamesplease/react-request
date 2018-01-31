@@ -315,6 +315,12 @@ For documentation on this prop, refer to the [response caching guide](./docs/gui
 > This prop behaves identically to the Apollo prop
 > [with the same name](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-fetchPolicy).
 
+##### `dedupe`
+
+A Boolean value representing whether or not the request should be
+[deduplicated](./docs/guides/request-deduplication.md).
+Defaults to `true`.
+
 ---
 
 #### `<FetchComposer />`

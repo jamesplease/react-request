@@ -86,7 +86,7 @@ export default class Fetch extends React.Component {
   }
 
   fetchData = (options, ignoreCache) => {
-    const { fetchPolicy, requestName } = this.props;
+    const { fetchPolicy, requestName, dedupe } = this.props;
 
     const {
       url,
@@ -167,7 +167,7 @@ export default class Fetch extends React.Component {
 
     this.setState({ fetching: true });
 
-    return fetchDedupe(url, init, { requestKey, responseType }).then(
+    return fetchDedupe(url, init, { requestKey, responseType, dedupe }).then(
       res => {
         if (isReadRequest) {
           responseCache[requestKey] = res;
@@ -209,6 +209,7 @@ Fetch.propTypes = {
   ]),
   transformResponse: PropTypes.func,
   lazy: PropTypes.bool,
+  dedupe: PropTypes.bool,
 
   url: PropTypes.string.isRequired,
   body: PropTypes.any,
@@ -265,6 +266,7 @@ Fetch.defaultProps = {
   onResponse: () => {},
   transformResponse: data => data,
   fetchPolicy: 'cache-first',
+  dedupe: true,
 
   method: 'get',
   referrerPolicy: '',

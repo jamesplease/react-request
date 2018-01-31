@@ -64,3 +64,21 @@ This may seem unreliable to you, but Apollo
 and it seems to be working.
 
 If this behavior ever causes problems, then we will revisit the approach.
+
+### Disabling deduplication
+
+You can disable deduplication with the `dedupe` prop.
+
+```jsx
+// In this example, two identical HTTP requests will be made at the same time.
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <Request url="/posts/1" dedupe={false} />
+        <Request url="/posts/1" dedupe={false} />
+      </div>
+    );
+  }
+}
+```

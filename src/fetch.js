@@ -99,52 +99,6 @@ export default class Fetch extends React.Component {
     }
   }
 
-  onResponseReceived = info => {
-    const {
-      error,
-      response,
-      hittingNetwork,
-      url,
-      init,
-      requestKey,
-      responseType
-    } = info;
-
-    this.responseReceivedInfo = null;
-    this.hasHandledResponse = true;
-
-    const data =
-      response && response.data
-        ? this.props.transformResponse(response.data)
-        : null;
-
-    if (hittingNetwork) {
-      this.props.afterFetch({
-        url,
-        init,
-        fetchDedupeConfig: { requestKey, responseType },
-        error,
-        response,
-        data,
-        didUnmount: this.willUnmount
-      });
-    }
-
-    if (this.willUnmount) {
-      return;
-    }
-
-    this.setState(
-      {
-        data,
-        error,
-        response,
-        fetching: false
-      },
-      () => this.props.onResponse(error, response)
-    );
-  };
-
   fetchData = (options, ignoreCache) => {
     const {
       fetchPolicy,
@@ -270,6 +224,52 @@ export default class Fetch extends React.Component {
 
         return error;
       }
+    );
+  };
+
+  onResponseReceived = info => {
+    const {
+      error,
+      response,
+      hittingNetwork,
+      url,
+      init,
+      requestKey,
+      responseType
+    } = info;
+
+    this.responseReceivedInfo = null;
+    this.hasHandledResponse = true;
+
+    const data =
+      response && response.data
+        ? this.props.transformResponse(response.data)
+        : null;
+
+    if (hittingNetwork) {
+      this.props.afterFetch({
+        url,
+        init,
+        fetchDedupeConfig: { requestKey, responseType },
+        error,
+        response,
+        data,
+        didUnmount: this.willUnmount
+      });
+    }
+
+    if (this.willUnmount) {
+      return;
+    }
+
+    this.setState(
+      {
+        data,
+        error,
+        response,
+        fetching: false
+      },
+      () => this.props.onResponse(error, response)
     );
   };
 }

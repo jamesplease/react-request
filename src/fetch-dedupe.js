@@ -21,37 +21,59 @@ function resolveRequest({ requestKey, res, err }) {
   requests[requestKey] = null;
 }
 
-export default function fetchDedupe(input, init, { requestKey, responseType }) {
-  if (!requests[requestKey]) {
-    requests[requestKey] = [];
+export default function fetchDedupe(
+  input,
+  init,
+  { requestKey, responseType, dedupe = true }
+) {
+  let proxyReq;
+  if (dedupe) {
+    if (!requests[requestKey]) {
+      requests[requestKey] = [];
+    }
+
+    const handlers = requests[requestKey];
+    const requestInFlight = Boolean(handlers.length);
+    const requestHandler = {};
+    proxyReq = new Promise((resolve, reject) => {
+      requestHandler.resolve = resolve;
+      requestHandler.reject = reject;
+    });
+
+    handlers.push(requestHandler);
+
+    if (requestInFlight) {
+      return proxyReq;
+    }
   }
 
-  const handlers = requests[requestKey];
-  const requestInFlight = Boolean(handlers.length);
-  const requestHandler = {};
-  const req = new Promise((resolve, reject) => {
-    requestHandler.resolve = resolve;
-    requestHandler.reject = reject;
-  });
-
-  handlers.push(requestHandler);
-
-  if (requestInFlight) {
-    return req;
-  }
-
-  fetch(input, init).then(
+  const request = fetch(input, init).then(
     res => {
       // The response body is a ReadableStream. ReadableStreams can only be read a single
       // time, so we must handle that in a central location, here, before resolving
       // the fetch.
       res[responseType]().then(data => {
         res.data = data;
-        resolveRequest({ requestKey, res });
+
+        if (dedupe) {
+          resolveRequest({ requestKey, res });
+        } else {
+          return res;
+        }
       });
     },
-    err => resolveRequest({ requestKey, err })
+    err => {
+      if (dedupe) {
+        resolveRequest({ requestKey, err });
+      } else {
+        return err;
+      }
+    }
   );
 
-  return req;
+  if (dedupe) {
+    return proxyReq;
+  } else {
+    return request;
+  }
 }

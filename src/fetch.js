@@ -73,31 +73,26 @@ export default class Fetch extends React.Component {
     const nextRequestKey = getRequestKey(nextProps);
 
     if (currentRequestKey !== nextRequestKey) {
-      // When a request is already in flight, and a new one is
-      // configured, then we need to "cancel" the previous one.
-      if (this.fetching && !this.hasHandledResponse) {
-        this.onResponseReceived({
-          ...this.responseReceivedInfo,
-          error: new Error('Request configuration changed'),
-          hittingNetwork: true
-        });
-      }
-
       this.fetchData(nextProps);
     }
   }
 
   componentWillUnmount() {
     this.willUnmount = true;
+    this.cancelExistingRequest('Component unmounted');
+  }
 
-    if (this.fetching && !this.hasHandledResponse) {
+  // When a request is already in flight, and a new one is
+  // configured, then we need to "cancel" the previous one.
+  cancelExistingRequest = reason => {
+    if (this.state.fetching && !this.hasHandledResponse) {
       this.onResponseReceived({
         ...this.responseReceivedInfo,
-        error: new Error('Component unmounted'),
+        error: new Error(reason),
         hittingNetwork: true
       });
     }
-  }
+  };
 
   fetchData = (options, ignoreCache) => {
     const {
@@ -107,6 +102,8 @@ export default class Fetch extends React.Component {
       beforeFetch,
       afterFetch
     } = this.props;
+
+    this.cancelExistingRequest('New fetch specified');
 
     const {
       url,

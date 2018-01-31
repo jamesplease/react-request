@@ -19,10 +19,10 @@ export default class Fetch extends React.Component {
         render({
           requestName,
           url,
-          fetching: fetching,
-          response: response,
-          data: data,
-          error: error,
+          fetching,
+          response,
+          data,
+          error,
           doFetch: opts => this.fetchData(opts, true)
         }) || null
       );

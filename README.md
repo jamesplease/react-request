@@ -15,12 +15,12 @@ that make network requests for you. Although Apollo is designed to work
 specifically with [GraphQL](http://graphql.org), many of the features of React
 Apollo make sense outside of that context.
 
-Although I was initially turned off by the idea of making HTTP requests in
-JSX, I soon realized that the declarative API of Apollo's requests
-**save you from writing a large amount of code**.
+I was initially turned off by the idea of making HTTP requests in
+JSX, but I soon realized that the declarative API of Apollo's requests
+**save you from writing a substantial amount of code**.
 
-This library abstracts some of React Apollo's best features into an HTTP
-component that works with any API.
+Which is why I made React Request. This library abstracts some of React
+Apollo's best features into an HTTP component that works with any API.
 
 ### Features
 

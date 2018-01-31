@@ -62,7 +62,7 @@ export function fetchDedupe(
       // The response body is a ReadableStream. ReadableStreams can only be read a single
       // time, so we must handle that in a central location, here, before resolving
       // the fetch.
-      res[responseType]().then(data => {
+      return res[responseType]().then(data => {
         res.data = data;
 
         if (dedupe) {

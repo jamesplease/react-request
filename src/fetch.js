@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getRequestKey, fetchDedupe } from './fetch-dedupe';
+import { getRequestKey, fetchDedupe, isRequestInFlight } from './fetch-dedupe';
 
 // This object is our cache
 // The keys of the object are requestKeys
@@ -82,7 +82,13 @@ export default class Fetch extends React.Component {
   }
 
   fetchData = (options, ignoreCache) => {
-    const { fetchPolicy, requestName, dedupe } = this.props;
+    const {
+      fetchPolicy,
+      requestName,
+      dedupe,
+      beforeFetch,
+      afterFetch
+    } = this.props;
 
     const {
       url,
@@ -104,15 +110,29 @@ export default class Fetch extends React.Component {
 
     const requestKey = getRequestKey({ url, method, body, responseType });
 
+    let hittingNetwork;
+    let init;
     const onResponseReceived = ({ error, response }) => {
-      if (this.willUnmount) {
-        return;
-      }
-
       const data =
         response && response.data
           ? this.props.transformResponse(response.data)
           : null;
+
+      if (hittingNetwork) {
+        afterFetch({
+          url,
+          init,
+          fetchDedupeConfig: { requestKey, responseType },
+          error,
+          response,
+          data,
+          didUnmount: this.willUnmount
+        });
+      }
+
+      if (this.willUnmount) {
+        return;
+      }
 
       this.setState(
         {
@@ -146,7 +166,7 @@ export default class Fetch extends React.Component {
       }
     }
 
-    const init = {
+    init = {
       body,
       credentials,
       headers,
@@ -163,14 +183,20 @@ export default class Fetch extends React.Component {
 
     this.setState({ fetching: true });
 
+    hittingNetwork = !isRequestInFlight(requestKey) || !dedupe;
+
+    if (hittingNetwork) {
+      beforeFetch({
+        url,
+        init,
+        fetchDedupeConfig: { requestKey, responseType }
+      });
+    }
+
     return fetchDedupe(url, init, { requestKey, responseType, dedupe }).then(
       res => {
         if (isReadRequest) {
           responseCache[requestKey] = res;
-        }
-
-        if (this.willUnmount) {
-          return;
         }
 
         onResponseReceived({ response: res });
@@ -196,6 +222,8 @@ Fetch.propTypes = {
     'cache-only'
   ]),
   onResponse: PropTypes.func,
+  beforeFetch: PropTypes.func,
+  afterFetch: PropTypes.func,
   responseType: PropTypes.oneOf([
     'json',
     'text',
@@ -260,6 +288,8 @@ Fetch.propTypes = {
 Fetch.defaultProps = {
   responseType: 'json',
   onResponse: () => {},
+  beforeFetch: () => {},
+  afterFetch: () => {},
   transformResponse: data => data,
   fetchPolicy: 'cache-first',
   dedupe: true,

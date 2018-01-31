@@ -23,7 +23,7 @@ export default class Fetch extends React.Component {
           response: response,
           data: data,
           error: error,
-          fetch: opts => this.fetchData(opts, true)
+          doFetch: opts => this.fetchData(opts, true)
         }) || null
       );
     }

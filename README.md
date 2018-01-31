@@ -107,7 +107,9 @@ class App extends Component {
             <div>
               {readPost.fetching && 'Loading post 1'}
               {!readPost.fetching && 'Post 1 is not being fetched'}
-              <button onClick={() => deletePost.fetch()}>Delete Post 1</button>
+              <button onClick={() => deletePost.doFetch()}>
+                Delete Post 1
+              </button>
             </div>
           );
         }}
@@ -165,8 +167,8 @@ Here's an example demonstrating some of the most commonly-used props:
     'csrf-token': myCsrfToken
   }}
   body={JSON.stringify({ title: 'New post' })}
-  render={({ fetch }) => {
-    <button onClick={() => fetch()}>Update Post</button>;
+  render={({ doFetch }) => {
+    <button onClick={() => doFetch()}>Update Post</button>;
   }}
 />
 ```
@@ -186,18 +188,18 @@ It is called with one argument, `result`, an object with the following keys:
   [`body`](https://developer.mozilla.org/en-US/docs/Web/API/Body) will already be read, and made
   available to you as `response.data`.
 * `data`: An alias of `response.data`.
-* `fetch`: A function that makes the HTTP request. See notes below.
+* `doFetch`: A function that makes the HTTP request. See notes below.
 * `url`: The URL that was passed into `<Fetch />`.
 * `requestName`: The name of the request (see `requestName` below)
 
-There are three common use cases for the `fetch` prop:
+There are three common use cases for the `doFetch` prop:
 
 * For GET requests, it can allow users to refresh the data
 * Anytime there is a network error, you can use this function to retry the request
 * When `lazy` is `true`, you can use this to actually make the request, typically as
   a result of user input
 
-`fetch` accepts one argument: `options`. Any of the `fetch()` options described above are valid
+`doFetch` accepts one argument: `options`. Any of the `global.fetch()` options described above are valid
 `options`. This allows you to customize the request from within the component.
 
 ##### `lazy`
@@ -398,7 +400,7 @@ class App extends Component {
               {readAuthor.fetching && 'Fetching author'}
               {!readBook.fetching && 'Book not being fetched'}
               {!readAuthor.fetching && 'Author not being fetched'}
-              <button onClick={() => deleteBook.fetch()}>
+              <button onClick={() => deleteBook.doFetch()}>
                 Delete this book
               </button>
             </div>

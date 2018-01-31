@@ -5,23 +5,30 @@ There are a few places where this library is different from React Apollo.
 
 ### Missing Features
 
-React Request is still a work in progress. The following features haven't
-been implemented yet:
+React Request is intended to be relatively lightweight, so it does not implement these
+props from React Apollo:
 
 * Polling
 * Optimistic responses
 * `errorPolicy` prop
 * `notifyOnNetworkStatusChange` prop
 
-These features will be added shortly. If you're interested in helping out, we love Pull Requests!
+The general idea behind these omissions is that we believe that implementing these features
+within your app shouldn't be much work. If you disagree, open an issue – we may be
+wrong!
 
 ### Higher-order Component vs Render Props
 
-This library uses a render prop rather than a higher-order component (HoC). Render props are more
-powerful than HoCs, which is why we went with this approach.
+This library uses a render prop rather than a higher-order component (HoC). As of January 2018,
+React Apollo does not implement render prop components, although they are on the roadmap for
+a future release.
 
-Once the new React context API is finalized, we will likely adjust this project's API to more closely
-align with that API.
+Render prop components are more powerful than HoCs, so we currently do not intend to release
+an HoC. But you can build your own!
+
+Oh, one more thing: once the new React context API is finalized, we will likely adjust this
+project's API to more closely align with that API. As of January 2018, it is looking that
+will involve switching the render prop from being `render` to `children` instead.
 
 ### No queries or mutations
 

@@ -5,17 +5,22 @@
 [![Test Coverage](https://codeclimate.com/github/jmeas/react-request/badges/coverage.svg)](https://codeclimate.com/github/jmeas/react-request)
 [![gzip size](http://img.badgesize.io/https://unpkg.com/react-request/dist/react-request.min.js?compression=gzip)](https://unpkg.com/react-request/dist/react-request.min.js)
 
-A library for making HTTP requests with React. Inspired by React Apollo.
+A library for making HTTP requests with React.
 
 ### Motivation
 
 [React Apollo](https://github.com/apollographql/react-apollo) exports
-[a higher-order component](https://www.apollographql.com/docs/react/basics/setup.html#graphql)
-that makes network requests for you. Although Apollo is designed to work
+[components](https://www.apollographql.com/docs/react/basics/setup.html#graphql)
+that make network requests for you. Although Apollo is designed to work
 specifically with [GraphQL](http://graphql.org), many of the features of React
 Apollo make sense outside of that context.
 
-This library abstracts those features into a generic HTTP component.
+Although I was initially turned off by the idea of making HTTP requests in
+JSX, I soon realized that the declarative API of Apollo's requests
+**save you from writing a large amount of code**.
+
+This library abstracts some of React Apollo's best features into an HTTP
+component that works with any API.
 
 ### Features
 

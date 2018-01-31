@@ -187,7 +187,8 @@ It is called with one argument, `result`, an object with the following keys:
 * `response`: An instance of [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response). The
   [`body`](https://developer.mozilla.org/en-US/docs/Web/API/Body) will already be read, and made
   available to you as `response.data`.
-* `data`: An alias of `response.data`.
+* `data`: The data returned in `response`. This will be different from `response.data` if a
+  `transformData` prop was passed to `<Fetch/>`.
 * `doFetch`: A function that makes the HTTP request. See notes below.
 * `url`: The URL that was passed into `<Fetch />`.
 * `requestName`: The name of the request (see `requestName` below)
@@ -249,6 +250,8 @@ with one arguments, an object with the following keys:
 * `fetchDedupeOptions`: An object with the following keys: `requestKey`,
   `responseType`, `dedupe`.
 * `response`: The response that was received from the HTTP request
+* `data`: The transformed data from the response. This will be different from
+  `response.data` if a `transformData` function was passed as a prop to `<Fetch/>`.
 * `error`: An error returned from the HTTP request
 * `didUnmount`: A Boolean representing whether or not the component has unmounted
 

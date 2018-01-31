@@ -23,7 +23,7 @@ This library abstracts those features into a generic HTTP component.
 ✓ Smart [deduping of requests](./docs/guides/request-deduplication.md)  
 ✓ Customizable [response caching](./docs/guides/response-caching.md)  
 ✓ Expressive API for parallel requests  
-✓ Small footprint (~2kb gzipped)
+✓ Small footprint (~3kb gzipped)
 
 ### Installation
 

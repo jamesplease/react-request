@@ -75,7 +75,7 @@ export default class Fetch extends React.Component {
     if (currentRequestKey !== nextRequestKey) {
       // When a request is already in flight, and a new one is
       // configured, then we need to "cancel" the previous one.
-      if (this.fetching) {
+      if (this.fetching && !this.hasHandledResponse) {
         this.onResponseReceived({
           ...this.responseReceivedInfo,
           error: new Error('Request configuration changed'),
@@ -89,6 +89,14 @@ export default class Fetch extends React.Component {
 
   componentWillUnmount() {
     this.willUnmount = true;
+
+    if (this.fetching && !this.hasHandledResponse) {
+      this.onResponseReceived({
+        ...this.responseReceivedInfo,
+        error: new Error('Component unmounted'),
+        hittingNetwork: true
+      });
+    }
   }
 
   onResponseReceived = info => {
@@ -103,6 +111,7 @@ export default class Fetch extends React.Component {
     } = info;
 
     this.responseReceivedInfo = null;
+    this.hasHandledResponse = true;
 
     const data =
       response && response.data
@@ -179,6 +188,7 @@ export default class Fetch extends React.Component {
     // If the request config changes, we need to be able to accurately
     // cancel the in-flight request.
     this.responseReceivedInfo = responseReceivedInfo;
+    this.hasHandledResponse = false;
 
     if (fetchPolicy !== 'network-only' && isReadRequest && !ignoreCache) {
       const cachedResponse = responseCache[requestKey];
@@ -239,19 +249,25 @@ export default class Fetch extends React.Component {
           responseCache[requestKey] = res;
         }
 
-        this.onResponseReceived({
-          ...responseReceivedInfo,
-          response: res,
-          hittingNetwork
-        });
+        if (!this.hasHandledResponse) {
+          this.onResponseReceived({
+            ...responseReceivedInfo,
+            response: res,
+            hittingNetwork
+          });
+        }
+
         return res;
       },
       error => {
-        this.onResponseReceived({
-          ...responseReceivedInfo,
-          error,
-          hittingNetwork
-        });
+        if (!this.hasHandledResponse) {
+          this.onResponseReceived({
+            ...responseReceivedInfo,
+            error,
+            hittingNetwork
+          });
+        }
+
         return error;
       }
     );

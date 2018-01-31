@@ -220,10 +220,49 @@ is based on the request method that you use.
 />
 ```
 
+##### `beforeFetch`
+
+A function that is called just before a network request is initiated. It is called
+with one argument, an object with the following keys:
+
+* `url`: The URL of the request
+* `init`: The second argument passed to `global.fetch()`, which specifies things
+  such as the body, method, and so on
+* `fetchDedupeOptions`: An object with the following keys: `requestKey`,
+  `responseType`, `dedupe`.
+
+This can be used for analytics or syncing response data with a data store such
+as [Redux](https://github.com/reactjs/redux/).
+
+> Note: This function is not called when the component reads from the cache.
+
+##### `afterFetch`
+
+A function that is called anytime that a network response is received. It is called
+with one arguments, an object with the following keys:
+
+* `url`: The URL of the request
+* `init`: The second argument passed to `global.fetch()`, which specifies things
+  such as the body, method, and so on
+* `fetchDedupeOptions`: An object with the following keys: `requestKey`,
+  `responseType`, `dedupe`.
+* `response`: The response that was received from the HTTP request
+* `error`: An error returned from the HTTP request
+* `didUnmount`: A Boolean representing whether or not the component has unmounted
+
+This can be used for analytics or syncing response data with a data store such
+as [Redux](https://github.com/reactjs/redux/).
+
+> Note: This function is not called when the component reads from the cache.
+
 ##### `onResponse`
 
-A function that is called every time a response is received. Receives two arguments: `error` and `response`.
-This could be used for analytics or syncing response data with a store such as [Redux](https://github.com/reactjs/redux/).
+A function that is called every time a response is received, whether that
+response is from the cache or from a network request. Receives two arguments:
+`error` and `response`.
+
+> Note: `onResponse` is not called if the component unmounts before the
+> response is received.
 
 ```jsx
 <Fetch

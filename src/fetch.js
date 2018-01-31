@@ -19,10 +19,10 @@ export default class Fetch extends React.Component {
         render({
           requestName,
           url,
-          fetching: fetching,
-          response: response,
-          data: data,
-          error: error,
+          fetching,
+          response,
+          data,
+          error,
           doFetch: opts => this.fetchData(opts, true)
         }) || null
       );
@@ -79,7 +79,20 @@ export default class Fetch extends React.Component {
 
   componentWillUnmount() {
     this.willUnmount = true;
+    this.cancelExistingRequest('Component unmounted');
   }
+
+  // When a request is already in flight, and a new one is
+  // configured, then we need to "cancel" the previous one.
+  cancelExistingRequest = reason => {
+    if (this.state.fetching && !this.hasHandledResponse) {
+      this.onResponseReceived({
+        ...this.responseReceivedInfo,
+        error: new Error(reason),
+        hittingNetwork: true
+      });
+    }
+  };
 
   fetchData = (options, ignoreCache) => {
     const {
@@ -89,6 +102,8 @@ export default class Fetch extends React.Component {
       beforeFetch,
       afterFetch
     } = this.props;
+
+    this.cancelExistingRequest('New fetch specified');
 
     const {
       url,
@@ -110,49 +125,31 @@ export default class Fetch extends React.Component {
 
     const requestKey = getRequestKey({ url, method, body, responseType });
 
-    let hittingNetwork;
-    let init;
-    const onResponseReceived = ({ error, response }) => {
-      const data =
-        response && response.data
-          ? this.props.transformResponse(response.data)
-          : null;
-
-      if (hittingNetwork) {
-        afterFetch({
-          url,
-          init,
-          fetchDedupeConfig: { requestKey, responseType },
-          error,
-          response,
-          data,
-          didUnmount: this.willUnmount
-        });
-      }
-
-      if (this.willUnmount) {
-        return;
-      }
-
-      this.setState(
-        {
-          data,
-          error,
-          response,
-          fetching: false
-        },
-        () => this.props.onResponse(error, response)
-      );
-    };
-
     const uppercaseMethod = method.toUpperCase();
     const isReadRequest = uppercaseMethod === 'GET';
+
+    const responseReceivedInfo = {
+      url,
+      init,
+      requestKey,
+      responseType
+    };
+
+    // This is necessary because `options` may have overridden the props.
+    // If the request config changes, we need to be able to accurately
+    // cancel the in-flight request.
+    this.responseReceivedInfo = responseReceivedInfo;
+    this.hasHandledResponse = false;
 
     if (fetchPolicy !== 'network-only' && isReadRequest && !ignoreCache) {
       const cachedResponse = responseCache[requestKey];
 
       if (cachedResponse) {
-        onResponseReceived({ response: cachedResponse });
+        this.onResponseReceived({
+          ...responseReceivedInfo,
+          response: cachedResponse,
+          hittingNetwork: false
+        });
 
         if (fetchPolicy === 'cache-first') {
           return Promise.resolve(cachedResponse);
@@ -161,12 +158,16 @@ export default class Fetch extends React.Component {
         const cacheError = new Error(
           `Response for "${requestName}" not found in cache.`
         );
-        onResponseReceived({ error: cacheError });
+        this.onResponseReceived({
+          ...responseReceivedInfo,
+          error: cacheError,
+          hittingNetwork: false
+        });
         return Promise.resolve(cacheError);
       }
     }
 
-    init = {
+    const init = {
       body,
       credentials,
       headers,
@@ -183,7 +184,7 @@ export default class Fetch extends React.Component {
 
     this.setState({ fetching: true });
 
-    hittingNetwork = !isRequestInFlight(requestKey) || !dedupe;
+    const hittingNetwork = !isRequestInFlight(requestKey) || !dedupe;
 
     if (hittingNetwork) {
       beforeFetch({
@@ -199,13 +200,73 @@ export default class Fetch extends React.Component {
           responseCache[requestKey] = res;
         }
 
-        onResponseReceived({ response: res });
+        if (!this.hasHandledResponse) {
+          this.onResponseReceived({
+            ...responseReceivedInfo,
+            response: res,
+            hittingNetwork
+          });
+        }
+
         return res;
       },
       error => {
-        onResponseReceived({ error });
+        if (!this.hasHandledResponse) {
+          this.onResponseReceived({
+            ...responseReceivedInfo,
+            error,
+            hittingNetwork
+          });
+        }
+
         return error;
       }
+    );
+  };
+
+  onResponseReceived = info => {
+    const {
+      error,
+      response,
+      hittingNetwork,
+      url,
+      init,
+      requestKey,
+      responseType
+    } = info;
+
+    this.responseReceivedInfo = null;
+    this.hasHandledResponse = true;
+
+    const data =
+      response && response.data
+        ? this.props.transformResponse(response.data)
+        : null;
+
+    if (hittingNetwork) {
+      this.props.afterFetch({
+        url,
+        init,
+        fetchDedupeConfig: { requestKey, responseType },
+        error,
+        response,
+        data,
+        didUnmount: this.willUnmount
+      });
+    }
+
+    if (this.willUnmount) {
+      return;
+    }
+
+    this.setState(
+      {
+        data,
+        error,
+        response,
+        fetching: false
+      },
+      () => this.props.onResponse(error, response)
     );
   };
 }

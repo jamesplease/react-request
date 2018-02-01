@@ -36,9 +36,7 @@ export function succeeds() {
         }
       });
     },
-    catch() {
-      return jest.fn().mockReturnValue(hangs());
-    }
+    catch() {}
   };
 }
 
@@ -46,10 +44,7 @@ export function fails() {
   return {
     then(onSuccess, onError) {
       onError(new TypeError('Network error'));
-      return jest.fn().mockReturnValue(hangs());
     },
-    catch(cb) {
-      return jest.fn().mockReturnValue(hangs());
-    }
+    catch(cb) {}
   };
 }

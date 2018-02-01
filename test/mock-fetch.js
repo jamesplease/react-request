@@ -1,7 +1,11 @@
 export function hangs() {
   return {
-    then() {},
-    catch() {}
+    then() {
+      return hangs();
+    },
+    catch() {
+      return hangs();
+    }
   };
 }
 
@@ -36,15 +40,14 @@ export function succeeds() {
         }
       });
     },
-    catch() {}
+    catch() {
+      return hangs();
+    }
   };
 }
 
 export function fails() {
-  return {
-    then(onSuccess, onError) {
-      onError(new TypeError('Network error'));
-    },
-    catch(cb) {}
-  };
+  return new Promise((resolve, reject) => {
+    reject(new TypeError('Network error'));
+  });
 }

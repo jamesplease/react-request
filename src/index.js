@@ -1,4 +1,16 @@
-import Fetch from './fetch';
-import FetchComposer from './fetch-composer';
+import { Fetch, clearResponseCache } from './fetch';
+import {
+  fetchDedupe,
+  getRequestKey,
+  clearRequestCache,
+  isRequestInFlight
+} from './fetch-dedupe';
 
-export { Fetch, FetchComposer };
+export {
+  Fetch,
+  fetchDedupe,
+  getRequestKey,
+  clearRequestCache,
+  clearResponseCache,
+  isRequestInFlight
+};

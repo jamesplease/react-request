@@ -5,9 +5,13 @@ import { getRequestKey, fetchDedupe, isRequestInFlight } from './fetch-dedupe';
 // This object is our cache
 // The keys of the object are requestKeys
 // The value of each key is a Response instance
-const responseCache = {};
+let responseCache = {};
 
-export default class Fetch extends React.Component {
+export function clearResponseCache() {
+  responseCache = {};
+}
+
+export class Fetch extends React.Component {
   render() {
     const { render, requestName, url } = this.props;
     const { fetching, response, data, error } = this.state;
@@ -23,7 +27,7 @@ export default class Fetch extends React.Component {
           response,
           data,
           error,
-          doFetch: opts => this.fetchData(opts, true)
+          doFetch: this.fetchRenderProp
         }) || null
       );
     }
@@ -34,7 +38,7 @@ export default class Fetch extends React.Component {
 
     this.state = {
       requestName: props.requestName,
-      fetching: !this.isLazy(),
+      fetching: false,
       response: null,
       data: null,
       error: null
@@ -85,13 +89,25 @@ export default class Fetch extends React.Component {
   // When a request is already in flight, and a new one is
   // configured, then we need to "cancel" the previous one.
   cancelExistingRequest = reason => {
-    if (this.state.fetching && !this.hasHandledResponse) {
+    if (this.state.fetching && !this.hasHandledNetworkResponse) {
       this.onResponseReceived({
         ...this.responseReceivedInfo,
         error: new Error(reason),
         hittingNetwork: true
       });
     }
+  };
+
+  fetchRenderProp = options => {
+    // We wrap this in a setTimeout so as to avoid calls to `setState`
+    // in render, which React does not allow.
+    //
+    // tl;dr, this cannot cause a problem:
+    //
+    // `<Fetch render={({ doFetch }) => doFetch()} />
+    setTimeout(() => {
+      this.fetchData(options, true);
+    });
   };
 
   fetchData = (options, ignoreCache) => {
@@ -103,7 +119,7 @@ export default class Fetch extends React.Component {
       afterFetch
     } = this.props;
 
-    this.cancelExistingRequest('New fetch specified');
+    this.cancelExistingRequest('New fetch initiated');
 
     const {
       url,
@@ -139,7 +155,7 @@ export default class Fetch extends React.Component {
     // If the request config changes, we need to be able to accurately
     // cancel the in-flight request.
     this.responseReceivedInfo = responseReceivedInfo;
-    this.hasHandledResponse = false;
+    this.hasHandledNetworkResponse = false;
 
     if (fetchPolicy !== 'network-only' && isReadRequest && !ignoreCache) {
       const cachedResponse = responseCache[requestKey];
@@ -148,10 +164,11 @@ export default class Fetch extends React.Component {
         this.onResponseReceived({
           ...responseReceivedInfo,
           response: cachedResponse,
-          hittingNetwork: false
+          hittingNetwork: false,
+          stillFetching: fetchPolicy === 'cache-and-network'
         });
 
-        if (fetchPolicy === 'cache-first') {
+        if (fetchPolicy === 'cache-first' || fetchPolicy === 'cache-only') {
           return Promise.resolve(cachedResponse);
         }
       } else if (fetchPolicy === 'cache-only') {
@@ -166,7 +183,6 @@ export default class Fetch extends React.Component {
         return Promise.resolve(cacheError);
       }
     }
-
     const init = {
       body,
       credentials,
@@ -190,7 +206,8 @@ export default class Fetch extends React.Component {
       beforeFetch({
         url,
         init,
-        fetchDedupeConfig: { requestKey, responseType }
+        requestKey,
+        responseType
       });
     }
 
@@ -200,7 +217,7 @@ export default class Fetch extends React.Component {
           responseCache[requestKey] = res;
         }
 
-        if (!this.hasHandledResponse) {
+        if (!this.hasHandledNetworkResponse) {
           this.onResponseReceived({
             ...responseReceivedInfo,
             response: res,
@@ -211,7 +228,7 @@ export default class Fetch extends React.Component {
         return res;
       },
       error => {
-        if (!this.hasHandledResponse) {
+        if (!this.hasHandledNetworkResponse) {
           this.onResponseReceived({
             ...responseReceivedInfo,
             error,
@@ -226,17 +243,21 @@ export default class Fetch extends React.Component {
 
   onResponseReceived = info => {
     const {
-      error,
-      response,
+      error = null,
+      response = null,
       hittingNetwork,
       url,
       init,
       requestKey,
-      responseType
+      responseType,
+      stillFetching = false
     } = info;
 
     this.responseReceivedInfo = null;
-    this.hasHandledResponse = true;
+
+    if (!stillFetching) {
+      this.hasHandledNetworkResponse = true;
+    }
 
     const data =
       response && response.data
@@ -247,11 +268,12 @@ export default class Fetch extends React.Component {
       this.props.afterFetch({
         url,
         init,
-        fetchDedupeConfig: { requestKey, responseType },
+        requestKey,
+        responseType,
         error,
         response,
         data,
-        didUnmount: this.willUnmount
+        didUnmount: Boolean(this.willUnmount)
       });
     }
 
@@ -264,7 +286,7 @@ export default class Fetch extends React.Component {
         data,
         error,
         response,
-        fetching: false
+        fetching: stillFetching
       },
       () => this.props.onResponse(error, response)
     );
@@ -347,6 +369,7 @@ Fetch.propTypes = {
 };
 
 Fetch.defaultProps = {
+  requestName: 'anonymousRequest',
   responseType: 'json',
   onResponse: () => {},
   beforeFetch: () => {},

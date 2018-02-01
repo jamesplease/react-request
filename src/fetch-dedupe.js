@@ -1,7 +1,7 @@
 // This is a cache of in-flight requests. Each request key maps to an
 // array of Promises. When the request resolves, each promise in the
 // array is pushed to.
-const requests = {};
+let requests = {};
 
 export function getRequestKey({ url, method, responseType, body }) {
   return [url, method, responseType, body].join('||');
@@ -11,6 +11,10 @@ export function getRequestKey({ url, method, responseType, body }) {
 // and `false` otherwise.
 export function isRequestInFlight(requestKey) {
   return Boolean(requests[requestKey]);
+}
+
+export function clearRequestCache() {
+  requests = {};
 }
 
 // This loops through all of the handlers for the request and either

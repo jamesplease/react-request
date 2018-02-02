@@ -28,7 +28,7 @@ Apollo's best features into an HTTP component that works with any API.
 ✓ Smart [deduping of requests](./docs/guides/request-deduplication.md)  
 ✓ Customizable [response caching](./docs/guides/response-caching.md)  
 ✓ Expressive API for parallel requests  
-✓ Small footprint (~3kb gzipped)
+✓ Small footprint (~2kb gzipped)
 
 ### Installation
 

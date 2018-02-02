@@ -228,8 +228,8 @@ is based on the request method that you use.
 <Fetch
   url="/books"
   lazy
-  render={({ fetch }) => {
-    <button onClick={() => fetch()}>Fetch books</button>;
+  render={({ doFetch }) => {
+    <button onClick={() => doFetch()}>Fetch books</button>;
   }}
 />
 ```

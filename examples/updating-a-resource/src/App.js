@@ -25,6 +25,12 @@ class App extends Component {
       />
     );
   }
+
+  getUpdatedPost() {
+    return JSON.stringify({
+      title: 'hello'
+    });
+  }
 }
 
 export default App;

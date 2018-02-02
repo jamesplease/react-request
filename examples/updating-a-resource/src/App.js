@@ -6,8 +6,8 @@ class App extends Component {
     return (
       <Fetch
         url="https://jsonplaceholder.typicode.com/posts/1"
-        method="patch"
-        render={({ fetching, error, data, doFetch }) => (
+        method="patch">
+        {({ fetching, error, data, doFetch }) => (
           <div>
             <button
               onClick={() =>
@@ -22,7 +22,7 @@ class App extends Component {
             {error && 'There was a network error'}
           </div>
         )}
-      />
+      </Fetch>
     );
   }
 

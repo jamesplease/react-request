@@ -13,8 +13,8 @@ class App extends Component {
             url="https://jsonplaceholder.typicode.com/posts/1"
             method="delete"
           />
-        ]}
-        render={([readPostOne, readPostTwo, deletePostOne]) => (
+        ]}>
+        {([readPostOne, readPostTwo, deletePostOne]) => (
           <div>
             <button
               onClick={() => deletePostOne.doFetch()}
@@ -29,7 +29,7 @@ class App extends Component {
             {!readPostTwo.fetching && 'Not currently fetching post 2.'}
           </div>
         )}
-      />
+      </Composer>
     );
   }
 }

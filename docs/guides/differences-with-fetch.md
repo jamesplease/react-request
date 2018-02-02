@@ -53,12 +53,12 @@ fetch('/posts/2', {
   url="/posts/2"
   method="PATCH"
   credentials="include"
-  body={JSON.stringify({ title: 'New post' })}
-  render={({ data }) => {
+  body={JSON.stringify({ title: 'New post' })}>
+  {({ data }) => {
     console.log('Got my JSON', data);
     return null;
   }}
-/>
+</Fetch>
 ```
 
 ### Only string request bodies are supported

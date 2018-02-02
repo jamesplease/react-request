@@ -75,9 +75,8 @@ import { Fetch } from 'react-request';
 class App extends Component {
   render() {
     return (
-      <Fetch
-        url="https://jsonplaceholder.typicode.com/posts/1"
-        render={({ fetching, error, data }) => {
+      <Fetch url="https://jsonplaceholder.typicode.com/posts/1">
+        {({ fetching, error, data }) => {
           if (fetching) {
             return <div>Loading data...</div>;
           }
@@ -93,7 +92,7 @@ class App extends Component {
             </div>
           );
         }}
-      />
+      </Fetch>
     );
   }
 }
@@ -117,8 +116,8 @@ class App extends Component {
             url="https://jsonplaceholder.typicode.com/posts/1"
             method="DELETE"
           />
-        ]}
-        render={([readPost, deletePost]) => {
+        ]}>
+        {([readPost, deletePost]) => {
           return (
             <div>
               {readPost.fetching && 'Loading post 1'}
@@ -129,7 +128,7 @@ class App extends Component {
             </div>
           );
         }}
-      />
+      </Composer>
     );
   }
 }
@@ -177,16 +176,16 @@ Here's an example demonstrating some of the most commonly-used props:
   headers={{
     'csrf-token': myCsrfToken
   }}
-  body={JSON.stringify({ title: 'New post' })}
-  render={({ doFetch }) => {
+  body={JSON.stringify({ title: 'New post' })}>
+  {({ doFetch }) => {
     <button onClick={() => doFetch()}>Update Post</button>;
   }}
-/>
+</Fetch>
 ```
 
 In addition to the `fetch()` props, there are a number of other useful props.
 
-##### `render`
+##### `children`
 
 The [render prop](https://cdb.reacttraining.com/use-a-render-prop-50de598f11ce) of this component.
 It is called with one argument, `result`, an object with the following keys:
@@ -227,11 +226,11 @@ is based on the request method that you use.
 ```jsx
 <Fetch
   url="/books"
-  lazy
-  render={({ doFetch }) => {
+  lazy>
+  {({ doFetch }) => {
     <button onClick={() => doFetch()}>Fetch books</button>;
   }}
-/>
+</Fetch>
 ```
 
 ##### `beforeFetch`
@@ -289,11 +288,11 @@ response is from the cache or from a network request. Receives two arguments:
     } else {
       console.log('Got a response!', response);
     }
-  }}
-  render={() => {
+  }}>
+  {() => {
     <div>Hello</div>;
   }}
-/>
+</Fetch>
 ```
 
 ##### `transformData`
@@ -304,10 +303,8 @@ hook to transform the data before it is passed into `render`.
 ```jsx
 <Fetch
   url="/posts/2"
-  transformData={data => {
-    return data.post;
-  }
-  render={({ fetching, error, response, data }) => {
+  transformData={data => data.post>
+  {({ fetching, error, response, data }) => {
     <div>
       {fetching && ('Loading...')}
       {error && ('There was an error.')}
@@ -319,7 +316,7 @@ hook to transform the data before it is passed into `render`.
       )}
     </div>
   }}
-/>
+</Fetch>
 ```
 
 ##### `responseType`
@@ -337,11 +334,11 @@ on [Body](https://developer.mozilla.org/en-US/docs/Web/API/Body).
     return {
       countryName
     };
-  }}
-  render={({ data }) => {
+  }}>
+  {({ data }) => {
     <div>{data.countryName}</div>;
   }}
-/>
+</Fetch>
 ```
 
 ##### `requestName`

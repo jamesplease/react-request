@@ -4,9 +4,8 @@ import { Fetch } from 'react-request';
 class App extends Component {
   render() {
     return (
-      <Fetch
-        url="https://jsonplaceholder.typicode.com/posts/1"
-        render={({ fetching, error, data }) => (
+      <Fetch url="https://jsonplaceholder.typicode.com/posts/1">
+        {({ fetching, error, data }) => (
           <div>
             {fetching && 'Loading...'}
             {error && 'There was a network error'}
@@ -18,7 +17,7 @@ class App extends Component {
             )}
           </div>
         )}
-      />
+      </Fetch>
     );
   }
 }

@@ -4,10 +4,8 @@ import { Fetch } from 'react-request';
 class App extends Component {
   render() {
     return (
-      <Fetch
-        url="https://jsonplaceholder.typicode.com/posts/1"
-        lazy
-        render={({ fetching, error, data, doFetch }) => (
+      <Fetch lazy url="https://jsonplaceholder.typicode.com/posts/1">
+        {({ fetching, error, data, doFetch }) => (
           <div>
             <button onClick={() => doFetch()} disabled={fetching}>
               Fetch Post 1
@@ -22,7 +20,7 @@ class App extends Component {
             )}
           </div>
         )}
-      />
+      </Fetch>
     );
   }
 }

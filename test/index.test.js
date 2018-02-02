@@ -42,7 +42,7 @@ describe('rendering', () => {
 
   test('renders what you return from the render prop', () => {
     const wrapper = shallow(
-      <Fetch url="/test" render={() => <a />} lazy={true} />
+      <Fetch url="/test" children={() => <a />} lazy={true} />
     );
     expect(wrapper.type()).toBe('a');
   });
@@ -50,7 +50,7 @@ describe('rendering', () => {
   test('passes the right object shape to the render function', () => {
     const mockRender = jest.fn().mockReturnValue(null);
     const wrapper = shallow(
-      <Fetch url="/test" requestName="tester" render={mockRender} lazy={true} />
+      <Fetch url="/test" requestName="tester" children={mockRender} lazy={true} />
     );
     expect(mockRender).toHaveBeenCalledTimes(1);
     expect(mockRender).toBeCalledWith(
@@ -919,7 +919,7 @@ describe('request cancellation', () => {
       <Fetch
         url="/test"
         afterFetch={afterFetchMock}
-        render={({ doFetch }) => {
+        children={({ doFetch }) => {
           if (!hasFetched) {
             hasFetched = true;
             doFetch();

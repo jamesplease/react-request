@@ -14,13 +14,12 @@ class App extends Component {
             </button>
             {fetching && 'Loading...'}
             {error && 'There was a network error'}
-            {!fetching &&
-              !error && (
-                <div>
-                  <h1>Post title: {data.title}</h1>
-                  <h2>Post ID: {data.id}</h2>
-                </div>
-              )}
+            {data && (
+              <div>
+                <h1>Post title: {data.title}</h1>
+                <h2>Post ID: {data.id}</h2>
+              </div>
+            )}
           </div>
         )}
       />

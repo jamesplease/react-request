@@ -5,6 +5,7 @@
   "dependencies": {
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
+    "react-request": "0.0.1",
     "react-scripts": "1.1.0"
   },
   "scripts": {

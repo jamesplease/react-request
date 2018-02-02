@@ -1,7 +1,11 @@
 export function hangs() {
   return {
-    then() {},
-    catch() {}
+    then() {
+      return hangs();
+    },
+    catch() {
+      return hangs();
+    }
   };
 }
 
@@ -37,19 +41,13 @@ export function succeeds() {
       });
     },
     catch() {
-      return jest.fn().mockReturnValue(hangs());
+      return hangs();
     }
   };
 }
 
 export function fails() {
-  return {
-    then(onSuccess, onError) {
-      onError(new TypeError('Network error'));
-      return jest.fn().mockReturnValue(hangs());
-    },
-    catch(cb) {
-      return jest.fn().mockReturnValue(hangs());
-    }
-  };
+  return new Promise((resolve, reject) => {
+    reject(new TypeError('Network error'));
+  });
 }

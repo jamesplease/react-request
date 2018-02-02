@@ -73,8 +73,14 @@ export class Fetch extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const currentRequestKey = getRequestKey(this.props);
-    const nextRequestKey = getRequestKey(nextProps);
+    const currentRequestKey = getRequestKey({
+      ...this.props,
+      method: this.props.method.toUpperCase()
+    });
+    const nextRequestKey = getRequestKey({
+      ...nextProps,
+      method: this.props.method.toUpperCase()
+    });
 
     if (currentRequestKey !== nextRequestKey) {
       this.fetchData(nextProps);
@@ -139,7 +145,12 @@ export class Fetch extends React.Component {
       signal
     } = Object.assign({}, this.props, options);
 
-    const requestKey = getRequestKey({ url, method, body, responseType });
+    const requestKey = getRequestKey({
+      url,
+      method: method.toUpperCase(),
+      body,
+      responseType
+    });
 
     const uppercaseMethod = method.toUpperCase();
     const isReadRequest = uppercaseMethod === 'GET';
@@ -157,8 +168,9 @@ export class Fetch extends React.Component {
     this.responseReceivedInfo = responseReceivedInfo;
     this.hasHandledNetworkResponse = false;
 
+    let cachedResponse;
     if (fetchPolicy !== 'network-only' && isReadRequest && !ignoreCache) {
-      const cachedResponse = responseCache[requestKey];
+      cachedResponse = responseCache[requestKey];
 
       if (cachedResponse) {
         this.onResponseReceived({
@@ -187,7 +199,7 @@ export class Fetch extends React.Component {
       body,
       credentials,
       headers,
-      method,
+      method: uppercaseMethod,
       mode,
       cache,
       redirect,
@@ -199,7 +211,6 @@ export class Fetch extends React.Component {
     };
 
     this.setState({ fetching: true });
-
     const hittingNetwork = !isRequestInFlight(requestKey) || !dedupe;
 
     if (hittingNetwork) {
@@ -210,7 +221,6 @@ export class Fetch extends React.Component {
         responseType
       });
     }
-
     return fetchDedupe(url, init, { requestKey, responseType, dedupe }).then(
       res => {
         if (isReadRequest) {
@@ -232,6 +242,7 @@ export class Fetch extends React.Component {
           this.onResponseReceived({
             ...responseReceivedInfo,
             error,
+            cachedResponse,
             hittingNetwork
           });
         }
@@ -250,6 +261,7 @@ export class Fetch extends React.Component {
       init,
       requestKey,
       responseType,
+      cachedResponse,
       stillFetching = false
     } = info;
 
@@ -259,10 +271,18 @@ export class Fetch extends React.Component {
       this.hasHandledNetworkResponse = true;
     }
 
-    const data =
-      response && response.data
-        ? this.props.transformResponse(response.data)
-        : null;
+    let data;
+    // If our response succeeded, then we use that data.
+    if (response && response.data) {
+      data = response.data;
+    } else if (cachedResponse && cachedResponse.data) {
+      // This happens when the request failed, but we have cache-and-network
+      // specified. Although we pass along the failed response, we continue to
+      // pass in the cached data.
+      data = cachedResponse.data;
+    }
+
+    data = data ? this.props.transformResponse(data) : null;
 
     if (hittingNetwork) {
       this.props.afterFetch({

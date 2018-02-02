@@ -80,7 +80,7 @@ export function fetchDedupe(
       if (dedupe) {
         resolveRequest({ requestKey, err });
       } else {
-        return err;
+        return Promise.reject(err);
       }
     }
   );

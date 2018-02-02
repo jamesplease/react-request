@@ -6,11 +6,11 @@ class App extends Component {
     return (
       <Fetch
         url="https://jsonplaceholder.typicode.com/posts/1"
-        render={({ loading, error, data }) => (
+        render={({ fetching, error, data }) => (
           <div>
-            {loading && 'Loading...'}
+            {fetching && 'Loading...'}
             {error && 'There was a network error'}
-            {!loading &&
+            {!fetching &&
               !error && (
                 <div>
                   <h1>Post title: {data.title}</h1>

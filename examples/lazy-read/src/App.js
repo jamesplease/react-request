@@ -7,14 +7,14 @@ class App extends Component {
       <Fetch
         url="https://jsonplaceholder.typicode.com/posts/1"
         lazy
-        render={({ loading, error, data, fetch }) => (
+        render={({ fetching, error, data, doFetch }) => (
           <div>
-            <button onClick={() => fetch()} disabled={loading}>
+            <button onClick={() => doFetch()} disabled={fetching}>
               Fetch Post 1
             </button>
-            {loading && 'Loading...'}
+            {fetching && 'Loading...'}
             {error && 'There was a network error'}
-            {!loading &&
+            {!fetching &&
               !error && (
                 <div>
                   <h1>Post title: {data.title}</h1>

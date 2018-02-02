@@ -7,18 +7,18 @@ class App extends Component {
       <Fetch
         url="https://jsonplaceholder.typicode.com/posts/1"
         method="patch"
-        render={({ loading, error, data, fetch }) => (
+        render={({ fetching, error, data, doFetch }) => (
           <div>
             <button
               onClick={() =>
-                fetch({
+                doFetch({
                   body: this.getUpdatedPost()
                 })
               }
-              disabled={loading}>
+              disabled={fetching}>
               Update Post 1
             </button>
-            {loading && 'Saving post 1...'}
+            {fetching && 'Saving post 1...'}
             {error && 'There was a network error'}
           </div>
         )}

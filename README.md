@@ -242,8 +242,8 @@ with one argument, an object with the following keys:
 * `url`: The URL of the request
 * `init`: The second argument passed to `global.fetch()`, which specifies things
   such as the body, method, and so on
-* `fetchDedupeOptions`: An object with the following keys: `requestKey`,
-  `responseType`, `dedupe`.
+* `requestKey`: The computed request key
+* `responseType`: The value of the `responseType` prop
 
 This can be used for analytics or syncing response data with a data store such
 as [Redux](https://github.com/reactjs/redux/).
@@ -258,8 +258,8 @@ with one arguments, an object with the following keys:
 * `url`: The URL of the request
 * `init`: The second argument passed to `global.fetch()`, which specifies things
   such as the body, method, and so on
-* `fetchDedupeOptions`: An object with the following keys: `requestKey`,
-  `responseType`, `dedupe`.
+* `requestKey`: The computed request key
+* `responseType`: The value of the `responseType` prop
 * `response`: The response that was received from the HTTP request
 * `data`: The transformed data from the response. This will be different from
   `response.data` if a `transformData` function was passed as a prop to `<Fetch/>`.

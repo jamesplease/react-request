@@ -32,7 +32,17 @@ Apollo's best features into an HTTP component that works with any API.
 
 ### Installation
 
-This package is not currently distributed on npm, but it will be shortly.
+Install using [npm](https://www.npmjs.com):
+
+```
+npm install react-request
+```
+
+or [yarn](https://yarnpkg.com/):
+
+```
+yarn add react-request
+```
 
 ### Documentation
 

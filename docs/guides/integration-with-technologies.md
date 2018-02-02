@@ -16,8 +16,8 @@ idea for how to do this would be:
 1. Define a consistent format for the server response
 2. If necessary, use the `transformData` prop to ensure that all of your responses
    adhere to the format
-3. Use the `onResponse` callback to dispatch the necessary Redux actions to get
-   server data into the store
+3. Use the `beforeFetch` and `afterFetch` callbacks to dispatch the necessary Redux actions
+   to get server data into the store
 
 ### Redux Resource
 

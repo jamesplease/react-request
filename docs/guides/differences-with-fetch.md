@@ -9,7 +9,7 @@ library, which are explained here.
 
 The second argument to `fetch()` is an optional object called `init`. With
 `<Fetch/>`, the object has been spread out as props. This change was made
-for aesthetic reasons: it is ugly to pass objects as props.
+for aesthetic reasons: I find it ugly to pass objects as props.
 
 ```js
 fetch('/posts/2', {
@@ -33,7 +33,7 @@ fetch('/posts/2', {
 When using `fetch`, you must manually read the body. This
 library reads it automatically for you. This is because the body
 is a ReadableStream, and can only be read a single time. It was
-a requirement that we read it to support
+a requirement that we read it for you to support
 [deduplication of requests](./request-deduplication.md).
 
 ```js

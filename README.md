@@ -49,7 +49,6 @@ yarn add react-request
 * [Getting Started](#getting-started)
 * [API](#api)
   * [\<Fetch/\>](#fetch-)
-  * [\<FetchComposer/\>](#fetchcomposer-)
 * [Guides ⇗](./docs/guides/INDEX.md)
   * [Why JSX? ⇗](./docs/guides/why-jsx.md)
   * [Using the `lazy` Prop ⇗](./docs/guides/using-the-lazy-prop.md)

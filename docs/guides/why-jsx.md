@@ -8,18 +8,18 @@ However, I had heard good things about Apollo, so I set my first impressions asi
 best to understand why someone would prefer to configure their requests with JSX.
 
 I came to realize that the primary benefit to me is that I would write less code by configuring my
-requests with JSX. I prefer to write as little code as possible, so I made React Request.
+requests with JSX. I like writing less code, so I made React Request.
 
 There are three things React Request do that, taken together, lead me to write less code:
 
 * Manage response caching
 * Make it easy to access data anywhere in the app
-* Reduce the number of connected components that I write
+* When using Redux, it reduces the number of connected components that I write
 
 ### Response Caching
 
 Managing caching requires writing additional code to your components. A system for caching requests is not
-necessarily difficult to create, but it does add extra code to your components.
+necessarily difficult to create, but it does add extra code to your application.
 
 With React Request, a response cache comes built in, and interactions with it are configured with a single prop,
 `fetchPolicy`.
@@ -28,14 +28,16 @@ The full guide on response caching can be read [here](./response-caching.md).
 
 ### Data Access
 
-If you're writing a small application, then you may be able to make HTTP requests in `componentDidMount`,
+If you're writing a small application, then you may be able to make HTTP requests in, say, `componentDidMount`,
 and then just access the data from state. You probably don't need something like Redux or React Request.
 
 As your application grows, the time may come when more than one component will need to access the same
-piece of data that came from the server, and there's no guarantee that these components will be near one
-another within the component tree. There are two solutions to this problem:
+piece of data that came from the server. There's no guarantee that these components will be near one
+another within the component tree, so using props to pass the data around may not be preferable. There are
+two solutions to this problem:
 
-1. Fetch the data in a component that is higher up, and then pass it down
+1. Fetch the data in a common ancestor component that is higher up, and then pass it down to any
+   component that needs it
 2. Fetch the data in every component that needs it
 
 Until the new context API is finalized, the first item on the list isn't straightforward to do without
@@ -45,7 +47,7 @@ The second approach can lead to duplicate requests without a system for deduping
 comes with request deduplication, so you never need to worry about the same request being in flight at
 the same time.
 
-There is [a guide](./request-deduplication.md) that explains request deduplication in greater depth.
+[This guide](./request-deduplication.md) that explains request deduplication in greater depth.
 
 ### Fewer connected components
 
@@ -132,7 +134,8 @@ class App extends Component {
 
 The neat part about this is that you can still use React Request with Redux. The `ReadBook` component
 in the above example can dispatch the action creator under-the-hood that adds in the book data to
-the store.
+the store. To see the source of ReadBook (it's not very big), refer to the
+[Best Practices](./best-practices.md) guide, which covers request components.
 
 ### Alternatives
 

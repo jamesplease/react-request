@@ -90,17 +90,19 @@ class App extends Component {
 }
 ```
 
-Need to make multiple requests? We got you.
+Need to make multiple requests? You can use any tool that you would like that
+allows you to "compose" render prop components together. This example
+uses [React Composer](https://github.com/jmeas/react-composer):
 
 ```js
 import React, { Component } from 'react';
-import { FetchComposer } from 'react-request';
+import Composer from 'react-composer';
 
 class App extends Component {
   render() {
     return (
-      <FetchComposer
-        requests={[
+      <Composer
+        components={[
           <Fetch url="https://jsonplaceholder.typicode.com/posts/1" />,
           <Fetch
             url="https://jsonplaceholder.typicode.com/posts/1"
@@ -128,11 +130,6 @@ These examples just scratch the surface of what you can do with React Request.
 Check out the API reference below for more.
 
 ### API
-
-This library has two exports:
-
-* `Fetch`: A component for making a single HTTP request
-* `FetchComposer`: A component for making parallel HTTP requests
 
 #### `<Fetch />`
 
@@ -369,56 +366,6 @@ For documentation on this prop, refer to the [response caching guide](./docs/gui
 A Boolean value representing whether or not the request should be
 [deduplicated](./docs/guides/request-deduplication.md).
 Defaults to `true`.
-
----
-
-#### `<FetchComposer />`
-
-A component that simplifies making parallel requests.
-
-##### `requests`
-
-An array of `Fetch` components. Use any of the above props, but leave out `render`.
-
-> Note: if you pass a `render` prop, it will be ignored.
-
-##### `render`
-
-A function that is called with the array of responses from `requests`.
-
-```js
-import React, { Component } from 'react';
-import { FetchComposer } from 'react-request';
-
-class App extends Component {
-  render() {
-    const { bookId, authorId } = this.props;
-
-    return (
-      <FetchComposer
-        requests={[
-          <Fetch url={`/books/${bookId}`} />,
-          <Fetch url={`/authors/${authorId}`} />,
-          <Fetch url={`/books/${bookId}`} method="DELETE" />
-        ]}
-        render={([readBook, readAuthor, deleteBook]) => {
-          return (
-            <div>
-              {readBook.fetching && 'Fetching book'}
-              {readAuthor.fetching && 'Fetching author'}
-              {!readBook.fetching && 'Book not being fetched'}
-              {!readAuthor.fetching && 'Author not being fetched'}
-              <button onClick={() => deleteBook.doFetch()}>
-                Delete this book
-              </button>
-            </div>
-          );
-        }}
-      />
-    );
-  }
-}
-```
 
 ### Acknowledgements
 

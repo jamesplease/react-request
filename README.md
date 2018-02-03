@@ -202,6 +202,7 @@ It is called with one argument, `result`, an object with the following keys:
 * `doFetch`: A function that makes the HTTP request. See notes below.
 * `url`: The URL that was passed into `<Fetch />`.
 * `requestName`: The name of the request (see `requestName` below)
+* `requestKey`: The computed [request key](./docs/guides/request-keys.md)
 
 There are three common use cases for the `doFetch` prop:
 
@@ -224,9 +225,7 @@ is based on the request method that you use.
 | POST, PUT, PATCH, DELETE | `true`        |
 
 ```jsx
-<Fetch
-  url="/books"
-  lazy>
+<Fetch url="/books" lazy>
   {({ doFetch }) => {
     <button onClick={() => doFetch()}>Fetch books</button>;
   }}

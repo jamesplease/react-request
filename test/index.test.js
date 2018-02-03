@@ -50,12 +50,23 @@ describe('rendering', () => {
   test('passes the right object shape to the render function', () => {
     const mockRender = jest.fn().mockReturnValue(null);
     const wrapper = shallow(
-      <Fetch url="/test" requestName="tester" children={mockRender} lazy={true} />
+      <Fetch
+        url="/test"
+        requestName="tester"
+        children={mockRender}
+        lazy={true}
+      />
     );
+    const requestKey = getRequestKey({
+      url: '/test',
+      method: 'GET',
+      responseType: 'json'
+    });
     expect(mockRender).toHaveBeenCalledTimes(1);
     expect(mockRender).toBeCalledWith(
       expect.objectContaining({
         requestName: 'tester',
+        requestKey,
         url: '/test',
         fetching: false,
         response: null,

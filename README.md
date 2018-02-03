@@ -298,7 +298,7 @@ response is from the cache or from a network request. Receives two arguments:
 ##### `transformData`
 
 A function that is called with the data returned from the response. You can use this
-hook to transform the data before it is passed into `render`.
+hook to transform the data before it is passed into `children`.
 
 ```jsx
 <Fetch

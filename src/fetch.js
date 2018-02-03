@@ -14,7 +14,7 @@ export function clearResponseCache() {
 export class Fetch extends React.Component {
   render() {
     const { children, requestName, url } = this.props;
-    const { fetching, response, data, error } = this.state;
+    const { fetching, response, data, error, requestKey } = this.state;
 
     if (!children) {
       return null;
@@ -26,6 +26,7 @@ export class Fetch extends React.Component {
           fetching,
           response,
           data,
+          requestKey,
           error,
           doFetch: this.fetchRenderProp
         }) || null
@@ -37,6 +38,10 @@ export class Fetch extends React.Component {
     super(props, context);
 
     this.state = {
+      requestKey: getRequestKey({
+        ...props,
+        method: props.method.toUpperCase()
+      }),
       requestName: props.requestName,
       fetching: false,
       response: null,
@@ -145,6 +150,7 @@ export class Fetch extends React.Component {
       signal
     } = Object.assign({}, this.props, options);
 
+    // We need to compute a new key, just in case a new value was passed in `doFetch`.
     const requestKey = getRequestKey({
       url,
       method: method.toUpperCase(),
@@ -210,7 +216,10 @@ export class Fetch extends React.Component {
       signal
     };
 
-    this.setState({ fetching: true });
+    this.setState({
+      fetching: true,
+      requestKey
+    });
     const hittingNetwork = !isRequestInFlight(requestKey) || !dedupe;
 
     if (hittingNetwork) {

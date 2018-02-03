@@ -113,9 +113,8 @@ export default ({ bookId }) => {};
 class App extends Component {
   render() {
     return (
-      <ReadBook
-        bookId={this.props.bookId}
-        render={({ fetching, data }) => (
+      <ReadBook bookId={this.props.bookId}>
+        {({ fetching, data }) => (
           <div>
             {fetching && 'Loading book...'}
             {!fetching && (
@@ -126,7 +125,7 @@ class App extends Component {
             )}
           </div>
         )}
-      />
+      </ReadBook>
     );
   }
 }

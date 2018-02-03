@@ -13,14 +13,14 @@ export function clearResponseCache() {
 
 export class Fetch extends React.Component {
   render() {
-    const { render, requestName, url } = this.props;
+    const { children, requestName, url } = this.props;
     const { fetching, response, data, error } = this.state;
 
-    if (!render) {
+    if (!children) {
       return null;
     } else {
       return (
-        render({
+        children({
           requestName,
           url,
           fetching,
@@ -110,7 +110,7 @@ export class Fetch extends React.Component {
     //
     // tl;dr, this cannot cause a problem:
     //
-    // `<Fetch render={({ doFetch }) => doFetch()} />
+    // `<Fetch children={({ doFetch }) => doFetch()} />
     setTimeout(() => {
       this.fetchData(options, true);
     });
@@ -317,6 +317,7 @@ const globalObj = typeof self !== 'undefined' ? self : this;
 const AbortSignalCtr = globalObj.AbortSignal || function() {};
 
 Fetch.propTypes = {
+  children: PropTypes.func,
   requestName: PropTypes.string,
   fetchPolicy: PropTypes.oneOf([
     'cache-first',

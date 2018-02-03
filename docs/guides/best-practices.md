@@ -1,6 +1,6 @@
 # Best Practices
 
-Here are some tips for using React Request.
+Here are some tips for using React Fetch.
 
 ### Making "request components"
 
@@ -14,30 +14,30 @@ request components:
 ```jsx
 // books.js
 import React from 'react';
-import { Request } from 'react-request';
+import { Fetch } from 'react-request';
 import headers from './utils/default-request-headers';
 import httpAnalytics from './utils/http-analytics';
 
-export function ReadBook({ bookId, render }) {
+export function ReadBook({ bookId, children }) {
   return (
-    <Request
+    <Fetch
       url={`/books/${bookId}`}
       headers={headers}
       credentials="same-origin"
-      render={render}
+      children={children}
       onResponse={httpAnalytics.responseReceived}
     />
   );
 }
 
-export function DeleteBook({ bookId, render }) {
+export function DeleteBook({ bookId, children }) {
   return (
-    <Request
+    <Fetch
       url={`/books/${bookId}`}
       headers={headers}
       method="DELETE"
       credentials="same-origin"
-      render={render}
+      children={children}
       onResponse={httpAnalytics.responseReceived}
     />
   );
@@ -60,12 +60,11 @@ export default class App extends Component {
     return (
       <div>
         <h1>Welcome to My App</h1>
-        <ReadBook
-          bookId={bookId}
-          render={result => {
+        <ReadBook bookId={bookId}>
+          {result => {
             // Use the result here
           }}
-        />
+        </ReadBook>
       </div>
     );
   }

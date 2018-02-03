@@ -68,7 +68,7 @@ yarn add react-request
 
 Here's a quick look at what using React Request is like:
 
-```js
+```jsx
 import React, { Component } from 'react';
 import { Fetch } from 'react-request';
 
@@ -102,7 +102,7 @@ Need to make multiple requests? You can use any tool that you would like that
 allows you to "compose" render prop components together. This example
 uses [React Composer](https://github.com/jmeas/react-composer):
 
-```js
+```jsx
 import React, { Component } from 'react';
 import Composer from 'react-composer';
 

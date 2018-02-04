@@ -4,7 +4,7 @@ import {
   getRequestKey,
   clearRequestCache,
   isRequestInFlight
-} from './fetch-dedupe';
+} from 'fetch-dedupe';
 
 export {
   Fetch,

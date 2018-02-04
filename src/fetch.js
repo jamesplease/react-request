@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getRequestKey, fetchDedupe, isRequestInFlight } from './fetch-dedupe';
+import { getRequestKey, fetchDedupe, isRequestInFlight } from 'fetch-dedupe';
 
 // This object is our cache
 // The keys of the object are requestKeys

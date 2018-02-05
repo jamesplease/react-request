@@ -113,7 +113,7 @@ export class Fetch extends React.Component {
     // We wrap this in a setTimeout so as to avoid calls to `setState`
     // in render, which React does not allow.
     //
-    // tl;dr, this cannot cause a problem:
+    // tl;dr, the following code should never cause a problem:
     //
     // `<Fetch children={({ doFetch }) => doFetch()} />
     setTimeout(() => {

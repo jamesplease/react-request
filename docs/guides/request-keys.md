@@ -1,10 +1,11 @@
 # Request Keys
 
 Two useful features of React Request are
-[request deduplication](./request-deduplication.md) and response caching.
+[request deduplication](./request-deduplication.md) and
+[response caching](./response-caching.md).
 
-These features are powered by a system called "request keys" that allows us to
-determine if two requests are identical.
+These features are powered by a system called "request keys," which are strings that
+allow React Request to determine if two requests are to be considered identical.
 
 ### What is a request key
 
@@ -14,7 +15,6 @@ The key is composed of these pieces of information:
 
 * `url`
 * `method`
-* `responseType`
 * `body`
 
 ### How is it used

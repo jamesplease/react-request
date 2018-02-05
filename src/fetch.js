@@ -154,8 +154,7 @@ export class Fetch extends React.Component {
     const requestKey = getRequestKey({
       url,
       method: method.toUpperCase(),
-      body,
-      responseType
+      body
     });
 
     const uppercaseMethod = method.toUpperCase();
@@ -226,8 +225,7 @@ export class Fetch extends React.Component {
       beforeFetch({
         url,
         init,
-        requestKey,
-        responseType
+        requestKey
       });
     }
     return fetchDedupe(url, init, { requestKey, responseType, dedupe }).then(
@@ -298,7 +296,6 @@ export class Fetch extends React.Component {
         url,
         init,
         requestKey,
-        responseType,
         error,
         response,
         data,
@@ -400,7 +397,6 @@ Fetch.propTypes = {
 
 Fetch.defaultProps = {
   requestName: 'anonymousRequest',
-  responseType: 'json',
   onResponse: () => {},
   beforeFetch: () => {},
   afterFetch: () => {},

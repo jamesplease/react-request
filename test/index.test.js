@@ -80,8 +80,7 @@ describe('rendering', () => {
     );
     const requestKey = getRequestKey({
       url: '/test/hangs',
-      method: 'GET',
-      responseType: 'json'
+      method: 'GET'
     });
     expect(mockRender).toHaveBeenCalledTimes(1);
     expect(mockRender).toBeCalledWith(
@@ -162,8 +161,7 @@ describe('successful requests', () => {
 
     const requestKey = getRequestKey({
       url: '/test/succeeds/first',
-      method: 'GET',
-      responseType: 'json'
+      method: 'GET'
     });
 
     const wrapper = mount(
@@ -179,7 +177,6 @@ describe('successful requests', () => {
       expect(beforeFetchMock).toBeCalledWith(
         expect.objectContaining({
           url: '/test/succeeds/first',
-          responseType: 'json',
           requestKey
         })
       );
@@ -189,7 +186,6 @@ describe('successful requests', () => {
           url: '/test/succeeds/first',
           error: null,
           didUnmount: false,
-          responseType: 'json',
           data: {
             books: [1, 42, 150]
           }
@@ -225,7 +221,6 @@ describe('successful requests', () => {
           url: '/test/succeeds/second',
           error: null,
           didUnmount: false,
-          responseType: 'text',
           data: 'hi'
         })
       );
@@ -264,7 +259,6 @@ describe('successful requests', () => {
           url: '/test/succeeds/third',
           error: null,
           didUnmount: false,
-          responseType: 'json',
           data: {
             sandwiches: [1, 42, 150]
           }
@@ -358,7 +352,6 @@ describe('cache strategies', () => {
             url: '/test/succeeds/cache-only-full',
             error: null,
             didUnmount: false,
-            responseType: 'json',
             data: {
               books: [1, 42, 150]
             }
@@ -443,7 +436,7 @@ describe('cache strategies', () => {
         expect(beforeFetchMock).toHaveBeenCalledTimes(1);
         expect(beforeFetchMock).toBeCalledWith(
           expect.objectContaining({
-            responseType: 'json'
+            url: '/test/succeeds/cache-first'
           })
         );
 
@@ -453,7 +446,6 @@ describe('cache strategies', () => {
             url: '/test/succeeds/cache-first',
             error: null,
             didUnmount: false,
-            responseType: 'json',
             data: {
               books: [1, 42, 150]
             }
@@ -535,8 +527,7 @@ describe('cache strategies', () => {
         expect(beforeFetchMock).toHaveBeenCalledTimes(1);
         expect(beforeFetchMock).toBeCalledWith(
           expect.objectContaining({
-            url: '/test/succeeds/network-only',
-            responseType: 'json'
+            url: '/test/succeeds/network-only'
           })
         );
         expect(afterFetchMock).toHaveBeenCalledTimes(1);
@@ -545,7 +536,6 @@ describe('cache strategies', () => {
             url: '/test/succeeds/network-only',
             error: null,
             didUnmount: false,
-            responseType: 'json',
             data: {
               books: [1, 42, 150]
             }
@@ -583,8 +573,7 @@ describe('cache strategies', () => {
           expect(beforeFetchMock2).toHaveBeenCalledTimes(1);
           expect(beforeFetchMock2).toBeCalledWith(
             expect.objectContaining({
-              url: '/test/succeeds/network-only',
-              responseType: 'json'
+              url: '/test/succeeds/network-only'
             })
           );
           expect(afterFetchMock2).toHaveBeenCalledTimes(1);
@@ -593,7 +582,6 @@ describe('cache strategies', () => {
               url: '/test/succeeds/network-only',
               error: null,
               didUnmount: false,
-              responseType: 'json',
               data: {
                 books: [1, 42, 150]
               }
@@ -639,8 +627,7 @@ describe('cache strategies', () => {
         expect(beforeFetchMock).toHaveBeenCalledTimes(1);
         expect(beforeFetchMock).toBeCalledWith(
           expect.objectContaining({
-            url: '/test/succeeds',
-            responseType: 'json'
+            url: '/test/succeeds'
           })
         );
         expect(afterFetchMock).toHaveBeenCalledTimes(1);
@@ -649,7 +636,6 @@ describe('cache strategies', () => {
             url: '/test/succeeds',
             error: null,
             didUnmount: false,
-            responseType: 'json',
             data: {
               books: [1, 42, 150]
             }
@@ -687,8 +673,7 @@ describe('cache strategies', () => {
           expect(beforeFetchMock2).toHaveBeenCalledTimes(1);
           expect(beforeFetchMock2).toBeCalledWith(
             expect.objectContaining({
-              url: '/test/succeeds',
-              responseType: 'json'
+              url: '/test/succeeds'
             })
           );
           expect(afterFetchMock2).toHaveBeenCalledTimes(1);
@@ -697,7 +682,6 @@ describe('cache strategies', () => {
               url: '/test/succeeds',
               error: null,
               didUnmount: false,
-              responseType: 'json',
               data: {
                 books: [1, 42, 150]
               }
@@ -731,8 +715,7 @@ describe('cache strategies', () => {
         expect(beforeFetchMock).toHaveBeenCalledTimes(1);
         expect(beforeFetchMock).toBeCalledWith(
           expect.objectContaining({
-            url: '/test/variable',
-            responseType: 'json'
+            url: '/test/variable'
           })
         );
         expect(afterFetchMock).toHaveBeenCalledTimes(1);
@@ -741,7 +724,6 @@ describe('cache strategies', () => {
             url: '/test/variable',
             error: null,
             didUnmount: false,
-            responseType: 'json',
             data: {
               books: [1, 42, 150]
             }
@@ -783,8 +765,7 @@ describe('cache strategies', () => {
           expect(beforeFetchMock2).toHaveBeenCalledTimes(1);
           expect(beforeFetchMock2).toBeCalledWith(
             expect.objectContaining({
-              url: '/test/variable',
-              responseType: 'json'
+              url: '/test/variable'
             })
           );
           expect(afterFetchMock2).toHaveBeenCalledTimes(1);
@@ -792,7 +773,6 @@ describe('cache strategies', () => {
             expect.objectContaining({
               url: '/test/variable',
               didUnmount: false,
-              responseType: 'json',
               data: {
                 books: [1, 42, 150]
               }
@@ -836,8 +816,7 @@ describe('unsuccessful requests', () => {
       expect(afterFetchMock).toBeCalledWith(
         expect.objectContaining({
           url: '/test/fails',
-          didUnmount: false,
-          responseType: 'json'
+          didUnmount: false
         })
       );
       expect(afterFetchMock.mock.calls[0][0]).toHaveProperty(
@@ -938,8 +917,7 @@ describe('request deduplication', () => {
       expect(afterFetchMock).toBeCalledWith(
         expect.objectContaining({
           url: '/test/fails/dedupe-false',
-          didUnmount: false,
-          responseType: 'json'
+          didUnmount: false
         })
       );
       expect(afterFetchMock.mock.calls[0][0]).toHaveProperty(

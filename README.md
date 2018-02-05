@@ -216,8 +216,9 @@ There are three common use cases for the `doFetch` prop:
 * When `lazy` is `true`, you can use this to actually make the request, typically as
   a result of user input
 
-`doFetch` accepts one argument: `options`. Any of the `global.fetch()` options described above are valid
-`options`. This allows you to customize the request from within the component.
+`doFetch` accepts one argument: `options`. Any of the `fetch()` options, such as `url`, `method`, and
+`body` are valid `options`. This allows you to customize the request from within the component based
+on the component's state.
 
 ##### `lazy`
 
@@ -246,7 +247,6 @@ with one argument, an object with the following keys:
 * `init`: The second argument passed to `global.fetch()`, which specifies things
   such as the body, method, and so on
 * `requestKey`: The computed request key
-* `responseType`: The value of the `responseType` prop
 
 This can be used for analytics or syncing response data with a data store such
 as [Redux](https://github.com/reactjs/redux/).
@@ -262,7 +262,6 @@ with one arguments, an object with the following keys:
 * `init`: The second argument passed to `global.fetch()`, which specifies things
   such as the body, method, and so on
 * `requestKey`: The computed request key
-* `responseType`: The value of the `responseType` prop
 * `response`: The response that was received from the HTTP request
 * `data`: The transformed data from the response. This will be different from
   `response.data` if a `transformData` function was passed as a prop to `<Fetch/>`.
@@ -325,11 +324,11 @@ hook to transform the data before it is passed into `children`.
 
 ##### `responseType`
 
-The content type of the response body. Defaults to `json`. Valid values are the methods
-on [Body](https://developer.mozilla.org/en-US/docs/Web/API/Body).
+The content type of the response body. Defaults to `"json"`, unless the response has a 204 status code,
+in which case it will be `"text"`. Valid values are the methods on [Body](https://developer.mozilla.org/en-US/docs/Web/API/Body).
 
 ```jsx
-// If you have an endpoint that just returns raw text, you can convert it into
+// If you have an endpoint that just returns raw text, you could, for instance, convert it into
 // an object using `responseType` and `transformData`.
 <Fetch
   url="/countries/2"

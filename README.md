@@ -5,29 +5,29 @@
 [![Test Coverage](https://codeclimate.com/github/jmeas/react-request/badges/coverage.svg)](https://codeclimate.com/github/jmeas/react-request)
 [![gzip size](http://img.badgesize.io/https://unpkg.com/react-request/dist/react-request.min.js?compression=gzip)](https://unpkg.com/react-request/dist/react-request.min.js)
 
-A library for making HTTP requests with React.
+Declarative HTTP requests with React.
 
 ### Motivation
 
-[React Apollo](https://github.com/apollographql/react-apollo) exports
-[components](https://www.apollographql.com/docs/react/basics/setup.html#graphql)
-that make network requests for you. Although Apollo is designed to work
-specifically with [GraphQL](http://graphql.org), many of the features of React
-Apollo make sense outside of that context.
+Making a single HTTP request is not difficult to do in JavaScript. However,
+complex web applications often make many requests as the
+user navigates through the app.
 
-I was initially turned off by the idea of making HTTP requests in
-JSX, but I soon realized that the declarative API of Apollo's requests
-**save you from writing a substantial amount of code**.
+Features such as request deduplication and response caching can often save the
+developer of apps like these from headache and bugs. Although it is possible to
+implement these features imperatively, it requires that you write a bit of
+code that can be tedious to test.
 
-Which is why I made React Request. This library abstracts some of React
-Apollo's best features into an HTTP component that works with any API.
+A declarative API makes things a lot simpler for you, which is where React Request
+comes in. React Request is a backend-agnostic, declarative solution for HTTP
+requests in React.
 
 ### Features
 
 ✓ Uses the native [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) API  
 ✓ Smart [deduping of requests](./docs/guides/request-deduplication.md)  
 ✓ Customizable [response caching](./docs/guides/response-caching.md)  
-✓ Expressive API for parallel requests  
+✓ Provides hooks to integrate with external stores (like [Redux](https://github.com/reactjs/redux))  
 ✓ Small footprint (~2kb gzipped)
 
 ### Installation

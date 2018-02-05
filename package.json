@@ -1,7 +1,7 @@
 {
   "name": "react-request",
   "version": "0.3.0",
-  "description": "A component for HTTP requests in React",
+  "description": "Declarative HTTP requests with React.",
   "main": "lib/index.js",
   "module": "es/index.js",
   "scripts": {

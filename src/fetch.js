@@ -122,19 +122,12 @@ export class Fetch extends React.Component {
   };
 
   fetchData = (options, ignoreCache) => {
-    const {
-      fetchPolicy,
-      requestName,
-      dedupe,
-      beforeFetch,
-      afterFetch
-    } = this.props;
+    const { fetchPolicy, requestName, dedupe, beforeFetch } = this.props;
 
     this.cancelExistingRequest('New fetch initiated');
 
     const {
       url,
-      request,
       body,
       credentials,
       headers,
@@ -267,7 +260,6 @@ export class Fetch extends React.Component {
       url,
       init,
       requestKey,
-      responseType,
       cachedResponse,
       stillFetching = false
     } = info;

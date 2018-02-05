@@ -5,7 +5,7 @@
 [![Test Coverage](https://codeclimate.com/github/jmeas/react-request/badges/coverage.svg)](https://codeclimate.com/github/jmeas/react-request)
 [![gzip size](http://img.badgesize.io/https://unpkg.com/react-request/dist/react-request.min.js?compression=gzip)](https://unpkg.com/react-request/dist/react-request.min.js)
 
-Declarative HTTP requests with React.
+Declarative HTTP requests for React.
 
 ### Motivation
 

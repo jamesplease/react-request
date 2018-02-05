@@ -377,7 +377,7 @@ A Boolean value representing whether or not the request should be
 [deduplicated](./docs/guides/request-deduplication.md).
 Defaults to `true`.
 
-### `fetchDedupe( input [, init] [, dedupeOptions] )`
+#### `fetchDedupe( input [, init] [, dedupeOptions] )`
 
 This is the `fetchDedupe` export from the [Fetch Dedupe](https://github.com/jmeas/fetch-dedupe)
 library. Fetch Dedupe powers the request deduplication in React Request.
@@ -388,19 +388,19 @@ duplicate request.
 
 For more, refer to [the documentation of fetch-dedupe](https://github.com/jmeas/fetch-dedupe).
 
-### `getRequestKey({ url, method, body, responseType })`
+#### `getRequestKey({ url, method, body, responseType })`
 
 Generates a request key. All of the values are optional.
 
 This method comes from [`fetch-dedupe`](https://github.com/jmeas/fetch-dedupe).
 
-### `isRequestInFlight( requestKey )`
+#### `isRequestInFlight( requestKey )`
 
 Return a Boolean representing if a request for `requestKey` is in flight or not.
 
 This method comes from [`fetch-dedupe`](https://github.com/jmeas/fetch-dedupe).
 
-### `clearRequestCache()`
+#### `clearRequestCache()`
 
 Wipes the cache of deduped requests. Mostly useful for testing.
 
@@ -408,7 +408,7 @@ This method comes from [`fetch-dedupe`](https://github.com/jmeas/fetch-dedupe).
 
 > Note: this method is not safe to use in application code.
 
-### `clearResponseCache()`
+#### `clearResponseCache()`
 
 Wipes the cache of cached responses. Mostly useful for testing.
 

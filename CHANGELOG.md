@@ -1,10 +1,18 @@
 # Changelog
 
+### v1.0.0 (2018/2/4)
+
+**Breaking**
+
+* The `responseType` will now be set to `"text"` anytime a response returns
+  with a 204 status code.
+* The `responseType` is no longer used when creating the request key.
+
 ### v0.3.0 (2018/2/4)
 
 **Changes**
 
-- `fetch-dedupe` has been abstracted into a separate library. This
+* `fetch-dedupe` has been abstracted into a separate library. This
   does not change the public API of this library.
 
 ### v0.2.0 (2018/2/1)

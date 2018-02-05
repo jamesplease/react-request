@@ -49,6 +49,11 @@ yarn add react-request
 * [Getting Started](#getting-started)
 * [API](#api)
   * [\<Fetch/\>](#fetch-)
+  * [fetchDedupe()](#fetchdedupe-input--init--dedupeoptions-)
+  * [getRequestKey()](#getrequestkey-url-method-body-responsetype-)
+  * [isRequestInFlight()](#isrequestinflight-requestkey-)
+  * [clearRequestCache()](#clearrequestcache)
+  * [clearResponseCache()](#clearresponsecache)
 * [Guides ⇗](./docs/guides/INDEX.md)
   * [Why JSX? ⇗](./docs/guides/why-jsx.md)
   * [Using the `lazy` Prop ⇗](./docs/guides/using-the-lazy-prop.md)
@@ -371,6 +376,43 @@ For documentation on this prop, refer to the [response caching guide](./docs/gui
 A Boolean value representing whether or not the request should be
 [deduplicated](./docs/guides/request-deduplication.md).
 Defaults to `true`.
+
+### `fetchDedupe( input [, init] [, dedupeOptions] )`
+
+This is the `fetchDedupe` export from the [Fetch Dedupe](https://github.com/jmeas/fetch-dedupe)
+library. Fetch Dedupe powers the request deduplication in React Request.
+
+If, for whatever reason, you need to make a standalone HTTP request outside of the
+`<Fetch />` component, then you can use this with confidence that you won't send a
+duplicate request.
+
+For more, refer to [the documentation of fetch-dedupe](https://github.com/jmeas/fetch-dedupe).
+
+### `getRequestKey({ url, method, body, responseType })`
+
+Generates a request key. All of the values are optional.
+
+This method comes from [`fetch-dedupe`](https://github.com/jmeas/fetch-dedupe).
+
+### `isRequestInFlight( requestKey )`
+
+Return a Boolean representing if a request for `requestKey` is in flight or not.
+
+This method comes from [`fetch-dedupe`](https://github.com/jmeas/fetch-dedupe).
+
+### `clearRequestCache()`
+
+Wipes the cache of deduped requests. Mostly useful for testing.
+
+This method comes from [`fetch-dedupe`](https://github.com/jmeas/fetch-dedupe).
+
+> Note: this method is not safe to use in application code.
+
+### `clearResponseCache()`
+
+Wipes the cache of cached responses. Mostly useful for testing.
+
+> Note: this method is not safe to use in application code.
 
 ### Acknowledgements
 

@@ -10,7 +10,7 @@ export {
   Fetch,
   fetchDedupe,
   getRequestKey,
+  isRequestInFlight,
   clearRequestCache,
-  clearResponseCache,
-  isRequestInFlight
+  clearResponseCache
 };

@@ -27,6 +27,7 @@ requests in React.
 ✓ Uses the native [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) API  
 ✓ Smart [deduping of requests](./docs/guides/request-deduplication.md)  
 ✓ Customizable [response caching](./docs/guides/response-caching.md)  
+✓ Provides hooks to integrate with external stores (like [Redux](https://github.com/reactjs/redux))  
 ✓ Small footprint (~2kb gzipped)
 
 ### Installation

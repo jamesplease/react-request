@@ -8,6 +8,10 @@ guide can provide guidance if you're looking to use React Request with other too
 We recommend either simply using Apollo instead of React Request, or looking at the Apollo
 documentation for inspiration.
 
+The reason is that React Request only caches and dedupes at the request level, whereas
+a library like apollo caches and dedupes at the sub-request level. The structure of
+GraphQL enables for a more granular approach to those features.
+
 ### Redux
 
 Data returned by your server can be synchronized with your Redux store if you'd like. An

@@ -1,6 +1,6 @@
 # Differences with Apollo
 
-React Apollo is a great library, and it serves as the primary inspiration for React Request.
+React Apollo is a great library, and it served as the primary inspiration for React Request.
 There are a few places where this library is different from React Apollo.
 
 ### Missing Features

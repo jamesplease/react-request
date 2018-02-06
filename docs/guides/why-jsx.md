@@ -1,19 +1,18 @@
 # Why JSX?
 
 It may seem weird to use React Components / JSX to make network requests. I completely understand.
-When I first read React Apollo's documentation, I was turned off by the component-based approach
-to requests.
 
-However, I had heard good things about Apollo, so I set my first impressions aside and did my
-best to understand why someone would prefer to configure their requests with JSX.
+I first saw this pattern in React Apollo, and I thought it was weird. However, I had heard good
+things about Apollo, so I set my first impressions aside and did my best to understand why someone
+would prefer to configure their requests with JSX.
 
 I came to realize that the primary benefit to me is that I would write less code by configuring my
 requests with JSX. I like writing less code, so I made React Request.
 
-There are three things React Request do that, taken together, lead me to write less code:
+There are three things React Request does that, taken together, lead me to write less code:
 
 * Manage response caching
-* Make it easy to access data anywhere in the app
+* Manage request deduplication
 * When using Redux, it reduces the number of connected components that I write
 
 ### Response Caching
@@ -26,7 +25,7 @@ With React Request, a response cache comes built in, and interactions with it ar
 
 The full guide on response caching can be read [here](./response-caching.md).
 
-### Data Access
+### Request Deduplication
 
 If you're writing a small application, then you may be able to make HTTP requests in, say, `componentDidMount`,
 and then just access the data from state. You probably don't need something like Redux or React Request.
@@ -134,7 +133,7 @@ class App extends Component {
 The neat part about this is that you can still use React Request with Redux. The `ReadBook` component
 in the above example can dispatch the action creator under-the-hood that adds in the book data to
 the store. To see the source of ReadBook (it's not very big), refer to the
-[Best Practices](./best-practices.md) guide, which covers request components.
+[Best Practices](./best-practices.md) guide, which covers fetch components.
 
 ### Alternatives
 

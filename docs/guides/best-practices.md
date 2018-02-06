@@ -1,15 +1,15 @@
 # Best Practices
 
-Here are some tips for using React Fetch.
+Here are some tips for using React Request.
 
-### Making "request components"
+### Making "fetch components"
 
 HTTP requests require a lot of configuration, which can make your
 application code messy. One way to clean this up is to make
-"request components" that simplify the API to make a request.
+"fetch components" that simplify the API to make a request.
 
 For instance, if your application manages books, you may have these
-request components:
+fetch components:
 
 ```jsx
 // books.js
@@ -72,11 +72,11 @@ export default class App extends Component {
 ```
 
 If you've used [Redux](https://redux.js.org) for HTTP requests in the past, then you can think of the
-"request components" as fulfilling a similar role as action creators.
+"fetch components" as fulfilling a similar role as action creators.
 
 ### Directory Structure
 
-We recommend organizing your request components by their resource type. For instance, if your app manages
+We recommend organizing your fetch components by their resource type. For instance, if your app manages
 books, authors, and publishers, you might have:
 
 ```

@@ -26,10 +26,6 @@ a future release.
 Render prop components are more powerful than HoCs, so we currently do not intend to release
 an HoC. But you can build your own!
 
-Oh, one more thing: once the new React context API is finalized, we will likely adjust this
-project's API to more closely align with that API. As of January 2018, it is looking that
-will involve switching the render prop from being `render` to `children` instead.
-
 ### No queries or mutations
 
 With GraphQL, whether a request is a query or a mutation determines whether the request is made

@@ -59,7 +59,7 @@ yarn add react-request
   * [Using the `lazy` Prop ⇗](./docs/guides/using-the-lazy-prop.md)
   * [Aborting ⇗](./docs/guides/aborting.md)
   * [Differences with `fetch()` ⇗](./docs/guides/differences-with-fetch.md)
-  * [Differences with React Apollo](./docs/guides/differences-with-react-apollo.md)
+  * [Differences with React Apollo ⇗](./docs/guides/differences-with-apollo.md)
   * [Request Keys ⇗](./docs/guides/request-keys.md)
   * [Response Caching ⇗](./docs/guides/response-caching.md)
   * [Request Deduplication ⇗](./docs/guides/request-deduplication.md)

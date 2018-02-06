@@ -81,7 +81,7 @@ books, authors, and publishers, you might have:
 
 ```
 /src
-  /request-components
+  /fetch-components
     books.js
     authors.js
     publishers.js

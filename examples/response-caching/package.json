@@ -1,5 +1,5 @@
 {
-  "name": "simple-read",
+  "name": "response-caching",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

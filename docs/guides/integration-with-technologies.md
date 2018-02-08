@@ -14,14 +14,33 @@ GraphQL enables for a more granular approach to those features.
 
 ### Redux
 
-Data returned by your server can be synchronized with your Redux store if you'd like. An
-idea for how to do this would be:
+Data returned by your server can be synchronized with your Redux store if you'd like. The
+`beforeFetch` and `afterFetch` methods make this straightforward.
 
-1. Define a consistent format for the server response
-2. If necessary, use the `transformData` prop to ensure that all of your responses
-   adhere to the format
-3. Use the `beforeFetch` and `afterFetch` callbacks to dispatch the necessary Redux actions
-   to get server data into the store
+```jsx
+<Fetch
+  {...fetchProps}
+  beforeFetch={data => {
+    store.dispatch({
+      type: 'FETCH_PENDING'
+      // ...add whatever you want here
+    });
+  }}
+  afterFetch={data => {
+    if (data.error || (data.response && !data.response.ok)) {
+      store.dispatch({
+        type: 'FETCH_FAILED'
+        // ...add other things to this action
+      });
+    } else {
+      store.dispatch({
+        type: 'FETCH_SUCCEEDED'
+        // ...add other things to this action
+      });
+    }
+  }}
+/>
+```
 
 ### Redux Resource
 

@@ -4,9 +4,22 @@ Here are some answers to common questions. Don't see yours here?
 [Open an issue](https://github.com/jmeas/react-request/issues/new) and
 we would be happy to help.
 
-#### Why would you use JSX for making HTTP requests?
+#### Why was this created?
 
-We were skeptical at first, too, but it turns out that many of the complex things people do with HTTP requests (namely,
+While I was studying Apollo, a framework for GraphQL, I learned that its React library exports a
+higher-order component that enables a developer to declaratively specify HTTP requests. It surprised me
+that this was the primary method that Apollo developers were interfacing with GraphQL over HTTP.
+
+It didn't take long for me to understand that the Apollo HoC was remarkably useful. And although some of the features
+that it provides only make sense in the context of GraphQL, I noticed that other features, such as request
+deduplication and response caching, would be incredibly useful to any developer who is writing React code.
+
+The only problem is that you can't use Apollo's HoC unless you use GraphQL. This is why I wrote React Request:
+to abstract this functionality out into a general-use component.
+
+#### Why would anyone want to use JSX for making HTTP requests?
+
+I was skeptical at first, too, but it turns out that many of the complex things people do with HTTP requests (namely,
 request deduplication and response caching) map nicely to the component lifecycle. You can remove a considerable amount
 of difficult-to-test imperative code from your application by declaratively specifying how you want your requests to
 behave through JSX.

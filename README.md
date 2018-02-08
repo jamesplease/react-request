@@ -16,7 +16,7 @@ user navigates through the app.
 Features such as request deduplication and response caching can often save the
 developer of apps like these from headache and bugs. Although it is possible to
 implement these features imperatively, it requires that you write a bit of
-code that can be tedious to test.
+code, and that code can be tedious to test.
 
 A declarative API makes things a lot simpler for you, which is where React Request
 comes in. React Request is a backend-agnostic, declarative solution for HTTP
@@ -27,8 +27,8 @@ requests in React, and its deduping and caching features are a delight to use.
 ✓ Uses the native [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) API  
 ✓ Smart [deduping of requests](./docs/guides/request-deduplication.md)  
 ✓ Customizable [response caching](./docs/guides/response-caching.md)  
-✓ Provides hooks to integrate with external stores (like [Redux](https://github.com/reactjs/redux))  
-✓ Small footprint (~2kb gzipped)
+✓ Provides hooks to integrate with external stores (such as [Redux](https://github.com/reactjs/redux))  
+✓ Reasonable footprint (~2kb gzipped)
 
 ### Installation
 
@@ -63,7 +63,7 @@ yarn add react-request
   * [Response Caching ⇗](./docs/guides/response-caching.md)
   * [Request Deduplication ⇗](./docs/guides/request-deduplication.md)
   * [Best Practices ⇗](./docs/guides/best-practices.md)
-  * [Integration with Technologies ⇗](./docs/guides/integration-with-technologies.md)
+  * [Integration with Other Technologies ⇗](./docs/guides/integration-with-other-technologies.md)
 * [Examples ⇗](./docs/examples.md)
 * [FAQ ⇗](./docs/FAQ.md)
 * [Roadmap ⇗](./ROADMAP.md)
@@ -139,8 +139,10 @@ class App extends Component {
 }
 ```
 
-These examples just scratch the surface of what you can do with React Request.
-Check out the API reference below for more.
+These examples just scratch the surface of what React Request can do for you.
+Check out the API reference below, or
+[read the guides](https://github.com/jmeas/react-request/blob/master/docs/guides/INDEX.md),
+to learn more.
 
 ### API
 
@@ -171,7 +173,7 @@ To learn more about the valid options for these props, refer to the
 [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch)
 documentation.
 
-Here's an example demonstrating some of the most commonly-used props:
+The following example demonstrates some of the most commonly-used props that come from `fetch()`:
 
 ```jsx
 <Fetch
@@ -211,10 +213,10 @@ It is called with one argument, `result`, an object with the following keys:
 
 There are three common use cases for the `doFetch` prop:
 
-* For GET requests, it can allow users to refresh the data
-* Anytime there is a network error, you can use this function to retry the request
-* When `lazy` is `true`, you can use this to actually make the request, typically as
-  a result of user input
+* You can use it to "refresh" the data by making a follow-up request for read requests
+* You can use it to retry the request if there is any sort of error
+* You must manually call this method to actually make the request anytime that the `lazy` prop
+  is passed as `true`.
 
 `doFetch` accepts one argument: `options`. Any of the `fetch()` options, such as `url`, `method`, and
 `body` are valid `options`. This allows you to customize the request from within the component based
@@ -233,7 +235,7 @@ is based on the request method that you use.
 ```jsx
 <Fetch url="/books" lazy>
   {({ doFetch }) => {
-    <button onClick={() => doFetch()}>Fetch books</button>;
+    <button onClick={() => doFetch()}>Load the books</button>;
   }}
 </Fetch>
 ```
@@ -246,9 +248,10 @@ with one argument, an object with the following keys:
 * `url`: The URL of the request
 * `init`: The second argument passed to `global.fetch()`, which specifies things
   such as the body, method, and so on
-* `requestKey`: The computed request key
+* `requestKey`: Either the computed request key, or the value of the
+  `requestKey` prop
 
-This can be used for analytics or syncing response data with a data store such
+This feature is useful for analytics, or syncing response data with a data store such
 as [Redux](https://github.com/reactjs/redux/).
 
 > Note: This function is not called when the component reads from the cache.
@@ -256,12 +259,13 @@ as [Redux](https://github.com/reactjs/redux/).
 ##### `afterFetch`
 
 A function that is called anytime that a network response is received. It is called
-with one arguments, an object with the following keys:
+with one argument, an object with the following keys:
 
 * `url`: The URL of the request
 * `init`: The second argument passed to `global.fetch()`, which specifies things
   such as the body, method, and so on
-* `requestKey`: The computed request key
+* `requestKey`: Either the computed request key, or the value of the
+  `requestKey` prop
 * `response`: The response that was received from the HTTP request
 * `data`: The transformed data from the response. This will be different from
   `response.data` if a `transformData` function was passed as a prop to `<Fetch/>`.
@@ -278,9 +282,6 @@ as [Redux](https://github.com/reactjs/redux/).
 A function that is called every time a response is received, whether that
 response is from the cache or from a network request. Receives two arguments:
 `error` and `response`.
-
-> Note: `onResponse` is not called if the component unmounts before the
-> response is received.
 
 ```jsx
 <Fetch
@@ -322,10 +323,14 @@ hook to transform the data before it is passed into `children`.
 </Fetch>
 ```
 
+> Note: `transformData` does not modify the value of `response.data`. The transformed data is
+> made available to you in the render prop argument under the `data` key.
+
 ##### `responseType`
 
-The content type of the response body. Defaults to `"json"`, unless the response has a 204 status code,
-in which case it will be `"text"`. Valid values are the methods on [Body](https://developer.mozilla.org/en-US/docs/Web/API/Body).
+The content type of the response body. Defaults to `"json"` unless the response has a 204 status code,
+in which case it will be `"text"` instead. Valid values are any of the methods on
+[Body](https://developer.mozilla.org/en-US/docs/Web/API/Body).
 
 Alternatively, you may specify a function that returns a string. The function will be called with one
 argument: `response`. This allows you to dynamically specify the response type based on information
@@ -408,6 +413,10 @@ a key is generated for you. Specifying a custom key is an advanced feature that 
 
 For more, see the [request key](https://github.com/jmeas/react-request/blob/master/docs/guides/request-keys.md)
 guide.
+
+---
+
+The rest of the API documentation describes the other named exports from the `react-request` package.
 
 #### `fetchDedupe( input [, init] [, dedupeOptions] )`
 

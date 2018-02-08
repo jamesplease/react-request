@@ -1,28 +1,28 @@
 # Best Practices
 
-Here are some tips for using React Request.
+Here are some tips that may help you when using React Request.
 
 ### Handling errors
 
-Handling errors isn't as simple as looking at the `error` object
-that is passed to you in render. The `error` object is only included as an
+It may seem like handling errors is as simple as checking for an `error` object
+within the render callback, but the `error` object is only included as an
 argument in the following situations:
 
 1. A network error occurred, such as a timeout or a loss of network connection
 2. A new request "aborted" the previous one (meaning that the component
    will ignore the response of the earlier request)
 
-Clearly, there are other situations where you might consider the component
+There are other situations when most developers typically the component
 to be in an error state, such as when a 404 is returned.
 
-The best way to identify those is by looking at the `response.ok` key.
+The best way to cover all situations is by _also_ looking at the `response.ok` value.
 This is a Boolean that is `false` anytime that the `status` of the response
 is `>= 400`. So this will catch other errors such as Not Found errors, Unauthorized errors,
 and other client and server errors.
 
 Together, checking for `error` and `response.ok` should cover all possible
-situations when a request is "unsuccessful." An example demonstrating this
-approach of handling of errors looks like:
+situations when a request is "unsuccessful." The following example demonstrates
+this.
 
 ```js
 <Fetch {...fetchProps}>
@@ -36,9 +36,8 @@ approach of handling of errors looks like:
 </Fetch>
 ```
 
-Of course, by looking at the `error` object or the `response` object in greater detail,
-you can provide your user with a more granular message, explaining to them what has
-gone wrong.
+> Note: you can explain what has gone wrong to the user in greater detail by looking
+> at properties on the `error` object or the `response` object.
 
 ### Making "fetch components"
 
@@ -110,7 +109,7 @@ export default class App extends Component {
 ```
 
 If you've used [Redux](https://redux.js.org) for HTTP requests in the past, then you can think of the
-"fetch components" as fulfilling a similar role as action creators.
+"fetch components" as fulfilling a similar role as action creators. They cut down on the boilerplate.
 
 ### Directory Structure
 
@@ -124,3 +123,6 @@ books, authors, and publishers, you might have:
     authors.js
     publishers.js
 ```
+
+Within each of those resource files, you might have multiple "fetch components" for reading and updating
+the resources in various ways.

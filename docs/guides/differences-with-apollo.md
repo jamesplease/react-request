@@ -6,25 +6,25 @@ There are a few places where this library is different from React Apollo.
 ### Missing Features
 
 React Request is intended to be relatively lightweight, so it does not implement these
-props from React Apollo:
+features or props from React Apollo:
 
 * Polling
 * Optimistic responses
 * `errorPolicy` prop
 * `notifyOnNetworkStatusChange` prop
 
-The general idea behind these omissions is that we believe that implementing these features
-within your app shouldn't be much work. If you disagree, open an issue – we may be
-wrong!
+The reason for these omissions is that we believe that you can implement this features in your
+application, or in a wrapping component, without too much extra work. If you disagree, open an issue –
+we may very well be wrong!
 
 ### Higher-order Component vs Render Props
 
 This library uses a render prop rather than a higher-order component (HoC). As of January 2018,
-React Apollo does not implement render prop components, although they are on the roadmap for
-a future release.
+React Apollo does not implement render prop components, although they are on that project's roadmap
+for a future release.
 
 Render prop components are more powerful than HoCs, so we currently do not intend to release
-an HoC. But you can build your own!
+an HoC. But you can build your own if you really want one!
 
 ### No queries or mutations
 
@@ -38,4 +38,14 @@ prop, which is what determines whether the request is made on mount or not.
 React Apollo normalizes your data, and makes it available through the store. This requires a
 definition of a "resource" or "entity," which is beyond the scope of this library.
 
-You can build a library on top of React Request that implements a system like that.
+If you want data normalization, you need two things:
+
+1. a location to place the normalized data in memory (typically called a store)
+2. a library or framework that defines what a resource or entity is
+
+For instance, [Redux](https://redux.js.org) can fulfill the role of item 1 while
+[Redux Resource](https://redux-resource.js.org) can fulfill the role of item 2.
+
+Once you have those two things, you can use React Request to provide declarative
+requests (in fact, the official React bindings for Redux Resource will be built
+using React Request).

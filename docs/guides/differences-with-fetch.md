@@ -2,8 +2,8 @@
 
 Whenever possible, we try to follow standard usage of the
 [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch)
-API. There are a few differences between using `fetch()` and this
-library, which are explained here.
+API as closely as possible. There are a few differences between using `fetch()` and this
+library, though, which are explained here.
 
 ### `init` is not an Object
 
@@ -33,7 +33,7 @@ fetch('/posts/2', {
 When using `fetch`, you must manually read the body. This
 library reads it automatically for you. This is because the body
 is a ReadableStream, and can only be read a single time. It was
-a requirement that we read it for you to support
+a requirement that React Request read it for you to support
 [deduplication of requests](./request-deduplication.md).
 
 ```js
@@ -81,5 +81,5 @@ This system does not work with `<Fetch/>`, because it would be tedious
 for you to create a new AbortController anytime the component was going
 to make a new request.
 
-We plan to add support for aborting, but for now it is not supported. For
+It is on our roadmap to provide a great story around aborting requests. For
 more, see the guide on [aborting requests](./aborting.md).

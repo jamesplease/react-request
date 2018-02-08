@@ -43,13 +43,13 @@ class App extends Component {
 
 ### Reliability
 
-Fr APIs that communicate through JSON, this system assume that `JSON.stringify`
-produces the same string given two objects that would be considered "deeply equal."
+The default request key implementation assumes that `JSON.stringify` will produce the same string given two different objects
+that would be considered "deeply equal" (for instance, if they were compared using [`_.isEqual`](https://lodash.com/docs/#isEqual)).
 
 This may seem unreliable to you, but Apollo
 [has been doing it this way for some time](https://github.com/apollographql/apollo-link/blob/d5b0d4c491563ed36c50170e0b4c6c5f8c988d59/packages/apollo-link/src/linkUtils.ts#L121-L127),
 and that is a library with half a million downloads per month (as of February 2018). So it seems to
-be a reliable system.
+be reliable.
 
 Needless to say, if this behavior ever causes problems, then we will revisit the approach.
 

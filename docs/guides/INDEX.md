@@ -2,7 +2,6 @@
 
 These guides provide tips and additional information that can help you use React Request.
 
-* [Why JSX?](./why-jsx.md)
 * [Using the `lazy` Prop](./using-the-lazy-prop.md)
 * [Aborting](./aborting.md)
 * [Differences with `fetch()`](./differences-with-fetch.md)
@@ -11,4 +10,4 @@ These guides provide tips and additional information that can help you use React
 * [Request Deduplication](./response-caching.md)
 * [Request Deduplication](./request-deduplication.md)
 * [Best Practices](./best-practices.md)
-* [Integration with Technologies](./integration-with-technologies.md)
+* [Integration with Other Technologies](./integration-with-other-technologies.md)

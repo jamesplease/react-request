@@ -67,6 +67,7 @@ yarn add react-request
   * [Integration with Technologies ⇗](./docs/guides/integration-with-technologies.md)
 * [Examples ⇗](./docs/examples.md)
 * [FAQ ⇗](./docs/FAQ.md)
+* [Roadmap ⇗](./ROADMAP.md)
 * [Acknowledgements](#acknowledgements)
 
 ### Getting Started

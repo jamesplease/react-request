@@ -2,6 +2,44 @@
 
 Here are some tips for using React Request.
 
+### Handling errors
+
+Handling errors isn't as simple as looking at the `error` object
+that is passed to you in render. The `error` object is only included as an
+argument in the following situations:
+
+1. A network error occurred, such as a timeout or a loss of network connection
+2. A new request "aborted" the previous one (meaning that the component
+   will ignore the response of the earlier request)
+
+Clearly, there are other situations where you might consider the component
+to be in an error state, such as when a 404 is returned.
+
+The best way to identify those is by looking at the `response.ok` key.
+This is a Boolean that is `false` anytime that the `status` of the response
+is `>= 400`. So this will catch other errors such as Not Found errors, Unauthorized errors,
+and other client and server errors.
+
+Together, checking for `error` and `response.ok` should cover all possible
+situations when a request is "unsuccessful." An example demonstrating this
+approach of handling of errors looks like:
+
+```js
+<Fetch {...fetchProps}>
+  {({ error, response }) => {
+    if (error || (response && !response.ok)) {
+      console.log('There was some kind of error.');
+    } else {
+      console.log('The request is either loading or it succeeded');
+    }
+  }}
+</Fetch>
+```
+
+Of course, by looking at the `error` object or the `response` object in greater detail,
+you can provide your user with a more granular message, explaining to them what has
+gone wrong.
+
 ### Making "fetch components"
 
 HTTP requests require a lot of configuration, which can make your

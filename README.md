@@ -376,6 +376,14 @@ A Boolean value representing whether or not the request should be
 [deduplicated](./docs/guides/request-deduplication.md).
 Defaults to `true`.
 
+##### `requestKey`
+
+A string that is used to control the request deduplication and response caching features. By default,
+a key is generated for you. Specifying a custom key is an advanced feature that you may not need.
+
+For more, see the [request key](https://github.com/jmeas/react-request/blob/master/docs/guides/request-keys.md)
+guide.
+
 #### `fetchDedupe( input [, init] [, dedupeOptions] )`
 
 This is the `fetchDedupe` export from the [Fetch Dedupe](https://github.com/jmeas/fetch-dedupe)

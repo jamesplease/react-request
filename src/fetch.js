@@ -38,10 +38,12 @@ export class Fetch extends React.Component {
     super(props, context);
 
     this.state = {
-      requestKey: getRequestKey({
-        ...props,
-        method: props.method.toUpperCase()
-      }),
+      requestKey:
+        props.requestKey ||
+        getRequestKey({
+          ...props,
+          method: props.method.toUpperCase()
+        }),
       requestName: props.requestName,
       fetching: false,
       response: null,
@@ -78,14 +80,18 @@ export class Fetch extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const currentRequestKey = getRequestKey({
-      ...this.props,
-      method: this.props.method.toUpperCase()
-    });
-    const nextRequestKey = getRequestKey({
-      ...nextProps,
-      method: this.props.method.toUpperCase()
-    });
+    const currentRequestKey =
+      this.props.requestKey ||
+      getRequestKey({
+        ...this.props,
+        method: this.props.method.toUpperCase()
+      });
+    const nextRequestKey =
+      nextProps.requestKey ||
+      getRequestKey({
+        ...nextProps,
+        method: this.props.method.toUpperCase()
+      });
 
     if (currentRequestKey !== nextRequestKey) {
       this.fetchData(nextProps);
@@ -144,11 +150,13 @@ export class Fetch extends React.Component {
     } = Object.assign({}, this.props, options);
 
     // We need to compute a new key, just in case a new value was passed in `doFetch`.
-    const requestKey = getRequestKey({
-      url,
-      method: method.toUpperCase(),
-      body
-    });
+    const requestKey =
+      this.props.requestKey ||
+      getRequestKey({
+        url,
+        method: method.toUpperCase(),
+        body
+      });
 
     const uppercaseMethod = method.toUpperCase();
     const isReadRequest = uppercaseMethod === 'GET';
@@ -336,6 +344,7 @@ Fetch.propTypes = {
   transformResponse: PropTypes.func,
   lazy: PropTypes.bool,
   dedupe: PropTypes.bool,
+  requestKey: PropTypes.string,
 
   url: PropTypes.string.isRequired,
   body: PropTypes.any,

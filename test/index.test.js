@@ -15,6 +15,8 @@ function hangingPromise() {
 }
 
 fetchMock.get('/test/hangs', hangingPromise());
+fetchMock.get('/test/hangs/1', hangingPromise());
+fetchMock.get('/test/hangs/2', hangingPromise());
 fetchMock.post('/test/hangs', hangingPromise());
 fetchMock.put('/test/hangs', hangingPromise());
 fetchMock.patch('/test/hangs', hangingPromise());
@@ -829,7 +831,7 @@ describe('unsuccessful requests', () => {
 });
 
 describe('request deduplication', () => {
-  test('it should dispatch two requests with the same key before they resolve', () => {
+  test('it should dispatch one request with the same key before they resolve', () => {
     const beforeFetchMock1 = jest.fn();
     const beforeFetchMock2 = jest.fn();
 
@@ -839,6 +841,46 @@ describe('request deduplication', () => {
     expect(beforeFetchMock1).toHaveBeenCalledTimes(1);
     expect(beforeFetchMock2).toHaveBeenCalledTimes(0);
     expect(fetchMock.calls('/test/hangs').length).toBe(1);
+  });
+
+  test('it should dispatch two requests, even when the URL is the same, when different keys are specified', () => {
+    const beforeFetchMock1 = jest.fn();
+    const beforeFetchMock2 = jest.fn();
+
+    shallow(
+      <Fetch url="/test/hangs" requestKey="1" beforeFetch={beforeFetchMock1} />
+    );
+    shallow(
+      <Fetch url="/test/hangs" requestKey="2" beforeFetch={beforeFetchMock2} />
+    );
+
+    expect(beforeFetchMock1).toHaveBeenCalledTimes(1);
+    expect(beforeFetchMock2).toHaveBeenCalledTimes(1);
+    expect(fetchMock.calls('/test/hangs').length).toBe(2);
+  });
+
+  test('it should dispatch one requests, even when the URL is different, when the same key is specified', () => {
+    const beforeFetchMock1 = jest.fn();
+    const beforeFetchMock2 = jest.fn();
+
+    shallow(
+      <Fetch
+        url="/test/hangs/1"
+        requestKey="1"
+        beforeFetch={beforeFetchMock1}
+      />
+    );
+    shallow(
+      <Fetch
+        url="/test/hangs/2"
+        requestKey="1"
+        beforeFetch={beforeFetchMock2}
+      />
+    );
+
+    expect(beforeFetchMock1).toHaveBeenCalledTimes(1);
+    expect(beforeFetchMock2).toHaveBeenCalledTimes(0);
+    expect(fetchMock.calls('/test/hangs/1').length).toBe(1);
   });
 
   test('it should dispatch two requests with the same key before they resolve when dedupe:false is passed to both', () => {
@@ -872,9 +914,6 @@ describe('request deduplication', () => {
   });
 
   test('it should dispatch two requests with different keys', () => {
-    fetchMock.get('/test/hangs/1', hangingPromise());
-    fetchMock.get('/test/hangs/2', hangingPromise());
-
     const beforeFetchMock1 = jest.fn();
     const beforeFetchMock2 = jest.fn();
 

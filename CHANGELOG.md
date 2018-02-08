@@ -1,5 +1,16 @@
 # Changelog
 
+### v1.1.0 (2018/2/7)
+
+**New Features**
+
+* `responseType` can now be specified as a function. It receives the `response`
+  as the first argument.
+* Adds a `requestKey` prop.
+* When the request is "faux-aborted," the error will have a `name` equal to `AbortError`.
+  This matches the name of the native error, allowing you to write future-proof code that
+  handles aborted requests.
+
 ### v1.0.0 (2018/2/4)
 
 **Breaking**

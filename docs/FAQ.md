@@ -13,11 +13,11 @@ behave through JSX.
 
 #### If a request is made when the component mounts, how does that work for POST, PATCH, or DELETE requests?
 
-The default behavior is that requests are only made on mount for `GET` requests when the component mounts, but
+The default behavior is that requests are only made on mount for `GET` requests when the component mounts, and
 not for those other HTTP methods.
 
-One of the things that are passed into the render prop is a method called `fetch`. Calling this method will perform
-the request. This allows you to hook up, say, PATCH requests to a button.
+One of the things that is passed into the render prop function is a method called `fetch`. Calling this method will perform
+the request. This allows you to hook up, say, a PATCH request to a button.
 
 Whether or not the request makes a request on mount can be customized with the `lazy` prop.
 

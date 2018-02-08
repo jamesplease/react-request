@@ -37,3 +37,22 @@ This is why `lazy` is `true` for HTTP methods that typically refer to write requ
 Sometimes, APIs will use `POST` for read requests. In these situations, you will
 need to manually specify `lazy` as `false` if you would like to make the request
 when the component mounts.
+
+### Dynamic `lazy` prop usage
+
+A neat pattern is to specify a dynamic `lazy` value based on some application state. For
+instance, let's say that you're building a search page that serializes the user's
+search into a query parameter.
+
+When the app loads, you may want to make the request immediately when the query parameter
+exists. But if there isn't a query parameter, then you won't want to make the request, because
+there's no search term to use in the request.
+
+You can use a dynamic value for `lazy` to implement this behavior. Take a look
+at the example below:
+
+```jsx
+<Fetch {...fetchProps} lazy={Boolean(params.search)}>
+  {children}
+</Fetch>
+```

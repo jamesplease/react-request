@@ -327,12 +327,37 @@ hook to transform the data before it is passed into `children`.
 The content type of the response body. Defaults to `"json"`, unless the response has a 204 status code,
 in which case it will be `"text"`. Valid values are the methods on [Body](https://developer.mozilla.org/en-US/docs/Web/API/Body).
 
+Alternatively, you may specify a function that returns a string. The function will be called with one
+argument: `response`. This allows you to dynamically specify the response type based on information
+about the response, such as its status code.
+
 ```jsx
 // If you have an endpoint that just returns raw text, you could, for instance, convert it into
 // an object using `responseType` and `transformData`.
 <Fetch
   url="/countries/2"
   responseType="text"
+  transformData={countryName => {
+    return {
+      countryName
+    };
+  }}>
+  {({ data }) => {
+    <div>{data.countryName}</div>;
+  }}
+</Fetch>
+```
+
+```jsx
+// Some "enterprisey" endpoints return text stack traces anytime that they error. A function
+// `responseType` can protect you against this.
+<Fetch
+  url="/countries/2"
+  responseType={response => {
+    // Only parse as JSON when the request's code is not an error code, and it is
+    // not 204 No Content.
+    return response.ok && response.status !== 204 ? 'json' : 'text';
+  }}
   transformData={countryName => {
     return {
       countryName

@@ -1,6 +1,6 @@
 # Using the `lazy` Prop
 
-One of the props to the `<Fetch/>` component is `lazy`. This
+One of the props of the `<Fetch/>` component is `lazy`. This
 determines whether or not a request will be made when the
 component mounts.
 
@@ -12,8 +12,8 @@ being used.
 | GET, HEAD, OPTIONS       | `false`       |
 | POST, PUT, PATCH, DELETE | `true`        |
 
-This is due to the differences between how applications typically
-make read and write requests.
+This is due to the way applications typically use these methods
+when performing reads and writes.
 
 ### Read Requests
 
@@ -24,32 +24,29 @@ want to kick off a request to fetch that book right after the page loads.
 
 This is why `lazy` is `false` for `GET` requests.
 
+> Sometimes, APIs will use `POST` for read requests. In these situations, you will
+need to manually specify `lazy` as `false` if you would like to make the request
+when the component mounts.
+
 ### Write Requests
 
 Typically, write requests, such as updating or deleting a resource, are not done
-as the result of navigation. Instead, these are typically performed when a
-user clicks a button to confirm their action.
+as the result of a user simply navigating to a page. Instead, these are typically
+performed when a user clicks a button to confirm the action.
 
 This is why `lazy` is `true` for HTTP methods that typically refer to write requests.
-
-### Exceptions
-
-Sometimes, APIs will use `POST` for read requests. In these situations, you will
-need to manually specify `lazy` as `false` if you would like to make the request
-when the component mounts.
 
 ### Dynamic `lazy` prop usage
 
 A neat pattern is to specify a dynamic `lazy` value based on some application state. For
-instance, let's say that you're building a search page that serializes the user's
-search into a query parameter.
+instance, consider a search page that serializes the user's search into a query parameter.
 
 When the app loads, you may want to make the request immediately when the query parameter
 exists. But if there isn't a query parameter, then you won't want to make the request, because
 there's no search term to use in the request.
 
-You can use a dynamic value for `lazy` to implement this behavior. Take a look
-at the example below:
+You can use a dynamic value for `lazy` to implement this behavior. The example below
+demonstrates how you might go about doing this.
 
 ```jsx
 <Fetch {...fetchProps} lazy={Boolean(params.search)}>

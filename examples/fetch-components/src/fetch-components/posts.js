@@ -10,6 +10,7 @@ import { Fetch } from 'react-request';
 //
 // In the case of this simple "post" resource, all that is needed is an ID (and
 // children, since Fetch is a render prop component)
+
 export function ReadPost({ postId, children }) {
   return (
     <Fetch

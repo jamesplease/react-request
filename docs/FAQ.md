@@ -11,8 +11,6 @@ request deduplication and response caching) map nicely to the component lifecycl
 of difficult-to-test imperative code from your application by declaratively specifying how you want your requests to
 behave through JSX.
 
-We wrote [a guide](./guides/why-jsx.md) that goes into this answer in greater detail.
-
 #### If a request is made when the component mounts, how does that work for POST, PATCH, or DELETE requests?
 
 The default behavior is that requests are only made on mount for `GET` requests when the component mounts, but

@@ -20,7 +20,7 @@ code that can be tedious to test.
 
 A declarative API makes things a lot simpler for you, which is where React Request
 comes in. React Request is a backend-agnostic, declarative solution for HTTP
-requests in React.
+requests in React, and its deduping and caching features are a delight to use.
 
 ### Features
 

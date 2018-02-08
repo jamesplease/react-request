@@ -55,7 +55,6 @@ yarn add react-request
   * [clearRequestCache()](#clearrequestcache)
   * [clearResponseCache()](#clearresponsecache)
 * [Guides ⇗](./docs/guides/INDEX.md)
-  * [Why JSX? ⇗](./docs/guides/why-jsx.md)
   * [Using the `lazy` Prop ⇗](./docs/guides/using-the-lazy-prop.md)
   * [Aborting ⇗](./docs/guides/aborting.md)
   * [Differences with `fetch()` ⇗](./docs/guides/differences-with-fetch.md)

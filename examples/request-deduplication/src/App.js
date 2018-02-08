@@ -20,6 +20,11 @@ class App extends Component {
         <Fetch url={urlTwo} />
         <Fetch url={urlTwo} />
         <Fetch url={urlTwo} />
+
+        <div>
+          Open the Network tab within DevTools to see the number of requests
+          that are sent off.
+        </div>
       </div>
     );
   }

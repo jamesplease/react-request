@@ -107,9 +107,11 @@ export class Fetch extends React.Component {
   // configured, then we need to "cancel" the previous one.
   cancelExistingRequest = reason => {
     if (this.state.fetching && !this.hasHandledNetworkResponse) {
+      const abortError = new Error(reason);
+      abortError.name = 'AbortError';
       this.onResponseReceived({
         ...this.responseReceivedInfo,
-        error: new Error(reason),
+        error: abortError,
         hittingNetwork: true
       });
     }

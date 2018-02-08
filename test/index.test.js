@@ -982,7 +982,7 @@ describe('request cancellation', () => {
   });
 
   test('it should cancel when a double request is initiated via `doFetch`', () => {
-    expect.assertions(2);
+    expect.assertions(3);
     jest.useFakeTimers();
     const afterFetchMock = jest.fn();
 
@@ -1006,6 +1006,10 @@ describe('request cancellation', () => {
       'error.message',
       'New fetch initiated'
     );
+    expect(afterFetchMock.mock.calls[0][0]).toHaveProperty(
+      'error.name',
+      'AbortError'
+    );
   });
 
   test('it should cancel when a double request is initiated via prop changes', () => {
@@ -1026,6 +1030,10 @@ describe('request cancellation', () => {
       'error.message',
       'New fetch initiated'
     );
+    expect(afterFetchMock.mock.calls[0][0]).toHaveProperty(
+      'error.name',
+      'AbortError'
+    );
   });
 
   test('it should cancel when the component unmounts', () => {
@@ -1041,6 +1049,10 @@ describe('request cancellation', () => {
     expect(afterFetchMock.mock.calls[0][0]).toHaveProperty(
       'error.message',
       'Component unmounted'
+    );
+    expect(afterFetchMock.mock.calls[0][0]).toHaveProperty(
+      'error.name',
+      'AbortError'
     );
     expect(afterFetchMock).toBeCalledWith(
       expect.objectContaining({

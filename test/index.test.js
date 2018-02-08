@@ -230,6 +230,39 @@ describe('successful requests', () => {
     }, networkTimeout);
   });
 
+  test('it accepts a custom `responseType` as a function, and calls afterFetch with the right arguments', done => {
+    fetchMock.get(
+      '/test/succeeds/secondpls',
+      new Promise(resolve => {
+        resolve(successfulResponse());
+      })
+    );
+
+    expect.assertions(2);
+    const afterFetchMock = jest.fn();
+
+    const wrapper = mount(
+      <Fetch
+        url="/test/succeeds/secondpls"
+        afterFetch={afterFetchMock}
+        responseType={() => 'text'}
+      />
+    );
+
+    setTimeout(() => {
+      expect(afterFetchMock).toHaveBeenCalledTimes(1);
+      expect(afterFetchMock).toBeCalledWith(
+        expect.objectContaining({
+          url: '/test/succeeds/secondpls',
+          error: null,
+          didUnmount: false,
+          data: 'hi'
+        })
+      );
+      done();
+    }, networkTimeout);
+  });
+
   test('`transformData` is used to transform the response data', done => {
     fetchMock.get(
       '/test/succeeds/third',

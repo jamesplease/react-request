@@ -336,12 +336,9 @@ Fetch.propTypes = {
   onResponse: PropTypes.func,
   beforeFetch: PropTypes.func,
   afterFetch: PropTypes.func,
-  responseType: PropTypes.oneOf([
-    'json',
-    'text',
-    'blob',
-    'arrayBuffer',
-    'formData'
+  responseType: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.oneOf(['json', 'text', 'blob', 'arrayBuffer', 'formData'])
   ]),
   transformResponse: PropTypes.func,
   lazy: PropTypes.bool,

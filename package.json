@@ -81,7 +81,7 @@
     "rollup-plugin-uglify": "^2.0.1"
   },
   "dependencies": {
-    "fetch-dedupe": "^2.0.0",
+    "fetch-dedupe": "^2.1.0",
     "prop-types": "^15.6.0"
   }
 }

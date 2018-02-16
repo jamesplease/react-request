@@ -299,7 +299,7 @@ response is from the cache or from a network request. Receives two arguments:
 </Fetch>
 ```
 
-##### `transformData`
+##### `transformResponse`
 
 A function that is called with the data returned from the response. You can use this
 hook to transform the data before it is passed into `children`.
@@ -307,7 +307,7 @@ hook to transform the data before it is passed into `children`.
 ```jsx
 <Fetch
   url="/posts/2"
-  transformData={data => data.post>
+  transformResponse={data => data.post>
   {({ fetching, error, response, data }) => {
     <div>
       {fetching && ('Loading...')}
@@ -323,7 +323,7 @@ hook to transform the data before it is passed into `children`.
 </Fetch>
 ```
 
-> Note: `transformData` does not modify the value of `response.data`. The transformed data is
+> Note: `transformResponse` does not modify the value of `response.data`. The transformed data is
 > made available to you in the render prop argument under the `data` key.
 
 ##### `responseType`

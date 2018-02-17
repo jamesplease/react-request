@@ -46,6 +46,30 @@ fetchMock.get('/test/variable', () => {
   }
 });
 
+fetchMock.get(
+  '/test/succeeds/cache-only-empty',
+  () =>
+    new Promise(resolve => {
+      resolve(successfulResponse());
+    })
+);
+
+fetchMock.get(
+  '/test/succeeds/cache-only-full',
+  () =>
+    new Promise(resolve => {
+      resolve(jsonResponse());
+    })
+);
+
+fetchMock.post(
+  '/test/succeeds/cache-only-full',
+  () =>
+    new Promise(resolve => {
+      resolve(jsonResponse());
+    })
+);
+
 // Some time for the mock fetches to resolve
 const networkTimeout = 10;
 
@@ -72,7 +96,7 @@ describe('rendering', () => {
 
   test('passes the right object shape to the render function', () => {
     const mockRender = jest.fn().mockReturnValue(null);
-    const wrapper = shallow(
+    shallow(
       <Fetch
         url="/test/hangs"
         requestName="tester"
@@ -91,6 +115,7 @@ describe('rendering', () => {
         requestKey,
         url: '/test/hangs',
         fetching: false,
+        failed: false,
         response: null,
         data: null,
         error: null,
@@ -166,7 +191,7 @@ describe('successful requests', () => {
       method: 'GET'
     });
 
-    const wrapper = mount(
+    mount(
       <Fetch
         url="/test/succeeds/first"
         beforeFetch={beforeFetchMock}
@@ -187,6 +212,7 @@ describe('successful requests', () => {
         expect.objectContaining({
           url: '/test/succeeds/first',
           error: null,
+          failed: false,
           didUnmount: false,
           data: {
             books: [1, 42, 150]
@@ -208,7 +234,7 @@ describe('successful requests', () => {
     expect.assertions(2);
     const afterFetchMock = jest.fn();
 
-    const wrapper = mount(
+    mount(
       <Fetch
         url="/test/succeeds/second"
         afterFetch={afterFetchMock}
@@ -222,6 +248,7 @@ describe('successful requests', () => {
         expect.objectContaining({
           url: '/test/succeeds/second',
           error: null,
+          failed: false,
           didUnmount: false,
           data: 'hi'
         })
@@ -241,7 +268,7 @@ describe('successful requests', () => {
     expect.assertions(2);
     const afterFetchMock = jest.fn();
 
-    const wrapper = mount(
+    mount(
       <Fetch
         url="/test/succeeds/secondpls"
         afterFetch={afterFetchMock}
@@ -255,6 +282,7 @@ describe('successful requests', () => {
         expect.objectContaining({
           url: '/test/succeeds/secondpls',
           error: null,
+          failed: false,
           didUnmount: false,
           data: 'hi'
         })
@@ -273,17 +301,17 @@ describe('successful requests', () => {
 
     expect.assertions(2);
     const afterFetchMock = jest.fn();
-    function transformResponse(data) {
+    function transformData(data) {
       return {
         sandwiches: data.books
       };
     }
 
-    const wrapper = mount(
+    mount(
       <Fetch
         url="/test/succeeds/third"
         afterFetch={afterFetchMock}
-        transformResponse={transformResponse}
+        transformData={transformData}
       />
     );
 
@@ -293,6 +321,7 @@ describe('successful requests', () => {
         expect.objectContaining({
           url: '/test/succeeds/third',
           error: null,
+          failed: false,
           didUnmount: false,
           data: {
             sandwiches: [1, 42, 150]
@@ -307,13 +336,6 @@ describe('successful requests', () => {
 describe('cache strategies', () => {
   describe('cache-only', () => {
     test('errors when there is nothing in the cache', done => {
-      fetchMock.get(
-        '/test/succeeds/cache-only-empty',
-        new Promise(resolve => {
-          resolve(successfulResponse());
-        })
-      );
-
       expect.assertions(5);
       const onResponseMock = jest.fn();
       const beforeFetchMock = jest.fn();
@@ -351,14 +373,7 @@ describe('cache strategies', () => {
         .catch(done.fail);
     });
 
-    test('it returns the cached data when found', done => {
-      fetchMock.get(
-        '/test/succeeds/cache-only-full',
-        new Promise(resolve => {
-          resolve(jsonResponse());
-        })
-      );
-
+    test('respects `cacheResponse: false`, erroring', done => {
       expect.assertions(11);
       const onResponseMock = jest.fn();
       const beforeFetchMock = jest.fn();
@@ -368,6 +383,7 @@ describe('cache strategies', () => {
       mount(
         <Fetch
           url="/test/succeeds/cache-only-full"
+          cacheResponse={false}
           beforeFetch={beforeFetchMock}
           afterFetch={afterFetchMock}
           onResponse={onResponseMock}
@@ -412,6 +428,178 @@ describe('cache strategies', () => {
         mount(
           <Fetch
             fetchPolicy="cache-only"
+            requestName="meepmeep"
+            url="/test/succeeds/cache-only-full"
+            beforeFetch={beforeFetchMock2}
+            afterFetch={afterFetchMock2}
+            onResponse={onResponseMock2}
+          />
+        );
+
+        setTimeout(() => {
+          expect(fetchMock.calls('/test/succeeds/cache-only-full').length).toBe(
+            1
+          );
+          expect(beforeFetchMock2).toHaveBeenCalledTimes(0);
+          expect(afterFetchMock2).toHaveBeenCalledTimes(0);
+          expect(onResponseMock2).toHaveBeenCalledTimes(1);
+          expect(onResponseMock2).toBeCalledWith(
+            expect.objectContaining({
+              message: 'Response for "meepmeep" not found in cache.'
+            }),
+            null
+          );
+          done();
+        }, networkTimeout);
+      }, networkTimeout);
+    });
+
+    test('it returns the cached data when found', done => {
+      expect.assertions(11);
+      const onResponseMock = jest.fn();
+      const beforeFetchMock = jest.fn();
+      const afterFetchMock = jest.fn();
+
+      // First, we need to add some stuff to the cache
+      mount(
+        <Fetch
+          url="/test/succeeds/cache-only-full"
+          beforeFetch={beforeFetchMock}
+          afterFetch={afterFetchMock}
+          onResponse={onResponseMock}
+        />
+      );
+
+      setTimeout(() => {
+        // NOTE: this is for adding stuff to the cache.
+        // This DOES NOT test the cache-only behavior!
+        expect(fetchMock.calls('/test/succeeds/cache-only-full').length).toBe(
+          1
+        );
+        expect(beforeFetchMock).toHaveBeenCalledTimes(1);
+        expect(afterFetchMock).toHaveBeenCalledTimes(1);
+        expect(afterFetchMock).toBeCalledWith(
+          expect.objectContaining({
+            url: '/test/succeeds/cache-only-full',
+            error: null,
+            failed: false,
+            didUnmount: false,
+            data: {
+              books: [1, 42, 150]
+            }
+          })
+        );
+        expect(onResponseMock).toHaveBeenCalledTimes(1);
+        expect(onResponseMock).toBeCalledWith(
+          null,
+          expect.objectContaining({
+            ok: true,
+            status: 200,
+            statusText: 'OK',
+            data: {
+              books: [1, 42, 150]
+            }
+          })
+        );
+
+        const beforeFetchMock2 = jest.fn();
+        const afterFetchMock2 = jest.fn();
+        const onResponseMock2 = jest.fn();
+
+        mount(
+          <Fetch
+            fetchPolicy="cache-only"
+            url="/test/succeeds/cache-only-full"
+            beforeFetch={beforeFetchMock2}
+            afterFetch={afterFetchMock2}
+            onResponse={onResponseMock2}
+          />
+        );
+
+        setTimeout(() => {
+          expect(fetchMock.calls('/test/succeeds/cache-only-full').length).toBe(
+            1
+          );
+          expect(beforeFetchMock2).toHaveBeenCalledTimes(0);
+          expect(afterFetchMock2).toHaveBeenCalledTimes(0);
+          expect(onResponseMock2).toHaveBeenCalledTimes(1);
+          expect(onResponseMock2).toBeCalledWith(
+            null,
+            expect.objectContaining({
+              ok: true,
+              status: 200,
+              statusText: 'OK',
+              data: {
+                books: [1, 42, 150]
+              }
+            })
+          );
+          done();
+        }, networkTimeout);
+      }, networkTimeout);
+    });
+
+    test('it returns the cached data when found; POST method', done => {
+      expect.assertions(11);
+      const onResponseMock = jest.fn();
+      const beforeFetchMock = jest.fn();
+      const afterFetchMock = jest.fn();
+
+      // First, we need to add some stuff to the cache
+      mount(
+        <Fetch
+          url="/test/succeeds/cache-only-full"
+          lazy={false}
+          method="POST"
+          cacheResponse
+          beforeFetch={beforeFetchMock}
+          afterFetch={afterFetchMock}
+          onResponse={onResponseMock}
+        />
+      );
+
+      setTimeout(() => {
+        // NOTE: this is for adding stuff to the cache.
+        // This DOES NOT test the cache-only behavior!
+        expect(fetchMock.calls('/test/succeeds/cache-only-full').length).toBe(
+          1
+        );
+        expect(beforeFetchMock).toHaveBeenCalledTimes(1);
+        expect(afterFetchMock).toHaveBeenCalledTimes(1);
+        expect(afterFetchMock).toBeCalledWith(
+          expect.objectContaining({
+            url: '/test/succeeds/cache-only-full',
+            error: null,
+            failed: false,
+            didUnmount: false,
+            data: {
+              books: [1, 42, 150]
+            }
+          })
+        );
+        expect(onResponseMock).toHaveBeenCalledTimes(1);
+        expect(onResponseMock).toBeCalledWith(
+          null,
+          expect.objectContaining({
+            ok: true,
+            status: 200,
+            statusText: 'OK',
+            data: {
+              books: [1, 42, 150]
+            }
+          })
+        );
+
+        const beforeFetchMock2 = jest.fn();
+        const afterFetchMock2 = jest.fn();
+        const onResponseMock2 = jest.fn();
+
+        mount(
+          <Fetch
+            fetchPolicy="cache-only"
+            method="POST"
+            lazy={false}
+            cacheResponse
             url="/test/succeeds/cache-only-full"
             beforeFetch={beforeFetchMock2}
             afterFetch={afterFetchMock2}
@@ -480,6 +668,7 @@ describe('cache strategies', () => {
           expect.objectContaining({
             url: '/test/succeeds/cache-first',
             error: null,
+            failed: false,
             didUnmount: false,
             data: {
               books: [1, 42, 150]
@@ -570,6 +759,7 @@ describe('cache strategies', () => {
           expect.objectContaining({
             url: '/test/succeeds/network-only',
             error: null,
+            failed: false,
             didUnmount: false,
             data: {
               books: [1, 42, 150]
@@ -616,6 +806,7 @@ describe('cache strategies', () => {
             expect.objectContaining({
               url: '/test/succeeds/network-only',
               error: null,
+              failed: false,
               didUnmount: false,
               data: {
                 books: [1, 42, 150]
@@ -670,6 +861,7 @@ describe('cache strategies', () => {
           expect.objectContaining({
             url: '/test/succeeds',
             error: null,
+            failed: false,
             didUnmount: false,
             data: {
               books: [1, 42, 150]
@@ -716,6 +908,7 @@ describe('cache strategies', () => {
             expect.objectContaining({
               url: '/test/succeeds',
               error: null,
+              failed: false,
               didUnmount: false,
               data: {
                 books: [1, 42, 150]
@@ -758,6 +951,7 @@ describe('cache strategies', () => {
           expect.objectContaining({
             url: '/test/variable',
             error: null,
+            failed: false,
             didUnmount: false,
             data: {
               books: [1, 42, 150]
@@ -794,8 +988,6 @@ describe('cache strategies', () => {
         );
 
         setTimeout(() => {
-          // This is 1 rather than 2 since we swapped the fetch above.
-          // This could be refactored so that the fetch never gets swapped
           expect(fetchMock.calls('/test/variable').length).toBe(2);
           expect(beforeFetchMock2).toHaveBeenCalledTimes(1);
           expect(beforeFetchMock2).toBeCalledWith(
@@ -808,6 +1000,7 @@ describe('cache strategies', () => {
             expect.objectContaining({
               url: '/test/variable',
               didUnmount: false,
+              failed: true,
               data: {
                 books: [1, 42, 150]
               }
@@ -841,9 +1034,7 @@ describe('unsuccessful requests', () => {
     expect.assertions(4);
     const afterFetchMock = jest.fn();
 
-    const wrapper = mount(
-      <Fetch url="/test/fails" afterFetch={afterFetchMock} />
-    );
+    mount(<Fetch url="/test/fails" afterFetch={afterFetchMock} />);
 
     setTimeout(() => {
       expect(fetchMock.calls('/test/fails').length).toBe(1);
@@ -851,6 +1042,7 @@ describe('unsuccessful requests', () => {
       expect(afterFetchMock).toBeCalledWith(
         expect.objectContaining({
           url: '/test/fails',
+          failed: true,
           didUnmount: false
         })
       );
@@ -989,7 +1181,8 @@ describe('request deduplication', () => {
       expect(afterFetchMock).toBeCalledWith(
         expect.objectContaining({
           url: '/test/fails/dedupe-false',
-          didUnmount: false
+          didUnmount: false,
+          failed: true
         })
       );
       expect(afterFetchMock.mock.calls[0][0]).toHaveProperty(
@@ -1007,9 +1200,7 @@ describe('request cancellation', () => {
   test('it should not cancel when a single request is initiated', () => {
     const afterFetchMock = jest.fn();
 
-    const wrapper = shallow(
-      <Fetch url="/test/hangs" afterFetch={afterFetchMock} />
-    );
+    shallow(<Fetch url="/test/hangs" afterFetch={afterFetchMock} />);
 
     expect(afterFetchMock).toHaveBeenCalledTimes(0);
   });
@@ -1020,7 +1211,7 @@ describe('request cancellation', () => {
     const afterFetchMock = jest.fn();
 
     let hasFetched = false;
-    const wrapper = shallow(
+    shallow(
       <Fetch
         url="/test/hangs"
         afterFetch={afterFetchMock}
@@ -1101,7 +1292,7 @@ describe('laziness', () => {
     test('is false when just a URL is passed', () => {
       const beforeFetchMock = jest.fn();
       const afterFetchMock = jest.fn();
-      const wrapper = mount(
+      mount(
         <Fetch
           url="/test/hangs"
           beforeFetch={beforeFetchMock}
@@ -1116,10 +1307,8 @@ describe('laziness', () => {
     test('is false when method is GET, HEAD, or OPTIONS', () => {
       const beforeFetchMock1 = jest.fn();
       const beforeFetchMock2 = jest.fn();
-      const beforeFetchMock3 = jest.fn();
       const afterFetchMock1 = jest.fn();
       const afterFetchMock2 = jest.fn();
-      const afterFetchMock3 = jest.fn();
 
       mount(
         <Fetch

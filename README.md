@@ -198,8 +198,10 @@ The [render prop](https://cdb.reacttraining.com/use-a-render-prop-50de598f11ce) 
 It is called with one argument, `result`, an object with the following keys:
 
 * `fetching`: A Boolean representing whether or not a request is currently in flight for this component
-* `error`: A Boolean representing if a network error occurred. Note that HTTP "error" status codes do not
-  cause `error` to be `true`; only failed or aborted network requests do. For more, see the
+* `failed`: A Boolean representing whether or not the request failed for any reason. This includes network
+  errors and status codes that are greater than or equal to`400`.
+* `error`: An error object representing a network error occurred. Note that HTTP "error" status codes do not
+  cause errors; only failed or aborted network requests do. For more, see the
   ["Using Fetch" MDN guide](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Checking_that_the_fetch_was_successful).
 * `response`: An instance of [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response). The
   [`body`](https://developer.mozilla.org/en-US/docs/Web/API/Body) will already be read, and made
@@ -299,7 +301,7 @@ response is from the cache or from a network request. Receives two arguments:
 </Fetch>
 ```
 
-##### `transformResponse`
+##### `transformData`
 
 A function that is called with the data returned from the response. You can use this
 hook to transform the data before it is passed into `children`.
@@ -307,7 +309,7 @@ hook to transform the data before it is passed into `children`.
 ```jsx
 <Fetch
   url="/posts/2"
-  transformResponse={data => data.post>
+  transformData={data => data.post>
   {({ fetching, error, response, data }) => {
     <div>
       {fetching && ('Loading...')}
@@ -323,7 +325,7 @@ hook to transform the data before it is passed into `children`.
 </Fetch>
 ```
 
-> Note: `transformResponse` does not modify the value of `response.data`. The transformed data is
+> Note: `transformData` does not modify the value of `response.data`. The transformed data is
 > made available to you in the render prop argument under the `data` key.
 
 ##### `responseType`
@@ -395,10 +397,29 @@ This determines how the request interacts with the cache. Valid options are:
 * `"network-only"`
 * `"cache-only"`
 
-For documentation on this prop, refer to the [response caching guide](./docs/guides/response-caching.md).
+For documentation on what each of these values do, refer to the [response caching guide](./docs/guides/response-caching.md).
+
+The default value of this prop is based on the value of the `method` prop that you pass to `<Fetch/>`.
+
+| Method                   | Default value    |
+| ------------------------ | ---------------- |
+| GET, HEAD, OPTIONS       | `"cache-first"`  |
+| POST, PUT, PATCH, DELETE | `"network-only"` |
 
 > This prop behaves identically to the Apollo prop
 > [with the same name](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-fetchPolicy).
+
+##### `cacheResponse`
+
+Whether or not the response will be cached. The default value is based on the value of the `method` prop that you pass
+to `<Fetch/>`.
+
+| Method                   | Default value |
+| ------------------------ | ------------- |
+| GET, HEAD, OPTIONS       | `true`        |
+| POST, PUT, PATCH, DELETE | `false`       |
+
+For documentation on this prop, refer to the [response caching guide](./docs/guides/response-caching.md).
 
 ##### `dedupe`
 

@@ -24,6 +24,7 @@ export class Fetch extends React.Component {
           requestName,
           url,
           fetching,
+          failed: Boolean(error || (response && !response.ok)),
           response,
           data,
           requestKey,
@@ -52,25 +53,40 @@ export class Fetch extends React.Component {
     };
   }
 
+  isReadRequest = method => {
+    const uppercaseMethod = method.toUpperCase();
+
+    return (
+      uppercaseMethod === 'GET' ||
+      uppercaseMethod === 'HEAD' ||
+      uppercaseMethod === 'OPTIONS'
+    );
+  };
+
+  // We default to being lazy for "write" requests,
+  // such as POST, PATCH, DELETE, and so on.
   isLazy = props => {
     const { lazy, method } = props || this.props;
 
-    const uppercaseMethod = method.toUpperCase();
+    return typeof lazy === 'undefined' ? !this.isReadRequest(method) : lazy;
+  };
 
-    let laziness;
+  shouldCacheResponse = () => {
+    const { cacheResponse, method } = this.props;
 
-    // We default to being lazy for "write" requests,
-    // such as POST, PATCH, DELETE, and so on.
-    if (typeof lazy === 'undefined') {
-      laziness =
-        uppercaseMethod !== 'GET' &&
-        uppercaseMethod !== 'HEAD' &&
-        uppercaseMethod !== 'OPTIONS';
+    return typeof cacheResponse === 'undefined'
+      ? this.isReadRequest(method)
+      : cacheResponse;
+  };
+
+  getFetchPolicy = () => {
+    const { fetchPolicy, method } = this.props;
+
+    if (typeof fetchPolicy === 'undefined') {
+      return this.isReadRequest(method) ? 'cache-first' : 'network-only';
     } else {
-      laziness = lazy;
+      return fetchPolicy;
     }
-
-    return laziness;
   };
 
   componentDidMount() {
@@ -130,7 +146,7 @@ export class Fetch extends React.Component {
   };
 
   fetchData = (options, ignoreCache) => {
-    const { fetchPolicy, requestName, dedupe, beforeFetch } = this.props;
+    const { requestName, dedupe, beforeFetch } = this.props;
 
     this.cancelExistingRequest('New fetch initiated');
 
@@ -161,7 +177,7 @@ export class Fetch extends React.Component {
       });
 
     const uppercaseMethod = method.toUpperCase();
-    const isReadRequest = uppercaseMethod === 'GET';
+    const shouldCacheResponse = this.shouldCacheResponse();
 
     const responseReceivedInfo = {
       url,
@@ -176,8 +192,10 @@ export class Fetch extends React.Component {
     this.responseReceivedInfo = responseReceivedInfo;
     this.hasHandledNetworkResponse = false;
 
+    const fetchPolicy = this.getFetchPolicy();
+
     let cachedResponse;
-    if (fetchPolicy !== 'network-only' && isReadRequest && !ignoreCache) {
+    if (fetchPolicy !== 'network-only' && !ignoreCache) {
       cachedResponse = responseCache[requestKey];
 
       if (cachedResponse) {
@@ -233,7 +251,7 @@ export class Fetch extends React.Component {
     }
     return fetchDedupe(url, init, { requestKey, responseType, dedupe }).then(
       res => {
-        if (isReadRequest) {
+        if (shouldCacheResponse) {
           responseCache[requestKey] = res;
         }
 
@@ -291,7 +309,7 @@ export class Fetch extends React.Component {
       data = cachedResponse.data;
     }
 
-    data = data ? this.props.transformResponse(data) : null;
+    data = data ? this.props.transformData(data) : null;
 
     if (hittingNetwork) {
       this.props.afterFetch({
@@ -299,6 +317,7 @@ export class Fetch extends React.Component {
         init,
         requestKey,
         error,
+        failed: Boolean(error || (response && !response.ok)),
         response,
         data,
         didUnmount: Boolean(this.willUnmount)
@@ -340,7 +359,7 @@ Fetch.propTypes = {
     PropTypes.func,
     PropTypes.oneOf(['json', 'text', 'blob', 'arrayBuffer', 'formData'])
   ]),
-  transformResponse: PropTypes.func,
+  transformData: PropTypes.func,
   lazy: PropTypes.bool,
   dedupe: PropTypes.bool,
   requestKey: PropTypes.string,
@@ -400,7 +419,7 @@ Fetch.defaultProps = {
   onResponse: () => {},
   beforeFetch: () => {},
   afterFetch: () => {},
-  transformResponse: data => data,
+  transformData: data => data,
   fetchPolicy: 'cache-first',
   dedupe: true,
 

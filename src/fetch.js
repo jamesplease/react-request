@@ -309,7 +309,7 @@ export class Fetch extends React.Component {
       data = cachedResponse.data;
     }
 
-    data = data ? this.props.transformResponse(data) : null;
+    data = data ? this.props.transformData(data) : null;
 
     if (hittingNetwork) {
       this.props.afterFetch({
@@ -359,7 +359,7 @@ Fetch.propTypes = {
     PropTypes.func,
     PropTypes.oneOf(['json', 'text', 'blob', 'arrayBuffer', 'formData'])
   ]),
-  transformResponse: PropTypes.func,
+  transformData: PropTypes.func,
   lazy: PropTypes.bool,
   dedupe: PropTypes.bool,
   requestKey: PropTypes.string,
@@ -419,7 +419,7 @@ Fetch.defaultProps = {
   onResponse: () => {},
   beforeFetch: () => {},
   afterFetch: () => {},
-  transformResponse: data => data,
+  transformData: data => data,
   fetchPolicy: 'cache-first',
   dedupe: true,
 

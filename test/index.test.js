@@ -291,7 +291,7 @@ describe('successful requests', () => {
     }, networkTimeout);
   });
 
-  test('`transformResponse` is used to transform the response data', done => {
+  test('`transformData` is used to transform the response data', done => {
     fetchMock.get(
       '/test/succeeds/third',
       new Promise(resolve => {
@@ -301,7 +301,7 @@ describe('successful requests', () => {
 
     expect.assertions(2);
     const afterFetchMock = jest.fn();
-    function transformResponse(data) {
+    function transformData(data) {
       return {
         sandwiches: data.books
       };
@@ -311,7 +311,7 @@ describe('successful requests', () => {
       <Fetch
         url="/test/succeeds/third"
         afterFetch={afterFetchMock}
-        transformResponse={transformResponse}
+        transformData={transformData}
       />
     );
 

@@ -1,5 +1,21 @@
 # Changelog
 
+### v2.0.0 (2018/2/17)
+
+**Breaking**
+
+* `transformResponse` has been renamed to be `transformData`
+* `fetchPolicy` is now determined by the method that you pass in. This change was made to support using
+  POST methods for read requests, and is unlikely to break your code.
+* A new prop, `cacheResponse`, is used to determine if a response is added to the cache or
+  not. This is to support using POST methods for read requests, and is unlikely to break your code.
+
+**New Features**
+
+* A new `failed` property is passed to you in the render prop callback. This allows you to
+  quickly determine if a request failed for any reason (be it network errors or "error" status
+  codes).
+
 ### v1.1.0 (2018/2/7)
 
 **New Features**

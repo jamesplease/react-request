@@ -46,6 +46,30 @@ fetchMock.get('/test/variable', () => {
   }
 });
 
+fetchMock.get(
+  '/test/succeeds/cache-only-empty',
+  () =>
+    new Promise(resolve => {
+      resolve(successfulResponse());
+    })
+);
+
+fetchMock.get(
+  '/test/succeeds/cache-only-full',
+  () =>
+    new Promise(resolve => {
+      resolve(jsonResponse());
+    })
+);
+
+fetchMock.post(
+  '/test/succeeds/cache-only-full',
+  () =>
+    new Promise(resolve => {
+      resolve(jsonResponse());
+    })
+);
+
 // Some time for the mock fetches to resolve
 const networkTimeout = 10;
 
@@ -263,7 +287,7 @@ describe('successful requests', () => {
     }, networkTimeout);
   });
 
-  test('`transformData` is used to transform the response data', done => {
+  test('`transformResponse` is used to transform the response data', done => {
     fetchMock.get(
       '/test/succeeds/third',
       new Promise(resolve => {
@@ -307,13 +331,6 @@ describe('successful requests', () => {
 describe('cache strategies', () => {
   describe('cache-only', () => {
     test('errors when there is nothing in the cache', done => {
-      fetchMock.get(
-        '/test/succeeds/cache-only-empty',
-        new Promise(resolve => {
-          resolve(successfulResponse());
-        })
-      );
-
       expect.assertions(5);
       const onResponseMock = jest.fn();
       const beforeFetchMock = jest.fn();
@@ -351,14 +368,88 @@ describe('cache strategies', () => {
         .catch(done.fail);
     });
 
-    test('it returns the cached data when found', done => {
-      fetchMock.get(
-        '/test/succeeds/cache-only-full',
-        new Promise(resolve => {
-          resolve(jsonResponse());
-        })
+    test('respects `cacheResponse: false`, erroring', done => {
+      expect.assertions(11);
+      const onResponseMock = jest.fn();
+      const beforeFetchMock = jest.fn();
+      const afterFetchMock = jest.fn();
+
+      // First, we need to add some stuff to the cache
+      mount(
+        <Fetch
+          url="/test/succeeds/cache-only-full"
+          cacheResponse={false}
+          beforeFetch={beforeFetchMock}
+          afterFetch={afterFetchMock}
+          onResponse={onResponseMock}
+        />
       );
 
+      setTimeout(() => {
+        // NOTE: this is for adding stuff to the cache.
+        // This DOES NOT test the cache-only behavior!
+        expect(fetchMock.calls('/test/succeeds/cache-only-full').length).toBe(
+          1
+        );
+        expect(beforeFetchMock).toHaveBeenCalledTimes(1);
+        expect(afterFetchMock).toHaveBeenCalledTimes(1);
+        expect(afterFetchMock).toBeCalledWith(
+          expect.objectContaining({
+            url: '/test/succeeds/cache-only-full',
+            error: null,
+            didUnmount: false,
+            data: {
+              books: [1, 42, 150]
+            }
+          })
+        );
+        expect(onResponseMock).toHaveBeenCalledTimes(1);
+        expect(onResponseMock).toBeCalledWith(
+          null,
+          expect.objectContaining({
+            ok: true,
+            status: 200,
+            statusText: 'OK',
+            data: {
+              books: [1, 42, 150]
+            }
+          })
+        );
+
+        const beforeFetchMock2 = jest.fn();
+        const afterFetchMock2 = jest.fn();
+        const onResponseMock2 = jest.fn();
+
+        mount(
+          <Fetch
+            fetchPolicy="cache-only"
+            requestName="meepmeep"
+            url="/test/succeeds/cache-only-full"
+            beforeFetch={beforeFetchMock2}
+            afterFetch={afterFetchMock2}
+            onResponse={onResponseMock2}
+          />
+        );
+
+        setTimeout(() => {
+          expect(fetchMock.calls('/test/succeeds/cache-only-full').length).toBe(
+            1
+          );
+          expect(beforeFetchMock2).toHaveBeenCalledTimes(0);
+          expect(afterFetchMock2).toHaveBeenCalledTimes(0);
+          expect(onResponseMock2).toHaveBeenCalledTimes(1);
+          expect(onResponseMock2).toBeCalledWith(
+            expect.objectContaining({
+              message: 'Response for "meepmeep" not found in cache.'
+            }),
+            null
+          );
+          done();
+        }, networkTimeout);
+      }, networkTimeout);
+    });
+
+    test('it returns the cached data when found', done => {
       expect.assertions(11);
       const onResponseMock = jest.fn();
       const beforeFetchMock = jest.fn();
@@ -412,6 +503,96 @@ describe('cache strategies', () => {
         mount(
           <Fetch
             fetchPolicy="cache-only"
+            url="/test/succeeds/cache-only-full"
+            beforeFetch={beforeFetchMock2}
+            afterFetch={afterFetchMock2}
+            onResponse={onResponseMock2}
+          />
+        );
+
+        setTimeout(() => {
+          expect(fetchMock.calls('/test/succeeds/cache-only-full').length).toBe(
+            1
+          );
+          expect(beforeFetchMock2).toHaveBeenCalledTimes(0);
+          expect(afterFetchMock2).toHaveBeenCalledTimes(0);
+          expect(onResponseMock2).toHaveBeenCalledTimes(1);
+          expect(onResponseMock2).toBeCalledWith(
+            null,
+            expect.objectContaining({
+              ok: true,
+              status: 200,
+              statusText: 'OK',
+              data: {
+                books: [1, 42, 150]
+              }
+            })
+          );
+          done();
+        }, networkTimeout);
+      }, networkTimeout);
+    });
+
+    test('it returns the cached data when found; POST method', done => {
+      expect.assertions(11);
+      const onResponseMock = jest.fn();
+      const beforeFetchMock = jest.fn();
+      const afterFetchMock = jest.fn();
+
+      // First, we need to add some stuff to the cache
+      mount(
+        <Fetch
+          url="/test/succeeds/cache-only-full"
+          lazy={false}
+          method="POST"
+          cacheResponse
+          beforeFetch={beforeFetchMock}
+          afterFetch={afterFetchMock}
+          onResponse={onResponseMock}
+        />
+      );
+
+      setTimeout(() => {
+        // NOTE: this is for adding stuff to the cache.
+        // This DOES NOT test the cache-only behavior!
+        expect(fetchMock.calls('/test/succeeds/cache-only-full').length).toBe(
+          1
+        );
+        expect(beforeFetchMock).toHaveBeenCalledTimes(1);
+        expect(afterFetchMock).toHaveBeenCalledTimes(1);
+        expect(afterFetchMock).toBeCalledWith(
+          expect.objectContaining({
+            url: '/test/succeeds/cache-only-full',
+            error: null,
+            didUnmount: false,
+            data: {
+              books: [1, 42, 150]
+            }
+          })
+        );
+        expect(onResponseMock).toHaveBeenCalledTimes(1);
+        expect(onResponseMock).toBeCalledWith(
+          null,
+          expect.objectContaining({
+            ok: true,
+            status: 200,
+            statusText: 'OK',
+            data: {
+              books: [1, 42, 150]
+            }
+          })
+        );
+
+        const beforeFetchMock2 = jest.fn();
+        const afterFetchMock2 = jest.fn();
+        const onResponseMock2 = jest.fn();
+
+        mount(
+          <Fetch
+            fetchPolicy="cache-only"
+            method="POST"
+            lazy={false}
+            cacheResponse
             url="/test/succeeds/cache-only-full"
             beforeFetch={beforeFetchMock2}
             afterFetch={afterFetchMock2}

@@ -9,7 +9,9 @@
     }
   },
   "rules": {
-    "no-unused-vars": "error"
+    "no-unused-vars": "error",
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error"
   },
   "env": {
     "browser": true,
@@ -17,5 +19,6 @@
   },
   "globals": {
     "Promise": true
-  }
+  },
+  "plugins": ["react"]
 }

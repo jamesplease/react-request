@@ -96,7 +96,7 @@ describe('rendering', () => {
 
   test('passes the right object shape to the render function', () => {
     const mockRender = jest.fn().mockReturnValue(null);
-    const wrapper = shallow(
+    shallow(
       <Fetch
         url="/test/hangs"
         requestName="tester"
@@ -190,7 +190,7 @@ describe('successful requests', () => {
       method: 'GET'
     });
 
-    const wrapper = mount(
+    mount(
       <Fetch
         url="/test/succeeds/first"
         beforeFetch={beforeFetchMock}
@@ -232,7 +232,7 @@ describe('successful requests', () => {
     expect.assertions(2);
     const afterFetchMock = jest.fn();
 
-    const wrapper = mount(
+    mount(
       <Fetch
         url="/test/succeeds/second"
         afterFetch={afterFetchMock}
@@ -265,7 +265,7 @@ describe('successful requests', () => {
     expect.assertions(2);
     const afterFetchMock = jest.fn();
 
-    const wrapper = mount(
+    mount(
       <Fetch
         url="/test/succeeds/secondpls"
         afterFetch={afterFetchMock}
@@ -303,7 +303,7 @@ describe('successful requests', () => {
       };
     }
 
-    const wrapper = mount(
+    mount(
       <Fetch
         url="/test/succeeds/third"
         afterFetch={afterFetchMock}
@@ -1022,9 +1022,7 @@ describe('unsuccessful requests', () => {
     expect.assertions(4);
     const afterFetchMock = jest.fn();
 
-    const wrapper = mount(
-      <Fetch url="/test/fails" afterFetch={afterFetchMock} />
-    );
+    mount(<Fetch url="/test/fails" afterFetch={afterFetchMock} />);
 
     setTimeout(() => {
       expect(fetchMock.calls('/test/fails').length).toBe(1);
@@ -1188,9 +1186,7 @@ describe('request cancellation', () => {
   test('it should not cancel when a single request is initiated', () => {
     const afterFetchMock = jest.fn();
 
-    const wrapper = shallow(
-      <Fetch url="/test/hangs" afterFetch={afterFetchMock} />
-    );
+    shallow(<Fetch url="/test/hangs" afterFetch={afterFetchMock} />);
 
     expect(afterFetchMock).toHaveBeenCalledTimes(0);
   });
@@ -1201,7 +1197,7 @@ describe('request cancellation', () => {
     const afterFetchMock = jest.fn();
 
     let hasFetched = false;
-    const wrapper = shallow(
+    shallow(
       <Fetch
         url="/test/hangs"
         afterFetch={afterFetchMock}
@@ -1282,7 +1278,7 @@ describe('laziness', () => {
     test('is false when just a URL is passed', () => {
       const beforeFetchMock = jest.fn();
       const afterFetchMock = jest.fn();
-      const wrapper = mount(
+      mount(
         <Fetch
           url="/test/hangs"
           beforeFetch={beforeFetchMock}
@@ -1297,10 +1293,8 @@ describe('laziness', () => {
     test('is false when method is GET, HEAD, or OPTIONS', () => {
       const beforeFetchMock1 = jest.fn();
       const beforeFetchMock2 = jest.fn();
-      const beforeFetchMock3 = jest.fn();
       const afterFetchMock1 = jest.fn();
       const afterFetchMock2 = jest.fn();
-      const afterFetchMock3 = jest.fn();
 
       mount(
         <Fetch

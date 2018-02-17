@@ -115,6 +115,7 @@ describe('rendering', () => {
         requestKey,
         url: '/test/hangs',
         fetching: false,
+        failed: false,
         response: null,
         data: null,
         error: null,
@@ -211,6 +212,7 @@ describe('successful requests', () => {
         expect.objectContaining({
           url: '/test/succeeds/first',
           error: null,
+          failed: false,
           didUnmount: false,
           data: {
             books: [1, 42, 150]
@@ -246,6 +248,7 @@ describe('successful requests', () => {
         expect.objectContaining({
           url: '/test/succeeds/second',
           error: null,
+          failed: false,
           didUnmount: false,
           data: 'hi'
         })
@@ -279,6 +282,7 @@ describe('successful requests', () => {
         expect.objectContaining({
           url: '/test/succeeds/secondpls',
           error: null,
+          failed: false,
           didUnmount: false,
           data: 'hi'
         })
@@ -317,6 +321,7 @@ describe('successful requests', () => {
         expect.objectContaining({
           url: '/test/succeeds/third',
           error: null,
+          failed: false,
           didUnmount: false,
           data: {
             sandwiches: [1, 42, 150]
@@ -477,6 +482,7 @@ describe('cache strategies', () => {
           expect.objectContaining({
             url: '/test/succeeds/cache-only-full',
             error: null,
+            failed: false,
             didUnmount: false,
             data: {
               books: [1, 42, 150]
@@ -564,6 +570,7 @@ describe('cache strategies', () => {
           expect.objectContaining({
             url: '/test/succeeds/cache-only-full',
             error: null,
+            failed: false,
             didUnmount: false,
             data: {
               books: [1, 42, 150]
@@ -661,6 +668,7 @@ describe('cache strategies', () => {
           expect.objectContaining({
             url: '/test/succeeds/cache-first',
             error: null,
+            failed: false,
             didUnmount: false,
             data: {
               books: [1, 42, 150]
@@ -751,6 +759,7 @@ describe('cache strategies', () => {
           expect.objectContaining({
             url: '/test/succeeds/network-only',
             error: null,
+            failed: false,
             didUnmount: false,
             data: {
               books: [1, 42, 150]
@@ -797,6 +806,7 @@ describe('cache strategies', () => {
             expect.objectContaining({
               url: '/test/succeeds/network-only',
               error: null,
+              failed: false,
               didUnmount: false,
               data: {
                 books: [1, 42, 150]
@@ -851,6 +861,7 @@ describe('cache strategies', () => {
           expect.objectContaining({
             url: '/test/succeeds',
             error: null,
+            failed: false,
             didUnmount: false,
             data: {
               books: [1, 42, 150]
@@ -897,6 +908,7 @@ describe('cache strategies', () => {
             expect.objectContaining({
               url: '/test/succeeds',
               error: null,
+              failed: false,
               didUnmount: false,
               data: {
                 books: [1, 42, 150]
@@ -939,6 +951,7 @@ describe('cache strategies', () => {
           expect.objectContaining({
             url: '/test/variable',
             error: null,
+            failed: false,
             didUnmount: false,
             data: {
               books: [1, 42, 150]
@@ -975,8 +988,6 @@ describe('cache strategies', () => {
         );
 
         setTimeout(() => {
-          // This is 1 rather than 2 since we swapped the fetch above.
-          // This could be refactored so that the fetch never gets swapped
           expect(fetchMock.calls('/test/variable').length).toBe(2);
           expect(beforeFetchMock2).toHaveBeenCalledTimes(1);
           expect(beforeFetchMock2).toBeCalledWith(
@@ -989,6 +1000,7 @@ describe('cache strategies', () => {
             expect.objectContaining({
               url: '/test/variable',
               didUnmount: false,
+              failed: true,
               data: {
                 books: [1, 42, 150]
               }
@@ -1030,6 +1042,7 @@ describe('unsuccessful requests', () => {
       expect(afterFetchMock).toBeCalledWith(
         expect.objectContaining({
           url: '/test/fails',
+          failed: true,
           didUnmount: false
         })
       );
@@ -1168,7 +1181,8 @@ describe('request deduplication', () => {
       expect(afterFetchMock).toBeCalledWith(
         expect.objectContaining({
           url: '/test/fails/dedupe-false',
-          didUnmount: false
+          didUnmount: false,
+          failed: true
         })
       );
       expect(afterFetchMock.mock.calls[0][0]).toHaveProperty(

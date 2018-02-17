@@ -198,8 +198,10 @@ The [render prop](https://cdb.reacttraining.com/use-a-render-prop-50de598f11ce) 
 It is called with one argument, `result`, an object with the following keys:
 
 * `fetching`: A Boolean representing whether or not a request is currently in flight for this component
-* `error`: A Boolean representing if a network error occurred. Note that HTTP "error" status codes do not
-  cause `error` to be `true`; only failed or aborted network requests do. For more, see the
+* `failed`: A Boolean representing whether or not the request failed for any reason. This includes network
+  errors and status codes that are greater than or equal to`400`.
+* `error`: An error object representing a network error occurred. Note that HTTP "error" status codes do not
+  cause errors; only failed or aborted network requests do. For more, see the
   ["Using Fetch" MDN guide](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Checking_that_the_fetch_was_successful).
 * `response`: An instance of [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response). The
   [`body`](https://developer.mozilla.org/en-US/docs/Web/API/Body) will already be read, and made

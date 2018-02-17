@@ -24,6 +24,7 @@ export class Fetch extends React.Component {
           requestName,
           url,
           fetching,
+          failed: Boolean(error || (response && !response.ok)),
           response,
           data,
           requestKey,
@@ -316,6 +317,7 @@ export class Fetch extends React.Component {
         init,
         requestKey,
         error,
+        failed: Boolean(error || (response && !response.ok)),
         response,
         data,
         didUnmount: Boolean(this.willUnmount)

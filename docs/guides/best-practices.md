@@ -4,40 +4,55 @@ Here are some tips that may help you when using React Request.
 
 ### Handling errors
 
-It may seem like handling errors is as simple as checking for an `error` object
-within the render callback, but the `error` object is only included as an
-argument in the following situations:
+The `failed` Boolean is passed to the `children` callback, which
+represents whether _any_ error occurred with the request. This includes
+network requests or status codes greater than or equal to 400.
 
-1. A network error occurred, such as a timeout or a loss of network connection
-2. A new request "aborted" the previous one (meaning that the component
-   will ignore the response of the earlier request)
+This Boolean is convenient for a coarse understanding that the network
+failed, but using this Boolean alone is typically not enough to provide
+a great user experience. A user may want to know why the request
+failed. Was the resource not found? Did the user submit bad information?
+Was there a network error? Was the user logged out?
 
-There are other situations when most developers typically the component
-to be in an error state, such as when a 404 is returned.
+We encourage you to dig into the `error` and `response` objects
+to provide your users with a more detailed explanation of what went wrong,
+rather than displaying a generic "There was an error" message.
 
-The best way to cover all situations is by _also_ looking at the `response.ok` value.
-This is a Boolean that is `false` anytime that the `status` of the response
-is `>= 400`. So this will catch other errors such as Not Found errors, Unauthorized errors,
-and other client and server errors.
-
-Together, checking for `error` and `response.ok` should cover all possible
-situations when a request is "unsuccessful." The following example demonstrates
-this.
+Here is an example that shows the different kinds of ways that a response
+can error.
 
 ```js
 <Fetch {...fetchProps}>
-  {({ error, response }) => {
-    if (error || (response && !response.ok)) {
-      console.log('There was some kind of error.');
-    } else {
-      console.log('The request is either loading or it succeeded');
+  {({ failed, error, response }) => {
+    if (failed) {
+      console.log('There was _some_ kind of error. What happened?');
+    }
+
+    if (error) {
+      console.log('There was a network error');
+
+      if (navigation.onLine) {
+        console.log('The user lost internet connection.');
+      } else {
+        // You can look at the Error to learn more.
+        console.log('The request was aborted, or it timed out');
+      }
+    }
+
+    const status = response && response.status;
+
+    if (status === 404) {
+      console.log('The resource was not found.');
+    } else if (status === 401) {
+      console.log('You user have been logged out.');
+    } else if (status === 400) {
+      console.log('Invalid data was submitted');
+    } else if (status === 500) {
+      console.log('Something went wrong on the server.');
     }
   }}
 </Fetch>
 ```
-
-> Note: you can explain what has gone wrong to the user in greater detail by looking
-> at properties on the `error` object or the `response` object.
 
 ### Making "fetch components"
 

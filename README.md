@@ -395,10 +395,29 @@ This determines how the request interacts with the cache. Valid options are:
 * `"network-only"`
 * `"cache-only"`
 
-For documentation on this prop, refer to the [response caching guide](./docs/guides/response-caching.md).
+For documentation on what each of these values do, refer to the [response caching guide](./docs/guides/response-caching.md).
+
+The default value of this prop is based on the value of the `method` prop that you pass to `<Fetch/>`.
+
+| Method                   | Default value    |
+| ------------------------ | ---------------- |
+| GET, HEAD, OPTIONS       | `"cache-first"`  |
+| POST, PUT, PATCH, DELETE | `"network-only"` |
 
 > This prop behaves identically to the Apollo prop
 > [with the same name](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-fetchPolicy).
+
+##### `cacheResponse`
+
+Whether or not the response will be cached. The default value is based on the value of the `method` prop that you pass
+to `<Fetch/>`.
+
+| Method                   | Default value |
+| ------------------------ | ------------- |
+| GET, HEAD, OPTIONS       | `true`        |
+| POST, PUT, PATCH, DELETE | `false`       |
+
+For documentation on this prop, refer to the [response caching guide](./docs/guides/response-caching.md).
 
 ##### `dedupe`
 

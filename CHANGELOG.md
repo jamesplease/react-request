@@ -1,5 +1,11 @@
 # Changelog
 
+### v2.0.1 (2018/2/17)
+
+**Bug Fixes**
+
+* This fixes a problem where the default `fetchPolicy` would be `"cache-first"` for "write" requests.
+
 ### v2.0.0 (2018/2/17)
 
 **Breaking**

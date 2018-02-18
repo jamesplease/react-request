@@ -420,7 +420,6 @@ Fetch.defaultProps = {
   beforeFetch: () => {},
   afterFetch: () => {},
   transformData: data => data,
-  fetchPolicy: 'cache-first',
   dedupe: true,
 
   method: 'get',

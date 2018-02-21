@@ -179,6 +179,21 @@ export class Fetch extends React.Component {
     const uppercaseMethod = method.toUpperCase();
     const shouldCacheResponse = this.shouldCacheResponse();
 
+    const init = {
+      body,
+      credentials,
+      headers,
+      method: uppercaseMethod,
+      mode,
+      cache,
+      redirect,
+      referrer,
+      referrerPolicy,
+      integrity,
+      keepalive,
+      signal
+    };
+
     const responseReceivedInfo = {
       url,
       init,
@@ -221,20 +236,6 @@ export class Fetch extends React.Component {
         return Promise.resolve(cacheError);
       }
     }
-    const init = {
-      body,
-      credentials,
-      headers,
-      method: uppercaseMethod,
-      mode,
-      cache,
-      redirect,
-      referrer,
-      referrerPolicy,
-      integrity,
-      keepalive,
-      signal
-    };
 
     this.setState({
       fetching: true,

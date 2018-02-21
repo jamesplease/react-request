@@ -10,6 +10,7 @@
   },
   "rules": {
     "no-unused-vars": "error",
+    "no-use-before-define": "error",
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error"
   },

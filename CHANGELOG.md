@@ -1,5 +1,11 @@
 # Changelog
 
+### v2.0.2 (2018/2/21)
+
+**Bug Fixes**
+
+* Fixes a bug where an Uncaught ReferenceError could be thrown
+
 ### v2.0.1 (2018/2/17)
 
 **Bug Fixes**

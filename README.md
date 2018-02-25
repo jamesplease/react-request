@@ -55,14 +55,14 @@ yarn add react-request
   * [clearRequestCache()](#clearrequestcache)
   * [clearResponseCache()](#clearresponsecache)
 * [Guides ⇗](./docs/guides/INDEX.md)
+  * [Response Caching ⇗](./docs/guides/response-caching.md)
+  * [Request Deduplication ⇗](./docs/guides/request-deduplication.md)
+  * [Request Keys ⇗](./docs/guides/request-keys.md)
+  * [Best Practices ⇗](./docs/guides/best-practices.md)
   * [Using the `lazy` Prop ⇗](./docs/guides/using-the-lazy-prop.md)
   * [Aborting ⇗](./docs/guides/aborting.md)
   * [Differences with `fetch()` ⇗](./docs/guides/differences-with-fetch.md)
   * [Differences with React Apollo ⇗](./docs/guides/differences-with-apollo.md)
-  * [Request Keys ⇗](./docs/guides/request-keys.md)
-  * [Response Caching ⇗](./docs/guides/response-caching.md)
-  * [Request Deduplication ⇗](./docs/guides/request-deduplication.md)
-  * [Best Practices ⇗](./docs/guides/best-practices.md)
   * [Integration with Other Technologies ⇗](./docs/guides/integration-with-other-technologies.md)
 * [Examples ⇗](./docs/examples.md)
 * [FAQ ⇗](./docs/FAQ.md)
@@ -81,13 +81,13 @@ class App extends Component {
   render() {
     return (
       <Fetch url="https://jsonplaceholder.typicode.com/posts/1">
-        {({ fetching, error, data }) => {
+        {({ fetching, failed, data }) => {
           if (fetching) {
             return <div>Loading data...</div>;
           }
 
-          if (error) {
-            return <div>There was a network error.</div>;
+          if (failed) {
+            return <div>The request did not succeed.</div>;
           }
 
           return (

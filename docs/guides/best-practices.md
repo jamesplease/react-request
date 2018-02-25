@@ -31,10 +31,10 @@ can error.
     if (error) {
       console.log('There was a network error');
 
-      if (navigation.onLine) {
+      if (!navigation.onLine) {
         console.log('The user lost internet connection.');
       } else {
-        // You can look at the Error to learn more.
+        // You can look at the Error object to learn even details.
         console.log('The request was aborted, or it timed out');
       }
     }

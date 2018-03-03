@@ -1,6 +1,6 @@
 {
   "name": "react-request",
-  "version": "2.0.3-beta1",
+  "version": "2.0.3",
   "description": "Declarative HTTP requests with React.",
   "main": "lib/index.js",
   "module": "es/index.js",

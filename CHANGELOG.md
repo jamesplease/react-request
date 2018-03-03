@@ -1,5 +1,12 @@
 # Changelog
 
+### v2.0.3 (2018/3/2)
+
+**Bug Fixes**
+
+* Fixes a bug where the `lazy` prop was not always respected. Anytime that a new request key was generated,
+  a request would be made.
+
 ### v2.0.2 (2018/2/21)
 
 **Bug Fixes**

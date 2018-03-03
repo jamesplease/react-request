@@ -1428,4 +1428,21 @@ describe('laziness', () => {
       expect(beforeFetchMock).toHaveBeenCalledTimes(1);
     });
   });
+
+  test('it should be respected when the props change', () => {
+    fetchMock.get('/test/hangs/double-request2', hangingPromise());
+
+    const afterFetchMock = jest.fn();
+
+    const wrapper = shallow(
+      <Fetch url="/test/hangs" afterFetch={afterFetchMock} lazy />
+    );
+
+    wrapper.setProps({
+      url: '/test/hangs/double-request2'
+    });
+
+    expect(fetchMock.calls('/test/hangs').length).toBe(0);
+    expect(fetchMock.calls('/test/hangs/double-request2').length).toBe(0);
+  });
 });

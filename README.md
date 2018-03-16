@@ -90,12 +90,16 @@ class App extends Component {
             return <div>The request did not succeed.</div>;
           }
 
-          return (
-            <div>
-              <div>Post ID: {data.id}</div>
-              <div>Post Title: {data.title}</div>
-            </div>
-          );
+          if (data) {
+            return (
+              <div>
+                <div>Post ID: {data.id}</div>
+                <div>Post Title: {data.title}</div>
+              </div>
+            );
+          }
+
+          return null;
         }}
       </Fetch>
     );
@@ -350,7 +354,11 @@ about the response, such as its status code.
     };
   }}>
   {({ data }) => {
-    <div>{data.countryName}</div>;
+    if (data) {
+      return <div>{data.countryName}</div>;
+    }
+
+    return null;
   }}
 </Fetch>
 ```
@@ -371,7 +379,11 @@ about the response, such as its status code.
     };
   }}>
   {({ data }) => {
-    <div>{data.countryName}</div>;
+    if (data) {
+      return <div>{data.countryName}</div>;
+    }
+
+    return null;
   }}
 </Fetch>
 ```

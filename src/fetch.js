@@ -109,9 +109,12 @@ export class Fetch extends React.Component {
         method: this.props.method.toUpperCase()
       });
 
-    if (currentRequestKey !== nextRequestKey && !this.isLazy(nextProps)) {
-      this.fetchData(nextProps);
-    }
+      if (currentRequestKey !== nextRequestKey && !this.isLazy(nextProps)) {
+        this.setState({
+          requestKey: nextRequestKey,
+          requestName: nextProps.requestName,
+        }, this.fetchData);
+      }
   }
 
   componentWillUnmount() {

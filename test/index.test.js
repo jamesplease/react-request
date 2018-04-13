@@ -7,7 +7,7 @@ import {
   getRequestKey,
   clearResponseCache
 } from '../src';
-import { successfulResponse, jsonResponse } from './responses';
+import { successfulResponse, jsonResponse, jsonResponse2 } from './responses';
 import { setTimeout } from 'timers';
 
 function hangingPromise() {
@@ -67,6 +67,22 @@ fetchMock.post(
   () =>
     new Promise(resolve => {
       resolve(jsonResponse());
+    })
+);
+
+fetchMock.get(
+  '/test/succeeds/json-one',
+  () =>
+    new Promise(resolve => {
+      resolve(jsonResponse());
+    })
+);
+
+fetchMock.get(
+  '/test/succeeds/json-two',
+  () =>
+    new Promise(resolve => {
+      resolve(jsonResponse2());
     })
 );
 

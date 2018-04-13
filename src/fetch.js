@@ -95,22 +95,25 @@ export class Fetch extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
     const currentRequestKey =
       this.props.requestKey ||
       getRequestKey({
         ...this.props,
         method: this.props.method.toUpperCase()
       });
-    const nextRequestKey =
-      nextProps.requestKey ||
+    //
+    const prevRequestKey =
+      prevProps.requestKey ||
       getRequestKey({
-        ...nextProps,
-        method: this.props.method.toUpperCase()
+        ...prevProps,
+        method: prevProps.method.toUpperCase()
       });
 
-    if (currentRequestKey !== nextRequestKey && !this.isLazy(nextProps)) {
-      this.fetchData(nextProps);
+    if (currentRequestKey !== prevRequestKey && !this.isLazy(prevProps)) {
+      this.fetchData({
+        requestKey: currentRequestKey
+      });
     }
   }
 
@@ -145,10 +148,60 @@ export class Fetch extends React.Component {
     });
   };
 
+  // When a subsequent request is made, it is important that the correct
+  // request key is used. This method computes the right key based on the
+  // options and props.
+  getRequestKey = options => {
+    // A request key in the options gets top priority
+    if (options && options.requestKey) {
+      return options.requestKey;
+    }
+
+    // Otherwise, if we have no request key, but we do have options, then we
+    // recompute the request key based on these options.
+    // Note that if the URL, body, or method have not changed, then the request
+    // key should match the previous request key if it was computed.
+    // If you passed in a custom request key as a prop, then you will also
+    // need to pass in a custom key when you call `doFetch()`!
+    else if (options) {
+      const { url, method, body } = Object.assign({}, this.props, options);
+      return getRequestKey({
+        url,
+        body,
+        method: method.toUpperCase()
+      });
+    }
+
+    // Next in line is the the request key from props.
+    else if (this.props.requestKey) {
+      return this.props.requestKey;
+    }
+
+    // Lastly, we compute the request key from the props.
+    else {
+      const { url, method, body } = this.props;
+
+      return getRequestKey({
+        url,
+        body,
+        method: method.toUpperCase()
+      });
+    }
+  };
+
+  // Heads up: accessing `this.props` within `fetchData`
+  // is unsafe! This is because we call `fetchData` from
+  // within `componentWillReceiveProps`!
   fetchData = (options, ignoreCache) => {
+    // These are the things that we do not allow a user to configure in
+    // `options` when calling `doFetch()`. Perhaps we should, however.
     const { requestName, dedupe, beforeFetch } = this.props;
 
-    this.cancelExistingRequest('New fetch initiated');
+    this.cancelExistingRequest('New fetch initiated', this.props);
+
+    const requestKey = this.getRequestKey(this.props, options);
+
+    const requestOptions = Object.assign({}, this.props, options);
 
     const {
       url,
@@ -165,16 +218,7 @@ export class Fetch extends React.Component {
       integrity,
       keepalive,
       signal
-    } = Object.assign({}, this.props, options);
-
-    // We need to compute a new key, just in case a new value was passed in `doFetch`.
-    const requestKey =
-      this.props.requestKey ||
-      getRequestKey({
-        url,
-        method: method.toUpperCase(),
-        body
-      });
+    } = requestOptions;
 
     const uppercaseMethod = method.toUpperCase();
     const shouldCacheResponse = this.shouldCacheResponse();
@@ -238,8 +282,12 @@ export class Fetch extends React.Component {
     }
 
     this.setState({
-      fetching: true,
-      requestKey
+      // Note: when data is returned from the cache, the calls to `onResponseReceived`
+      // will call `setState` to update the `requestKey`. This call to update `requestKey`
+      // may be duplicated in those situations, but that should be OK. It is necessary
+      // to include this here to account for "network-only" fetch policies.
+      requestKey,
+      fetching: true
     });
     const hittingNetwork = !isRequestInFlight(requestKey) || !dedupe;
 
@@ -334,7 +382,8 @@ export class Fetch extends React.Component {
         data,
         error,
         response,
-        fetching: stillFetching
+        fetching: stillFetching,
+        requestKey
       },
       () => this.props.onResponse(error, response)
     );

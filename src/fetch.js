@@ -7,12 +7,20 @@ import { getRequestKey, fetchDedupe, isRequestInFlight } from 'fetch-dedupe';
 // The value of each key is a Response instance
 let responseCache = {};
 
+// The docs state that this is not safe to use in an
+// application. That's just because I am not writing tests,
+// nor designing the API, around folks clearing the cache.
+// This was only added to help out with testing your app.
+// Use your judgment if you decide to use this in your
+// app directly.
 export function clearResponseCache() {
   responseCache = {};
 }
 
 export class Fetch extends React.Component {
   render() {
+    // Anything pulled from `this.props` here is not eligible to be
+    // specified when calling `doFetch`.
     const { children, requestName } = this.props;
     const { fetching, response, data, error, requestKey, url } = this.state;
 
@@ -96,6 +104,9 @@ export class Fetch extends React.Component {
     }
   }
 
+  // Because we use `componentDidUpdate` to determine if we should fetch
+  // again, there will be at least one render when you receive your new
+  // fetch options, such as a new URL, but the fetch has not begun yet.
   componentDidUpdate(prevProps) {
     const currentRequestKey =
       this.props.requestKey ||
@@ -103,7 +114,6 @@ export class Fetch extends React.Component {
         ...this.props,
         method: this.props.method.toUpperCase()
       });
-    //
     const prevRequestKey =
       prevProps.requestKey ||
       getRequestKey({
@@ -128,6 +138,8 @@ export class Fetch extends React.Component {
   cancelExistingRequest = reason => {
     if (this.state.fetching && !this.hasHandledNetworkResponse) {
       const abortError = new Error(reason);
+      // This is an effort to mimic the error that is created when a
+      // fetch is actually aborted using the AbortController API.
       abortError.name = 'AbortError';
       this.onResponseReceived({
         ...this.responseReceivedInfo,
@@ -190,9 +202,6 @@ export class Fetch extends React.Component {
     }
   };
 
-  // Heads up: accessing `this.props` within `fetchData`
-  // is unsafe! This is because we call `fetchData` from
-  // within `componentWillReceiveProps`!
   fetchData = (options, ignoreCache) => {
     // These are the things that we do not allow a user to configure in
     // `options` when calling `doFetch()`. Perhaps we should, however.
@@ -283,10 +292,6 @@ export class Fetch extends React.Component {
     }
 
     this.setState({
-      // Note: when data is returned from the cache, the calls to `onResponseReceived`
-      // will call `setState` to update the `requestKey`. This call to update `requestKey`
-      // may be duplicated in those situations, but that should be OK. It is necessary
-      // to include this here to account for "network-only" fetch policies.
       requestKey,
       url,
       error: null,

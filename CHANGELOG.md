@@ -1,5 +1,12 @@
 # Changelog
 
+### v2.0.4 (2018/4/20)
+
+**Bug Fixes**
+
+* Fixes a bug where there could be a cache mismatch when re-rendering the same component
+  that has a fetch policy configured.
+
 ### v2.0.3 (2018/3/2)
 
 **Bug Fixes**

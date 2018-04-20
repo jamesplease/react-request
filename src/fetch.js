@@ -50,7 +50,7 @@ export class Fetch extends React.Component {
       response: null,
       data: null,
       error: null,
-      url: props.url || ''
+      url: props.url
     };
   }
 

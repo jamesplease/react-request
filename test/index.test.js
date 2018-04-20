@@ -8,27 +8,6 @@ import {
   clearResponseCache
 } from '../src';
 import { successfulResponse, jsonResponse } from './responses';
-import { setTimeout } from 'timers';
-
-function hangingPromise() {
-  return new Promise(() => {});
-}
-
-fetchMock.get('/test/hangs', hangingPromise());
-fetchMock.get('/test/hangs/1', hangingPromise());
-fetchMock.get('/test/hangs/2', hangingPromise());
-fetchMock.post('/test/hangs', hangingPromise());
-fetchMock.put('/test/hangs', hangingPromise());
-fetchMock.patch('/test/hangs', hangingPromise());
-fetchMock.head('/test/hangs', hangingPromise());
-fetchMock.delete('/test/hangs', hangingPromise());
-
-// This could be improved by adding the URL to the JSON response
-fetchMock.get('/test/succeeds', () => {
-  return new Promise(resolve => {
-    resolve(jsonResponse());
-  });
-});
 
 let success = true;
 // This could be improved by adding the URL to the JSON response
@@ -45,30 +24,6 @@ fetchMock.get('/test/variable', () => {
     });
   }
 });
-
-fetchMock.get(
-  '/test/succeeds/cache-only-empty',
-  () =>
-    new Promise(resolve => {
-      resolve(successfulResponse());
-    })
-);
-
-fetchMock.get(
-  '/test/succeeds/cache-only-full',
-  () =>
-    new Promise(resolve => {
-      resolve(jsonResponse());
-    })
-);
-
-fetchMock.post(
-  '/test/succeeds/cache-only-full',
-  () =>
-    new Promise(resolve => {
-      resolve(jsonResponse());
-    })
-);
 
 // Some time for the mock fetches to resolve
 const networkTimeout = 10;

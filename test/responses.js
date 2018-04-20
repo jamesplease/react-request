@@ -11,3 +11,17 @@ export function jsonResponse() {
     statusText: 'OK'
   });
 }
+
+export function jsonResponse2() {
+  return new Response('{"authors": [22, 13]}', {
+    status: 200,
+    statusText: 'OK'
+  });
+}
+
+export function jsonResponse3() {
+  return new Response('{"movies": [1]}', {
+    status: 200,
+    statusText: 'OK'
+  });
+}

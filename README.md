@@ -225,8 +225,9 @@ There are three common use cases for the `doFetch` prop:
   is passed as `true`.
 
 `doFetch` accepts one argument: `options`. Any of the `fetch()` options, such as `url`, `method`, and
-`body` are valid `options`. This allows you to customize the request from within the component based
-on the component's state.
+`body` are valid `options`. You may also specify a new `requestKey` if you are manually generating your
+own keys. This method allows you to customize the request from within the component based on the
+component's state.
 
 ##### `lazy`
 

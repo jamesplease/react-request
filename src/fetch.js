@@ -13,8 +13,8 @@ export function clearResponseCache() {
 
 export class Fetch extends React.Component {
   render() {
-    const { children, requestName, url } = this.props;
-    const { fetching, response, data, error, requestKey } = this.state;
+    const { children, requestName } = this.props;
+    const { fetching, response, data, error, requestKey, url } = this.state;
 
     if (!children) {
       return null;
@@ -49,7 +49,8 @@ export class Fetch extends React.Component {
       fetching: false,
       response: null,
       data: null,
-      error: null
+      error: null,
+      url: props.url || ''
     };
   }
 
@@ -197,10 +198,9 @@ export class Fetch extends React.Component {
     // `options` when calling `doFetch()`. Perhaps we should, however.
     const { requestName, dedupe, beforeFetch } = this.props;
 
-    this.cancelExistingRequest('New fetch initiated', this.props);
+    this.cancelExistingRequest('New fetch initiated');
 
-    const requestKey = this.getRequestKey(this.props, options);
-
+    const requestKey = this.getRequestKey(options);
     const requestOptions = Object.assign({}, this.props, options);
 
     const {
@@ -249,6 +249,7 @@ export class Fetch extends React.Component {
     // If the request config changes, we need to be able to accurately
     // cancel the in-flight request.
     this.responseReceivedInfo = responseReceivedInfo;
+
     this.hasHandledNetworkResponse = false;
 
     const fetchPolicy = this.getFetchPolicy();
@@ -287,6 +288,9 @@ export class Fetch extends React.Component {
       // may be duplicated in those situations, but that should be OK. It is necessary
       // to include this here to account for "network-only" fetch policies.
       requestKey,
+      url,
+      error: null,
+      failed: false,
       fetching: true
     });
     const hittingNetwork = !isRequestInFlight(requestKey) || !dedupe;
@@ -379,6 +383,7 @@ export class Fetch extends React.Component {
 
     this.setState(
       {
+        url,
         data,
         error,
         response,

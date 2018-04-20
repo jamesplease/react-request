@@ -18,3 +18,10 @@ export function jsonResponse2() {
     statusText: 'OK'
   });
 }
+
+export function jsonResponse3() {
+  return new Response('{"movies": [1]}', {
+    status: 200,
+    statusText: 'OK'
+  });
+}

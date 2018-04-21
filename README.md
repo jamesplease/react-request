@@ -2,7 +2,7 @@
 
 [![Travis build status](http://img.shields.io/travis/jamesplease/react-request.svg?style=flat)](https://travis-ci.org/jamesplease/react-request)
 [![npm version](https://img.shields.io/npm/v/react-request.svg)](https://www.npmjs.com/package/react-request)
-[![Test Coverage](https://codeclimate.com/github/jmeas/react-request/badges/coverage.svg)](https://codeclimate.com/github/jmeas/react-request)
+[![Test Coverage](https://coveralls.io/repos/github/jamesplease/react-request/badge.svg?branch=master)](https://coveralls.io/github/jamesplease/react-request?branch=master)
 [![gzip size](http://img.badgesize.io/https://unpkg.com/react-request/dist/react-request.min.js?compression=gzip)](https://unpkg.com/react-request/dist/react-request.min.js)
 
 Declarative HTTP requests for React.

@@ -1,14 +1,14 @@
 # Examples
 
 A number of examples are distributed with the library's
-[source code](https://github.com/jmeas/react-request).
+[source code](https://github.com/jamesplease/react-request).
 
 ### Simple Read
 
 To run this example:
 
 ```
-git clone https://github.com/jmeas/react-request.git
+git clone https://github.com/jamesplease/react-request.git
 
 cd react-request/examples/simple-read
 npm install
@@ -25,7 +25,7 @@ when the component mounts.
 To run this example:
 
 ```
-git clone https://github.com/jmeas/react-request.git
+git clone https://github.com/jamesplease/react-request.git
 
 cd react-request/examples/lazy-read
 npm install
@@ -43,7 +43,7 @@ must click a button to make the request.
 To run this example:
 
 ```
-git clone https://github.com/jmeas/react-request.git
+git clone https://github.com/jamesplease/react-request.git
 
 cd react-request/examples/updating-a-resource
 npm install
@@ -61,7 +61,7 @@ typically used in your application.
 To run this example:
 
 ```
-git clone https://github.com/jmeas/react-request.git
+git clone https://github.com/jamesplease/react-request.git
 
 cd react-request/examples/multiple-requests
 npm install
@@ -71,7 +71,7 @@ open http://localhost:3000/
 ```
 
 Sometimes, you will need access to multiple requests at the same time. This
-example demonstrates using the [React Composer](https://github.com/jmeas/react-composer)
+example demonstrates using the [React Composer](https://github.com/jamesplease/react-composer)
 library to do that.
 
 ### Request Deduplication
@@ -79,7 +79,7 @@ library to do that.
 To run this example:
 
 ```
-git clone https://github.com/jmeas/react-request.git
+git clone https://github.com/jamesplease/react-request.git
 
 cd react-request/examples/request-deduplication
 npm install
@@ -95,7 +95,7 @@ This example demonstrates how many requests of the same kind are deduplicated by
 To run this example:
 
 ```
-git clone https://github.com/jmeas/react-request.git
+git clone https://github.com/jamesplease/react-request.git
 
 cd react-request/examples/response-caching
 npm install
@@ -113,7 +113,7 @@ making a second request.
 To run this example:
 
 ```
-git clone https://github.com/jmeas/react-request.git
+git clone https://github.com/jamesplease/react-request.git
 
 cd react-request/examples/fetch-components
 npm install

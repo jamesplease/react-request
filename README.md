@@ -109,7 +109,7 @@ class App extends Component {
 
 Need to make multiple requests? You can use any tool that you would like that
 allows you to "compose" render prop components together. This example
-uses [React Composer](https://github.com/jmeas/react-composer):
+uses [React Composer](https://github.com/jamesplease/react-composer):
 
 ```jsx
 import React, { Component } from 'react';
@@ -145,7 +145,7 @@ class App extends Component {
 
 These examples just scratch the surface of what React Request can do for you.
 Check out the API reference below, or
-[read the guides](https://github.com/jmeas/react-request/blob/master/docs/guides/INDEX.md),
+[read the guides](https://github.com/jamesplease/react-request/blob/master/docs/guides/INDEX.md),
 to learn more.
 
 ### API
@@ -445,7 +445,7 @@ Defaults to `true`.
 A string that is used to control the request deduplication and response caching features. By default,
 a key is generated for you. Specifying a custom key is an advanced feature that you may not need.
 
-For more, see the [request key](https://github.com/jmeas/react-request/blob/master/docs/guides/request-keys.md)
+For more, see the [request key](https://github.com/jamesplease/react-request/blob/master/docs/guides/request-keys.md)
 guide.
 
 ---
@@ -454,32 +454,32 @@ The rest of the API documentation describes the other named exports from the `re
 
 #### `fetchDedupe( input [, init] [, dedupeOptions] )`
 
-This is the `fetchDedupe` export from the [Fetch Dedupe](https://github.com/jmeas/fetch-dedupe)
+This is the `fetchDedupe` export from the [Fetch Dedupe](https://github.com/jamesplease/fetch-dedupe)
 library. Fetch Dedupe powers the request deduplication in React Request.
 
 If, for whatever reason, you need to make a standalone HTTP request outside of the
 `<Fetch />` component, then you can use this with confidence that you won't send a
 duplicate request.
 
-For more, refer to [the documentation of fetch-dedupe](https://github.com/jmeas/fetch-dedupe).
+For more, refer to [the documentation of fetch-dedupe](https://github.com/jamesplease/fetch-dedupe).
 
 #### `getRequestKey({ url, method, body, responseType })`
 
 Generates a request key. All of the values are optional.
 
-This method comes from [`fetch-dedupe`](https://github.com/jmeas/fetch-dedupe).
+This method comes from [`fetch-dedupe`](https://github.com/jamesplease/fetch-dedupe).
 
 #### `isRequestInFlight( requestKey )`
 
 Return a Boolean representing if a request for `requestKey` is in flight or not.
 
-This method comes from [`fetch-dedupe`](https://github.com/jmeas/fetch-dedupe).
+This method comes from [`fetch-dedupe`](https://github.com/jamesplease/fetch-dedupe).
 
 #### `clearRequestCache()`
 
 Wipes the cache of deduped requests. Mostly useful for testing.
 
-This method comes from [`fetch-dedupe`](https://github.com/jmeas/fetch-dedupe).
+This method comes from [`fetch-dedupe`](https://github.com/jamesplease/fetch-dedupe).
 
 > Note: this method is not safe to use in application code.
 

@@ -51,3 +51,11 @@ The following example demonstrates how you might go about doing this:
 React Request was built with [Redux Resource](https://redux-resource.js.org) in mind.
 An official library that provides React bindings for Redux Resource is in the works, and it
 will use React Request.
+
+### React Native
+
+React Request may work in React Native. I am not sure, because I haven't used React Native
+before.
+
+Before you try it out, be sure to include the polyfill for
+[a global object](https://github.com/johanneslumpe/react-native-browser-polyfill/blob/25a736aac89e5025d49a8ca10b01bb1a81cd6ce7/polyfills/globalself.js).

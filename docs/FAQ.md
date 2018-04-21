@@ -1,7 +1,7 @@
 # FAQ
 
 Here are some answers to common questions. Don't see yours here?
-[Open an issue](https://github.com/jmeas/react-request/issues/new) and
+[Open an issue](https://github.com/jamesplease/react-request/issues/new) and
 we would be happy to help.
 
 #### Why was this created?

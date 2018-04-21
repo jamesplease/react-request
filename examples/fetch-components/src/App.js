@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import Composer from 'react-composer';
 import { ReadPost, UpdatePost, DeletePost } from './fetch-components/posts';
 
@@ -44,9 +44,7 @@ class App extends Component {
             </div>
             <div>
               {readPost.fetching && 'Loading...'}
-              {(readPost.error ||
-                (readPost.response && !readPost.response.ok)) &&
-                'There was some kind of error'}
+              {readPost.failed && 'There was some kind of error'}
               {readPost.data && (
                 <div>
                   <h1>Post title: {readPost.data.title}</h1>

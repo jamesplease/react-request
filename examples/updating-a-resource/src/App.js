@@ -5,7 +5,7 @@ class App extends Component {
   render() {
     return (
       <Fetch url="https://jsonplaceholder.typicode.com/posts/1" method="patch">
-        {({ fetching, error, response, doFetch }) => (
+        {({ fetching, failed, doFetch }) => (
           <div>
             <button
               onClick={() =>
@@ -17,8 +17,7 @@ class App extends Component {
               Update Post 1
             </button>
             {fetching && 'Saving post 1...'}
-            {(error || (response && !response.ok)) &&
-              'There was some kind of error'}
+            {failed && 'There was some kind of error'}
           </div>
         )}
       </Fetch>

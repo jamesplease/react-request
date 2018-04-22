@@ -150,14 +150,16 @@ export class Fetch extends React.Component {
   };
 
   fetchRenderProp = options => {
-    // We wrap this in a setTimeout so as to avoid calls to `setState`
-    // in render, which React does not allow.
-    //
-    // tl;dr, the following code should never cause a problem:
-    //
-    // `<Fetch children={({ doFetch }) => doFetch()} />
-    setTimeout(() => {
-      this.fetchData(options, true);
+    return Promise((resolve, reject) => {
+      // We wrap this in a setTimeout so as to avoid calls to `setState`
+      // in render, which React does not allow.
+      //
+      // tl;dr, the following code should never cause a problem:
+      //
+      // `<Fetch children={({ doFetch }) => doFetch()} />
+      setTimeout(() => {
+        this.fetchData(options, true).then(v => resolve(v), v => reject(v));
+      });
     });
   };
 
@@ -333,7 +335,7 @@ export class Fetch extends React.Component {
           });
         }
 
-        return error;
+        return Promise.reject(error);
       }
     );
   };

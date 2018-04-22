@@ -64,6 +64,8 @@ yarn add react-request
   * [Differences with `fetch()` ⇗](./docs/guides/differences-with-fetch.md)
   * [Differences with React Apollo ⇗](./docs/guides/differences-with-apollo.md)
   * [Integration with Other Technologies ⇗](./docs/guides/integration-with-other-technologies.md)
+* [Advanced Guides ⇗](./docs/advanced-guides/INDEX.md)
+  * [<Fetch/> Limitations ⇗](./docs/advanced-guides/fetch-limitations.md)
 * [Examples ⇗](./docs/examples.md)
 * [FAQ ⇗](./docs/FAQ.md)
 * [Roadmap ⇗](./ROADMAP.md)

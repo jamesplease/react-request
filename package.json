@@ -1,6 +1,6 @@
 {
   "name": "react-request",
-  "version": "2.0.4",
+  "version": "3.0.0",
   "description": "Declarative HTTP requests with React.",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -83,7 +83,7 @@
     "rollup-plugin-uglify": "^2.0.1"
   },
   "dependencies": {
-    "fetch-dedupe": "^2.1.0",
+    "fetch-dedupe": "^3.0.0",
     "prop-types": "^15.6.0"
   }
 }

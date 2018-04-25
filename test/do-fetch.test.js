@@ -37,16 +37,18 @@ describe('same-component doFetch() with caching (gh-151)', () => {
           // 2nd. fetch begins
           // 3rd. fetch ends
           if (run === 1 && renderCount === 3) {
-            expect(options).toEqual(expect.objectContaining({
-              fetching: false,
-              data: {
-                books: [1, 42, 150]
-              },
-              error: null,
-              failed: false,
-              requestName: 'anonymousRequest',
-              url: '/test/succeeds/json-one'
-            }));
+            expect(options).toEqual(
+              expect.objectContaining({
+                fetching: false,
+                data: {
+                  books: [1, 42, 150]
+                },
+                error: null,
+                failed: false,
+                requestName: 'anonymousRequest',
+                url: '/test/succeeds/json-one'
+              })
+            );
 
             // We need a timeout here to prevent a race condition
             // with the assertions after the component mounts.
@@ -68,29 +70,33 @@ describe('same-component doFetch() with caching (gh-151)', () => {
 
           if (run === 2) {
             if (renderCount === 1) {
-              expect(options).toEqual(expect.objectContaining({
-                fetching: true,
-                data: {
-                  books: [1, 42, 150]
-                },
-                error: null,
-                failed: false,
-                requestName: 'anonymousRequest',
-                url: '/test/succeeds/patch'
-              }));
+              expect(options).toEqual(
+                expect.objectContaining({
+                  fetching: true,
+                  data: {
+                    books: [1, 42, 150]
+                  },
+                  error: null,
+                  failed: false,
+                  requestName: 'anonymousRequest',
+                  url: '/test/succeeds/patch'
+                })
+              );
             }
             if (renderCount === 2) {
               expect(fetchMock.calls('/test/succeeds/patch').length).toBe(1);
-              expect(options).toEqual(expect.objectContaining({
-                fetching: false,
-                data: {
-                  movies: [1]
-                },
-                error: null,
-                failed: false,
-                requestName: 'anonymousRequest',
-                url: '/test/succeeds/patch'
-              }));
+              expect(options).toEqual(
+                expect.objectContaining({
+                  fetching: false,
+                  data: {
+                    movies: [1]
+                  },
+                  error: null,
+                  failed: false,
+                  requestName: 'anonymousRequest',
+                  url: '/test/succeeds/patch'
+                })
+              );
             }
             if (renderCount === 3) {
               done.fail();
@@ -157,16 +163,18 @@ describe('same-component doFetch() with caching (gh-151)', () => {
           // 2nd. fetch begins
           // 3rd. fetch ends
           if (run === 1 && renderCount === 3) {
-            expect(options).toEqual(expect.objectContaining({
-              fetching: false,
-              data: {
-                books: [1, 42, 150]
-              },
-              error: null,
-              failed: false,
-              requestName: 'anonymousRequest',
-              url: '/test/succeeds/json-one'
-            }));
+            expect(options).toEqual(
+              expect.objectContaining({
+                fetching: false,
+                data: {
+                  books: [1, 42, 150]
+                },
+                error: null,
+                failed: false,
+                requestName: 'anonymousRequest',
+                url: '/test/succeeds/json-one'
+              })
+            );
 
             // We need a timeout here to prevent a race condition
             // with the assertions after the component mounts.
@@ -189,30 +197,34 @@ describe('same-component doFetch() with caching (gh-151)', () => {
 
           if (run === 2) {
             if (renderCount === 1) {
-              expect(options).toEqual(expect.objectContaining({
-                fetching: true,
-                data: {
-                  books: [1, 42, 150]
-                },
-                error: null,
-                failed: false,
-                requestKey: 'sandwiches',
-                requestName: 'anonymousRequest',
-                url: '/test/succeeds/json-two'
-              }));
+              expect(options).toEqual(
+                expect.objectContaining({
+                  fetching: true,
+                  data: {
+                    books: [1, 42, 150]
+                  },
+                  error: null,
+                  failed: false,
+                  requestKey: 'sandwiches',
+                  requestName: 'anonymousRequest',
+                  url: '/test/succeeds/json-two'
+                })
+              );
             }
             if (renderCount === 2) {
-              expect(options).toEqual(expect.objectContaining({
-                fetching: false,
-                data: {
-                  authors: [22, 13]
-                },
-                error: null,
-                failed: false,
-                requestKey: 'sandwiches',
-                requestName: 'anonymousRequest',
-                url: '/test/succeeds/json-two'
-              }));
+              expect(options).toEqual(
+                expect.objectContaining({
+                  fetching: false,
+                  data: {
+                    authors: [22, 13]
+                  },
+                  error: null,
+                  failed: false,
+                  requestKey: 'sandwiches',
+                  requestName: 'anonymousRequest',
+                  url: '/test/succeeds/json-two'
+                })
+              );
             }
             if (renderCount === 3) {
               done.fail();
@@ -281,16 +293,18 @@ describe('same-component doFetch() with caching (gh-151)', () => {
           // 2nd. fetch begins
           // 3rd. fetch ends
           if (run === 1 && renderCount === 3) {
-            expect(options).toEqual(expect.objectContaining({
-              fetching: false,
-              data: {
-                books: [1, 42, 150]
-              },
-              error: null,
-              failed: false,
-              requestName: 'anonymousRequest',
-              url: '/test/succeeds/json-one'
-            }));
+            expect(options).toEqual(
+              expect.objectContaining({
+                fetching: false,
+                data: {
+                  books: [1, 42, 150]
+                },
+                error: null,
+                failed: false,
+                requestName: 'anonymousRequest',
+                url: '/test/succeeds/json-one'
+              })
+            );
 
             // We need a timeout here to prevent a race condition
             // with the assertions after the component mounts.
@@ -318,57 +332,65 @@ describe('same-component doFetch() with caching (gh-151)', () => {
 
           if (run === 2) {
             if (renderCount === 1) {
-              expect(options).toEqual(expect.objectContaining({
-                fetching: true,
-                data: {
-                  books: [1, 42, 150]
-                },
-                error: null,
-                failed: false,
-                requestKey: 'sandwiches',
-                requestName: 'anonymousRequest',
-                url: '/test/succeeds/json-two'
-              }));
+              expect(options).toEqual(
+                expect.objectContaining({
+                  fetching: true,
+                  data: {
+                    books: [1, 42, 150]
+                  },
+                  error: null,
+                  failed: false,
+                  requestKey: 'sandwiches',
+                  requestName: 'anonymousRequest',
+                  url: '/test/succeeds/json-two'
+                })
+              );
             }
             if (renderCount === 2) {
-              expect(options).toEqual(expect.objectContaining({
-                fetching: false,
-                // I am not sure if I like this behavior!
-                // See gh-154 for more
-                data: null,
-                failed: true,
-                requestKey: 'sandwiches',
-                requestName: 'anonymousRequest',
-                url: '/test/succeeds/json-two'
-              }));
+              expect(options).toEqual(
+                expect.objectContaining({
+                  fetching: false,
+                  data: {
+                    books: [1, 42, 150]
+                  },
+                  failed: true,
+                  requestKey: 'sandwiches',
+                  requestName: 'anonymousRequest',
+                  url: '/test/succeeds/json-two'
+                })
+              );
             }
 
             // This is the 2nd doFetch(). It is difficult to update
             // the `run` for that fetch, so we just use the renderCounts.
             else if (renderCount === 3) {
-              expect(options).toEqual(expect.objectContaining({
-                fetching: true,
-                data: null,
-                error: null,
-                failed: false,
-                requestKey: 'sandwiches',
-                requestName: 'anonymousRequest',
-                url: '/test/succeeds/json-two'
-              }));
-            }
-
-            else if (renderCount === 4) {
-              expect(options).toEqual(expect.objectContaining({
-                fetching: false,
-                data: {
-                  authors: [22, 13]
-                },
-                error: null,
-                failed: false,
-                requestKey: 'sandwiches',
-                requestName: 'anonymousRequest',
-                url: '/test/succeeds/json-two'
-              }));
+              expect(options).toEqual(
+                expect.objectContaining({
+                  fetching: true,
+                  data: {
+                    books: [1, 42, 150]
+                  },
+                  error: null,
+                  failed: false,
+                  requestKey: 'sandwiches',
+                  requestName: 'anonymousRequest',
+                  url: '/test/succeeds/json-two'
+                })
+              );
+            } else if (renderCount === 4) {
+              expect(options).toEqual(
+                expect.objectContaining({
+                  fetching: false,
+                  data: {
+                    authors: [22, 13]
+                  },
+                  error: null,
+                  failed: false,
+                  requestKey: 'sandwiches',
+                  requestName: 'anonymousRequest',
+                  url: '/test/succeeds/json-two'
+                })
+              );
             }
             if (renderCount > 4) {
               done.fail();

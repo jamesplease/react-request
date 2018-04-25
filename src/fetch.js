@@ -369,6 +369,14 @@ export class Fetch extends React.Component {
 
     data = data ? this.props.transformData(data) : null;
 
+    // If we already have some data in state on error, then we continue to
+    // pass that data down. This prevents the data from being wiped when a
+    // request fails, which is generally not what people want.
+    // For more, see: GitHub Issue #154
+    if (error && this.state.data) {
+      data = this.state.data;
+    }
+
     if (hittingNetwork) {
       this.props.afterFetch({
         url,

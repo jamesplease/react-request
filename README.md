@@ -364,30 +364,8 @@ about the response, such as its status code.
 </Fetch>
 ```
 
-```jsx
-// Some "enterprisey" endpoints return text stack traces anytime that they error. A function
-// `responseType` can protect you against this.
-<Fetch
-  url="/countries/2"
-  responseType={response => {
-    // Only parse as JSON when the request's code is not an error code, and it is
-    // not 204 No Content.
-    return response.ok && response.status !== 204 ? 'json' : 'text';
-  }}
-  transformData={countryName => {
-    return {
-      countryName
-    };
-  }}>
-  {({ data }) => {
-    if (data) {
-      return <div>{data.countryName}</div>;
-    }
-
-    return null;
-  }}
-</Fetch>
-```
+If the response body cannot be parsed as the `responseType` that you specify, then `data` will
+be set to `null`.
 
 ##### `requestName`
 

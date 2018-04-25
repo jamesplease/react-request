@@ -1,5 +1,18 @@
 # Changelog
 
+### v3.0.0 (2018/4/24)
+
+> Although the changes in this release are technically breaking, they are unlikely to
+> affect most users' code.
+
+**Breaking Changes**
+
+* When a request fails, the `data` from a request will no longer be set to `null`. This
+  allows you to control whether or not your UI continues to display the existing data.
+
+* The `responseType` prop is now more forgiving. If the body cannot be parsed with
+  the `responseType` that you set, then `data` will be set to `null`.
+
 ### v2.0.4 (2018/4/20)
 
 **Bug Fixes**

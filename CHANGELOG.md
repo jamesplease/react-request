@@ -1,5 +1,12 @@
 # Changelog
 
+### v3.0.1 (2018/4/24)
+
+**Bug Fixes**
+
+* Fixes a bug where `isLazy` would sometimes be computed using previous
+  props rather than the current props.
+
 ### v3.0.0 (2018/4/24)
 
 > Although the changes in this release are technically breaking, they are unlikely to

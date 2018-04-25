@@ -212,6 +212,40 @@ describe('successful requests', () => {
     }, networkTimeout);
   });
 
+  test('it sets data to `null` if the contentType does not parse the data', done => {
+    fetchMock.get(
+      '/test/succeeds/second-mismatch-content-type',
+      new Promise(resolve => {
+        resolve(successfulResponse());
+      })
+    );
+
+    expect.assertions(2);
+    const afterFetchMock = jest.fn();
+
+    mount(
+      <Fetch
+        url="/test/succeeds/second-mismatch-content-type"
+        afterFetch={afterFetchMock}
+        responseType="json"
+      />
+    );
+
+    setTimeout(() => {
+      expect(afterFetchMock).toHaveBeenCalledTimes(1);
+      expect(afterFetchMock).toBeCalledWith(
+        expect.objectContaining({
+          url: '/test/succeeds/second-mismatch-content-type',
+          error: null,
+          failed: false,
+          didUnmount: false,
+          data: null
+        })
+      );
+      done();
+    }, networkTimeout);
+  });
+
   test('it accepts a custom `responseType` as a function, and calls afterFetch with the right arguments', done => {
     fetchMock.get(
       '/test/succeeds/secondpls',

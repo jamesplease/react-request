@@ -74,8 +74,8 @@ export class Fetch extends React.Component {
 
   // We default to being lazy for "write" requests,
   // such as POST, PATCH, DELETE, and so on.
-  isLazy = props => {
-    const { lazy, method } = props || this.props;
+  isLazy = () => {
+    const { lazy, method } = this.props;
 
     return typeof lazy === 'undefined' ? !this.isReadRequest(method) : lazy;
   };

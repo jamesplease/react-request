@@ -11,6 +11,8 @@ class App extends Component {
               onClick={() =>
                 doFetch({
                   body: this.getUpdatedPost()
+                }).then(afterFetchInfo => {
+                  console.log(afterFetchInfo) // eslint-disable-line no-console
                 })
               }
               disabled={fetching}>

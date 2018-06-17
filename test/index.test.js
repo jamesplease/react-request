@@ -178,6 +178,72 @@ describe('successful requests', () => {
     }, networkTimeout);
   });
 
+  test('`doFetch()` returns a promise that resolves with the same object as `afterFetch`', done => {
+    fetchMock.get(
+      '/test/succeeds/dofetch-promise',
+      new Promise(resolve => {
+        resolve(jsonResponse());
+      })
+    );
+
+    expect.assertions(2);
+    const afterFetchMock = jest.fn();
+    const childrenMock = jest.fn();
+
+    mount(
+      <Fetch
+        url="/test/succeeds/first"
+        afterFetch={afterFetchMock}
+        children={childrenMock}
+        lazy
+      />
+    );
+
+    const { doFetch } = childrenMock.mock.calls[0][0];
+    doFetch().then(afterFetchInfo => {
+      setTimeout(() => {
+        expect(afterFetchMock).toHaveBeenCalledTimes(1);
+        expect(afterFetchMock).toBeCalledWith(afterFetchInfo);
+        done();
+      });
+    });
+  })
+
+  test('`doFetch()` returned promise resolves even if there was an error', done => {
+    fetchMock.get(
+      "/test/fails/dofetch-promise",
+      new Promise((resolve, reject) => {
+        reject({
+          message: "Network error"
+        });
+      })
+    );
+
+    expect.assertions(1);
+    const childrenMock = jest.fn();
+
+    mount(
+      <Fetch
+        url="/test/fails/dofetch-promise"
+        children={childrenMock}
+      />
+    );
+
+    const { doFetch } = childrenMock.mock.calls[0][0];
+    doFetch().then(afterFetchInfo => {
+      expect(afterFetchInfo).toMatchObject({
+        url: "/test/fails/dofetch-promise",
+        error: {
+          message: "Network error"
+        },
+        failed: true,
+        didUnmount: false,
+        data: null
+      });
+      done();
+    });
+  })
+
   test('it accepts a custom `responseType`, and calls afterFetch with the right arguments', done => {
     fetchMock.get(
       '/test/succeeds/second',
@@ -288,8 +354,9 @@ describe('successful requests', () => {
       })
     );
 
-    expect.assertions(2);
+    expect.assertions(3);
     const afterFetchMock = jest.fn();
+    const childrenMock = jest.fn();
     function transformData(data) {
       return {
         sandwiches: data.books
@@ -301,21 +368,30 @@ describe('successful requests', () => {
         url="/test/succeeds/third"
         afterFetch={afterFetchMock}
         transformData={transformData}
+        lazy
+        children={childrenMock}
       />
     );
+
+    const expectedAfterFetch = {
+      url: '/test/succeeds/third',
+      error: null,
+      failed: false,
+      didUnmount: false,
+      data: {
+        sandwiches: [1, 42, 150]
+      }
+    };
+
+    const { doFetch } = childrenMock.mock.calls[0][0];
+    doFetch().then(afterFetchInfo => {
+      expect(afterFetchInfo).toMatchObject(expectedAfterFetch);
+    });
 
     setTimeout(() => {
       expect(afterFetchMock).toHaveBeenCalledTimes(1);
       expect(afterFetchMock).toBeCalledWith(
-        expect.objectContaining({
-          url: '/test/succeeds/third',
-          error: null,
-          failed: false,
-          didUnmount: false,
-          data: {
-            sandwiches: [1, 42, 150]
-          }
-        })
+        expect.objectContaining(expectedAfterFetch)
       );
       done();
     }, networkTimeout);

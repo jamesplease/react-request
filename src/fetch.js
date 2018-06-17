@@ -156,9 +156,11 @@ export class Fetch extends React.Component {
     // tl;dr, the following code should never cause a problem:
     //
     // `<Fetch children={({ doFetch }) => doFetch()} />
-    setTimeout(() => {
-      this.fetchData(options, true);
-    });
+    return new Promise(resolve => {
+      setTimeout(() => {
+        this.fetchData(options, true, resolve);
+      });
+    })
   };
 
   // When a subsequent request is made, it is important that the correct
@@ -202,7 +204,7 @@ export class Fetch extends React.Component {
     }
   };
 
-  fetchData = (options, ignoreCache) => {
+  fetchData = (options, ignoreCache, resolve) => {
     // These are the things that we do not allow a user to configure in
     // `options` when calling `doFetch()`. Perhaps we should, however.
     const { requestName, dedupe, beforeFetch } = this.props;
@@ -314,23 +316,29 @@ export class Fetch extends React.Component {
         }
 
         if (!this.hasHandledNetworkResponse) {
-          this.onResponseReceived({
-            ...responseReceivedInfo,
-            response: res,
-            hittingNetwork
-          });
+          this.onResponseReceived(
+            {
+              ...responseReceivedInfo,
+              response: res,
+              hittingNetwork
+            },
+            resolve
+          );
         }
 
         return res;
       },
       error => {
         if (!this.hasHandledNetworkResponse) {
-          this.onResponseReceived({
-            ...responseReceivedInfo,
-            error,
-            cachedResponse,
-            hittingNetwork
-          });
+          this.onResponseReceived(
+            {
+              ...responseReceivedInfo,
+              error,
+              cachedResponse,
+              hittingNetwork
+            },
+            resolve
+          );
         }
 
         return error;
@@ -338,7 +346,7 @@ export class Fetch extends React.Component {
     );
   };
 
-  onResponseReceived = info => {
+  onResponseReceived = (info, resolve) => {
     const {
       error = null,
       response = null,
@@ -377,17 +385,23 @@ export class Fetch extends React.Component {
       data = this.state.data;
     }
 
+    const afterFetchInfo = {
+      url,
+      init,
+      requestKey,
+      error,
+      failed: Boolean(error || (response && !response.ok)),
+      response,
+      data,
+      didUnmount: Boolean(this.willUnmount)
+    };
+
+    if (typeof resolve === 'function') {
+      resolve(afterFetchInfo);
+    }
+
     if (hittingNetwork) {
-      this.props.afterFetch({
-        url,
-        init,
-        requestKey,
-        error,
-        failed: Boolean(error || (response && !response.ok)),
-        response,
-        data,
-        didUnmount: Boolean(this.willUnmount)
-      });
+      this.props.afterFetch(afterFetchInfo);
     }
 
     if (this.willUnmount) {

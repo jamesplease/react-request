@@ -229,6 +229,9 @@ There are three common use cases for the `doFetch` prop:
 own keys. This method allows you to customize the request from within the component based on the
 component's state.
 
+`doFetch` returns a Promise that resolves with the same value that the [`afterFetch`](#afterFetch)
+prop receives (see below for details).
+
 ##### `lazy`
 
 Whether or not the request will be called when the component mounts. The default value

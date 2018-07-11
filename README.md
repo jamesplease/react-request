@@ -46,28 +46,28 @@ yarn add react-request
 
 ### Documentation
 
-* [Getting Started](#getting-started)
-* [API](#api)
-  * [\<Fetch/\>](#fetch-)
-  * [fetchDedupe()](#fetchdedupe-input--init--dedupeoptions-)
-  * [getRequestKey()](#getrequestkey-url-method-body-responsetype-)
-  * [isRequestInFlight()](#isrequestinflight-requestkey-)
-  * [clearRequestCache()](#clearrequestcache)
-  * [clearResponseCache()](#clearresponsecache)
-* [Guides ⇗](./docs/guides/INDEX.md)
-  * [Response Caching ⇗](./docs/guides/response-caching.md)
-  * [Request Deduplication ⇗](./docs/guides/request-deduplication.md)
-  * [Request Keys ⇗](./docs/guides/request-keys.md)
-  * [Best Practices ⇗](./docs/guides/best-practices.md)
-  * [Using the `lazy` Prop ⇗](./docs/guides/using-the-lazy-prop.md)
-  * [Aborting ⇗](./docs/guides/aborting.md)
-  * [Differences with `fetch()` ⇗](./docs/guides/differences-with-fetch.md)
-  * [Differences with React Apollo ⇗](./docs/guides/differences-with-apollo.md)
-  * [Integration with Other Technologies ⇗](./docs/guides/integration-with-other-technologies.md)
-* [Examples ⇗](./docs/examples.md)
-* [FAQ ⇗](./docs/FAQ.md)
-* [Roadmap ⇗](./ROADMAP.md)
-* [Acknowledgements](#acknowledgements)
+- [Getting Started](#getting-started)
+- [API](#api)
+  - [\<Fetch/\>](#fetch-)
+  - [fetchDedupe()](#fetchdedupe-input--init--dedupeoptions-)
+  - [getRequestKey()](#getrequestkey-url-method-body-responsetype-)
+  - [isRequestInFlight()](#isrequestinflight-requestkey-)
+  - [clearRequestCache()](#clearrequestcache)
+  - [clearResponseCache()](#clearresponsecache)
+- [Guides ⇗](./docs/guides/INDEX.md)
+  - [Response Caching ⇗](./docs/guides/response-caching.md)
+  - [Request Deduplication ⇗](./docs/guides/request-deduplication.md)
+  - [Request Keys ⇗](./docs/guides/request-keys.md)
+  - [Best Practices ⇗](./docs/guides/best-practices.md)
+  - [Using the `lazy` Prop ⇗](./docs/guides/using-the-lazy-prop.md)
+  - [Aborting ⇗](./docs/guides/aborting.md)
+  - [Differences with `fetch()` ⇗](./docs/guides/differences-with-fetch.md)
+  - [Differences with React Apollo ⇗](./docs/guides/differences-with-apollo.md)
+  - [Integration with Other Technologies ⇗](./docs/guides/integration-with-other-technologies.md)
+- [Examples ⇗](./docs/examples.md)
+- [FAQ ⇗](./docs/FAQ.md)
+- [Roadmap ⇗](./ROADMAP.md)
+- [Acknowledgements](#acknowledgements)
 
 ### Getting Started
 
@@ -124,7 +124,7 @@ class App extends Component {
           <Fetch
             url="https://jsonplaceholder.typicode.com/posts/1"
             method="DELETE"
-          />
+          />,
         ]}>
         {([readPost, deletePost]) => {
           return (
@@ -159,19 +159,19 @@ API as a prop, in addition to a few other things.
 
 The props that come from the `fetch()` method are:
 
-* `url`
-* `method`: defaults to `"GET"`
-* `body`
-* `credentials`
-* `headers`
-* `mode`
-* `cache`
-* `redirect`
-* `referrer`: defaults to `"about:client"`
-* `referrerPolicy`: defaults to `""`
-* `integrity`: defaults to `""`
-* `keepalive`
-* `signal`
+- `url`
+- `method`: defaults to `"GET"`
+- `body`
+- `credentials`
+- `headers`
+- `mode`
+- `cache`
+- `redirect`
+- `referrer`: defaults to `"about:client"`
+- `referrerPolicy`: defaults to `""`
+- `integrity`: defaults to `""`
+- `keepalive`
+- `signal`
 
 To learn more about the valid options for these props, refer to the
 [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch)
@@ -185,7 +185,7 @@ The following example demonstrates some of the most commonly-used props that com
   method="patch"
   credentials="same-origin"
   headers={{
-    'csrf-token': myCsrfToken
+    'csrf-token': myCsrfToken,
   }}
   body={JSON.stringify({ title: 'New post' })}>
   {({ doFetch }) => {
@@ -201,27 +201,27 @@ In addition to the `fetch()` props, there are a number of other useful props.
 The [render prop](https://cdb.reacttraining.com/use-a-render-prop-50de598f11ce) of this component.
 It is called with one argument, `result`, an object with the following keys:
 
-* `fetching`: A Boolean representing whether or not a request is currently in flight for this component
-* `failed`: A Boolean representing whether or not the request failed for any reason. This includes network
+- `fetching`: A Boolean representing whether or not a request is currently in flight for this component
+- `failed`: A Boolean representing whether or not the request failed for any reason. This includes network
   errors and status codes that are greater than or equal to`400`.
-* `error`: An error object representing a network error occurred. Note that HTTP "error" status codes do not
+- `error`: An error object representing a network error occurred. Note that HTTP "error" status codes do not
   cause errors; only failed or aborted network requests do. For more, see the
   ["Using Fetch" MDN guide](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Checking_that_the_fetch_was_successful).
-* `response`: An instance of [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response). The
+- `response`: An instance of [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response). The
   [`body`](https://developer.mozilla.org/en-US/docs/Web/API/Body) will already be read, and made
   available to you as `response.data`.
-* `data`: The data returned in `response`. This will be different from `response.data` if a
+- `data`: The data returned in `response`. This will be different from `response.data` if a
   `transformData` prop was passed to `<Fetch/>`.
-* `doFetch`: A function that makes the HTTP request. See notes below.
-* `url`: The URL that was passed into `<Fetch />`.
-* `requestName`: The name of the request (see `requestName` below)
-* `requestKey`: The computed [request key](./docs/guides/request-keys.md)
+- `doFetch`: A function that makes the HTTP request. See notes below.
+- `url`: The URL that was passed into `<Fetch />`.
+- `requestName`: The name of the request (see `requestName` below)
+- `requestKey`: The computed [request key](./docs/guides/request-keys.md)
 
 There are three common use cases for the `doFetch` prop:
 
-* You can use it to "refresh" the data by making a follow-up request for read requests
-* You can use it to retry the request if there is any sort of error
-* You must manually call this method to actually make the request anytime that the `lazy` prop
+- You can use it to "refresh" the data by making a follow-up request for read requests
+- You can use it to retry the request if there is any sort of error
+- You must manually call this method to actually make the request anytime that the `lazy` prop
   is passed as `true`.
 
 `doFetch` accepts one argument: `options`. Any of the `fetch()` options, such as `url`, `method`, and
@@ -229,8 +229,8 @@ There are three common use cases for the `doFetch` prop:
 own keys. This method allows you to customize the request from within the component based on the
 component's state.
 
-`doFetch` returns a Promise that resolves with the same value that the [`afterFetch`](#afterFetch)
-prop receives (see below for details).
+`doFetch` returns a Promise that **always** resolves. It resolves to the same argument that the
+[`afterFetch`](#afterFetch) prop receives.
 
 ##### `lazy`
 
@@ -255,10 +255,10 @@ is based on the request method that you use.
 A function that is called just before a network request is initiated. It is called
 with one argument, an object with the following keys:
 
-* `url`: The URL of the request
-* `init`: The second argument passed to `global.fetch()`, which specifies things
+- `url`: The URL of the request
+- `init`: The second argument passed to `global.fetch()`, which specifies things
   such as the body, method, and so on
-* `requestKey`: Either the computed request key, or the value of the
+- `requestKey`: Either the computed request key, or the value of the
   `requestKey` prop
 
 This feature is useful for analytics, or syncing response data with a data store such
@@ -271,16 +271,16 @@ as [Redux](https://github.com/reactjs/redux/).
 A function that is called anytime that a network response is received. It is called
 with one argument, an object with the following keys:
 
-* `url`: The URL of the request
-* `init`: The second argument passed to `global.fetch()`, which specifies things
+- `url`: The URL of the request
+- `init`: The second argument passed to `global.fetch()`, which specifies things
   such as the body, method, and so on
-* `requestKey`: Either the computed request key, or the value of the
+- `requestKey`: Either the computed request key, or the value of the
   `requestKey` prop
-* `response`: The response that was received from the HTTP request
-* `data`: The transformed data from the response. This will be different from
+- `response`: The response that was received from the HTTP request
+- `data`: The transformed data from the response. This will be different from
   `response.data` if a `transformData` function was passed as a prop to `<Fetch/>`.
-* `error`: An error returned from the HTTP request
-* `didUnmount`: A Boolean representing whether or not the component has unmounted
+- `error`: An error returned from the HTTP request
+- `didUnmount`: A Boolean representing whether or not the component has unmounted
 
 This can be used for analytics or syncing response data with a data store such
 as [Redux](https://github.com/reactjs/redux/).
@@ -354,7 +354,7 @@ about the response, such as its status code.
   responseType="text"
   transformData={countryName => {
     return {
-      countryName
+      countryName,
     };
   }}>
   {({ data }) => {
@@ -386,10 +386,10 @@ everywhere, we tend to give them names to help humans read and debug the code.
 
 This determines how the request interacts with the cache. Valid options are:
 
-* `"cache-first"`
-* `"cache-and-network"`
-* `"network-only"`
-* `"cache-only"`
+- `"cache-first"`
+- `"cache-and-network"`
+- `"network-only"`
+- `"cache-only"`
 
 For documentation on what each of these values do, refer to the [response caching guide](./docs/guides/response-caching.md).
 

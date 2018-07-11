@@ -10,7 +10,13 @@ class App extends Component {
             <button
               onClick={() =>
                 doFetch({
-                  body: this.getUpdatedPost()
+                  body: this.getUpdatedPost(),
+                }).then(afterFetchInfo => {
+                  // eslint-disable-next-line no-console
+                  console.log(
+                    'The call to doFetch resolved. Received result:',
+                    afterFetchInfo
+                  );
                 })
               }
               disabled={fetching}>
@@ -26,7 +32,7 @@ class App extends Component {
 
   getUpdatedPost() {
     return JSON.stringify({
-      title: 'hello'
+      title: 'hello',
     });
   }
 }

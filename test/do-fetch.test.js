@@ -1,6 +1,7 @@
 import React from 'react';
 import fetchMock from 'fetch-mock';
 import { mount } from 'enzyme';
+import { jsonResponse } from './responses';
 import { Fetch, clearRequestCache, clearResponseCache } from '../src';
 
 // Some time for the mock fetches to resolve
@@ -9,6 +10,69 @@ const networkTimeout = 10;
 beforeEach(() => {
   clearRequestCache();
   clearResponseCache();
+});
+
+describe('doFetch()', () => {
+  test('`doFetch()` returns a promise that resolves with the same object as `afterFetch`', done => {
+    fetchMock.get(
+      '/test/succeeds/dofetch-promise',
+      new Promise(resolve => {
+        resolve(jsonResponse());
+      })
+    );
+
+    expect.assertions(2);
+    const afterFetchMock = jest.fn();
+    const childrenMock = jest.fn();
+
+    mount(
+      <Fetch
+        url="/test/succeeds/dofetch-promise"
+        afterFetch={afterFetchMock}
+        children={childrenMock}
+        lazy
+      />
+    );
+
+    const { doFetch } = childrenMock.mock.calls[0][0];
+    doFetch().then(afterFetchInfo => {
+      setTimeout(() => {
+        expect(afterFetchMock).toHaveBeenCalledTimes(1);
+        expect(afterFetchMock).toBeCalledWith(afterFetchInfo);
+        done();
+      });
+    });
+  });
+
+  test('`doFetch()` returns a promise that resolves _even_ when there was an error', done => {
+    fetchMock.get(
+      '/test/fails/dofetch-promise',
+      new Promise((resolve, reject) => {
+        reject({
+          message: 'Network error',
+        });
+      })
+    );
+
+    expect.assertions(1);
+    const childrenMock = jest.fn();
+
+    mount(<Fetch url="/test/fails/dofetch-promise" children={childrenMock} />);
+
+    const { doFetch } = childrenMock.mock.calls[0][0];
+    doFetch().then(afterFetchInfo => {
+      expect(afterFetchInfo).toMatchObject({
+        url: '/test/fails/dofetch-promise',
+        error: {
+          message: 'Network error',
+        },
+        failed: true,
+        didUnmount: false,
+        data: null,
+      });
+      done();
+    });
+  });
 });
 
 describe('same-component doFetch() with caching (gh-151)', () => {
@@ -41,12 +105,12 @@ describe('same-component doFetch() with caching (gh-151)', () => {
               expect.objectContaining({
                 fetching: false,
                 data: {
-                  books: [1, 42, 150]
+                  books: [1, 42, 150],
                 },
                 error: null,
                 failed: false,
                 requestName: 'anonymousRequest',
-                url: '/test/succeeds/json-one'
+                url: '/test/succeeds/json-one',
               })
             );
 
@@ -57,7 +121,7 @@ describe('same-component doFetch() with caching (gh-151)', () => {
               renderCount = 0;
               options.doFetch({
                 method: 'patch',
-                url: '/test/succeeds/patch'
+                url: '/test/succeeds/patch',
               });
 
               // Now we need another timeout to allow for the fetch
@@ -74,12 +138,12 @@ describe('same-component doFetch() with caching (gh-151)', () => {
                 expect.objectContaining({
                   fetching: true,
                   data: {
-                    books: [1, 42, 150]
+                    books: [1, 42, 150],
                   },
                   error: null,
                   failed: false,
                   requestName: 'anonymousRequest',
-                  url: '/test/succeeds/patch'
+                  url: '/test/succeeds/patch',
                 })
               );
             }
@@ -89,12 +153,12 @@ describe('same-component doFetch() with caching (gh-151)', () => {
                 expect.objectContaining({
                   fetching: false,
                   data: {
-                    movies: [1]
+                    movies: [1],
                   },
                   error: null,
                   failed: false,
                   requestName: 'anonymousRequest',
-                  url: '/test/succeeds/patch'
+                  url: '/test/succeeds/patch',
                 })
               );
             }
@@ -119,8 +183,8 @@ describe('same-component doFetch() with caching (gh-151)', () => {
           failed: false,
           didUnmount: false,
           data: {
-            books: [1, 42, 150]
-          }
+            books: [1, 42, 150],
+          },
         })
       );
       expect(onResponseMock).toHaveBeenCalledTimes(1);
@@ -131,8 +195,8 @@ describe('same-component doFetch() with caching (gh-151)', () => {
           status: 200,
           statusText: 'OK',
           data: {
-            books: [1, 42, 150]
-          }
+            books: [1, 42, 150],
+          },
         })
       );
     }, networkTimeout);
@@ -167,12 +231,12 @@ describe('same-component doFetch() with caching (gh-151)', () => {
               expect.objectContaining({
                 fetching: false,
                 data: {
-                  books: [1, 42, 150]
+                  books: [1, 42, 150],
                 },
                 error: null,
                 failed: false,
                 requestName: 'anonymousRequest',
-                url: '/test/succeeds/json-one'
+                url: '/test/succeeds/json-one',
               })
             );
 
@@ -184,7 +248,7 @@ describe('same-component doFetch() with caching (gh-151)', () => {
 
               options.doFetch({
                 requestKey: 'sandwiches',
-                url: '/test/succeeds/json-two'
+                url: '/test/succeeds/json-two',
               });
 
               // Now we need another timeout to allow for the fetch
@@ -201,13 +265,13 @@ describe('same-component doFetch() with caching (gh-151)', () => {
                 expect.objectContaining({
                   fetching: true,
                   data: {
-                    books: [1, 42, 150]
+                    books: [1, 42, 150],
                   },
                   error: null,
                   failed: false,
                   requestKey: 'sandwiches',
                   requestName: 'anonymousRequest',
-                  url: '/test/succeeds/json-two'
+                  url: '/test/succeeds/json-two',
                 })
               );
             }
@@ -216,13 +280,13 @@ describe('same-component doFetch() with caching (gh-151)', () => {
                 expect.objectContaining({
                   fetching: false,
                   data: {
-                    authors: [22, 13]
+                    authors: [22, 13],
                   },
                   error: null,
                   failed: false,
                   requestKey: 'sandwiches',
                   requestName: 'anonymousRequest',
-                  url: '/test/succeeds/json-two'
+                  url: '/test/succeeds/json-two',
                 })
               );
             }
@@ -247,8 +311,8 @@ describe('same-component doFetch() with caching (gh-151)', () => {
           failed: false,
           didUnmount: false,
           data: {
-            books: [1, 42, 150]
-          }
+            books: [1, 42, 150],
+          },
         })
       );
       expect(onResponseMock).toHaveBeenCalledTimes(1);
@@ -259,8 +323,8 @@ describe('same-component doFetch() with caching (gh-151)', () => {
           status: 200,
           statusText: 'OK',
           data: {
-            books: [1, 42, 150]
-          }
+            books: [1, 42, 150],
+          },
         })
       );
     }, networkTimeout);
@@ -297,12 +361,12 @@ describe('same-component doFetch() with caching (gh-151)', () => {
               expect.objectContaining({
                 fetching: false,
                 data: {
-                  books: [1, 42, 150]
+                  books: [1, 42, 150],
                 },
                 error: null,
                 failed: false,
                 requestName: 'anonymousRequest',
-                url: '/test/succeeds/json-one'
+                url: '/test/succeeds/json-one',
               })
             );
 
@@ -314,12 +378,12 @@ describe('same-component doFetch() with caching (gh-151)', () => {
 
               options.doFetch({
                 requestKey: 'sandwiches',
-                url: '/test/succeeds/json-two'
+                url: '/test/succeeds/json-two',
               });
 
               options.doFetch({
                 requestKey: 'sandwiches',
-                url: '/test/succeeds/json-two'
+                url: '/test/succeeds/json-two',
               });
 
               // Now we need another timeout to allow for the fetch
@@ -336,13 +400,13 @@ describe('same-component doFetch() with caching (gh-151)', () => {
                 expect.objectContaining({
                   fetching: true,
                   data: {
-                    books: [1, 42, 150]
+                    books: [1, 42, 150],
                   },
                   error: null,
                   failed: false,
                   requestKey: 'sandwiches',
                   requestName: 'anonymousRequest',
-                  url: '/test/succeeds/json-two'
+                  url: '/test/succeeds/json-two',
                 })
               );
             }
@@ -351,12 +415,12 @@ describe('same-component doFetch() with caching (gh-151)', () => {
                 expect.objectContaining({
                   fetching: false,
                   data: {
-                    books: [1, 42, 150]
+                    books: [1, 42, 150],
                   },
                   failed: true,
                   requestKey: 'sandwiches',
                   requestName: 'anonymousRequest',
-                  url: '/test/succeeds/json-two'
+                  url: '/test/succeeds/json-two',
                 })
               );
             }
@@ -368,13 +432,13 @@ describe('same-component doFetch() with caching (gh-151)', () => {
                 expect.objectContaining({
                   fetching: true,
                   data: {
-                    books: [1, 42, 150]
+                    books: [1, 42, 150],
                   },
                   error: null,
                   failed: false,
                   requestKey: 'sandwiches',
                   requestName: 'anonymousRequest',
-                  url: '/test/succeeds/json-two'
+                  url: '/test/succeeds/json-two',
                 })
               );
             } else if (renderCount === 4) {
@@ -382,13 +446,13 @@ describe('same-component doFetch() with caching (gh-151)', () => {
                 expect.objectContaining({
                   fetching: false,
                   data: {
-                    authors: [22, 13]
+                    authors: [22, 13],
                   },
                   error: null,
                   failed: false,
                   requestKey: 'sandwiches',
                   requestName: 'anonymousRequest',
-                  url: '/test/succeeds/json-two'
+                  url: '/test/succeeds/json-two',
                 })
               );
             }
@@ -413,8 +477,8 @@ describe('same-component doFetch() with caching (gh-151)', () => {
           failed: false,
           didUnmount: false,
           data: {
-            books: [1, 42, 150]
-          }
+            books: [1, 42, 150],
+          },
         })
       );
       expect(onResponseMock).toHaveBeenCalledTimes(1);
@@ -425,8 +489,8 @@ describe('same-component doFetch() with caching (gh-151)', () => {
           status: 200,
           statusText: 'OK',
           data: {
-            books: [1, 42, 150]
-          }
+            books: [1, 42, 150],
+          },
         })
       );
     }, networkTimeout);

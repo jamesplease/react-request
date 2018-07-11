@@ -5,7 +5,7 @@ import {
   Fetch,
   clearRequestCache,
   getRequestKey,
-  clearResponseCache
+  clearResponseCache,
 } from '../src';
 import { successfulResponse, jsonResponse } from './responses';
 
@@ -19,7 +19,7 @@ fetchMock.get('/test/variable', () => {
   } else {
     return new Promise((resolve, reject) => {
       reject({
-        message: 'Network error'
+        message: 'Network error',
       });
     });
   }
@@ -61,7 +61,7 @@ describe('rendering', () => {
     );
     const requestKey = getRequestKey({
       url: '/test/hangs',
-      method: 'GET'
+      method: 'GET',
     });
     expect(mockRender).toHaveBeenCalledTimes(1);
     expect(mockRender).toBeCalledWith(
@@ -74,7 +74,7 @@ describe('rendering', () => {
         response: null,
         data: null,
         error: null,
-        doFetch: expect.any(Function)
+        doFetch: expect.any(Function),
       })
     );
     expect(fetchMock.calls('/test/hangs').length).toBe(0);
@@ -90,7 +90,7 @@ describe('init props', () => {
         method="head"
         body="cheese"
         headers={{
-          csrf: 'wat'
+          csrf: 'wat',
         }}
         credentials="include"
         mode="websocket"
@@ -112,7 +112,7 @@ describe('init props', () => {
         method: 'HEAD',
         body: 'cheese',
         headers: {
-          csrf: 'wat'
+          csrf: 'wat',
         },
         credentials: 'include',
         mode: 'websocket',
@@ -122,8 +122,8 @@ describe('init props', () => {
         referrerPolicy: 'unsafe-url',
         integrity: 'sha-over-9000',
         keepalive: false,
-        signal: signal
-      }
+        signal: signal,
+      },
     ]);
   });
 });
@@ -143,7 +143,7 @@ describe('successful requests', () => {
 
     const requestKey = getRequestKey({
       url: '/test/succeeds/first',
-      method: 'GET'
+      method: 'GET',
     });
 
     mount(
@@ -159,7 +159,7 @@ describe('successful requests', () => {
       expect(beforeFetchMock).toBeCalledWith(
         expect.objectContaining({
           url: '/test/succeeds/first',
-          requestKey
+          requestKey,
         })
       );
       expect(afterFetchMock).toHaveBeenCalledTimes(1);
@@ -170,79 +170,13 @@ describe('successful requests', () => {
           failed: false,
           didUnmount: false,
           data: {
-            books: [1, 42, 150]
-          }
+            books: [1, 42, 150],
+          },
         })
       );
       done();
     }, networkTimeout);
   });
-
-  test('`doFetch()` returns a promise that resolves with the same object as `afterFetch`', done => {
-    fetchMock.get(
-      '/test/succeeds/dofetch-promise',
-      new Promise(resolve => {
-        resolve(jsonResponse());
-      })
-    );
-
-    expect.assertions(2);
-    const afterFetchMock = jest.fn();
-    const childrenMock = jest.fn();
-
-    mount(
-      <Fetch
-        url="/test/succeeds/first"
-        afterFetch={afterFetchMock}
-        children={childrenMock}
-        lazy
-      />
-    );
-
-    const { doFetch } = childrenMock.mock.calls[0][0];
-    doFetch().then(afterFetchInfo => {
-      setTimeout(() => {
-        expect(afterFetchMock).toHaveBeenCalledTimes(1);
-        expect(afterFetchMock).toBeCalledWith(afterFetchInfo);
-        done();
-      });
-    });
-  })
-
-  test('`doFetch()` returned promise resolves even if there was an error', done => {
-    fetchMock.get(
-      "/test/fails/dofetch-promise",
-      new Promise((resolve, reject) => {
-        reject({
-          message: "Network error"
-        });
-      })
-    );
-
-    expect.assertions(1);
-    const childrenMock = jest.fn();
-
-    mount(
-      <Fetch
-        url="/test/fails/dofetch-promise"
-        children={childrenMock}
-      />
-    );
-
-    const { doFetch } = childrenMock.mock.calls[0][0];
-    doFetch().then(afterFetchInfo => {
-      expect(afterFetchInfo).toMatchObject({
-        url: "/test/fails/dofetch-promise",
-        error: {
-          message: "Network error"
-        },
-        failed: true,
-        didUnmount: false,
-        data: null
-      });
-      done();
-    });
-  })
 
   test('it accepts a custom `responseType`, and calls afterFetch with the right arguments', done => {
     fetchMock.get(
@@ -271,7 +205,7 @@ describe('successful requests', () => {
           error: null,
           failed: false,
           didUnmount: false,
-          data: 'hi'
+          data: 'hi',
         })
       );
       done();
@@ -305,7 +239,7 @@ describe('successful requests', () => {
           error: null,
           failed: false,
           didUnmount: false,
-          data: null
+          data: null,
         })
       );
       done();
@@ -339,7 +273,7 @@ describe('successful requests', () => {
           error: null,
           failed: false,
           didUnmount: false,
-          data: 'hi'
+          data: 'hi',
         })
       );
       done();
@@ -354,12 +288,11 @@ describe('successful requests', () => {
       })
     );
 
-    expect.assertions(3);
+    expect.assertions(2);
     const afterFetchMock = jest.fn();
-    const childrenMock = jest.fn();
     function transformData(data) {
       return {
-        sandwiches: data.books
+        sandwiches: data.books,
       };
     }
 
@@ -368,30 +301,21 @@ describe('successful requests', () => {
         url="/test/succeeds/third"
         afterFetch={afterFetchMock}
         transformData={transformData}
-        lazy
-        children={childrenMock}
       />
     );
-
-    const expectedAfterFetch = {
-      url: '/test/succeeds/third',
-      error: null,
-      failed: false,
-      didUnmount: false,
-      data: {
-        sandwiches: [1, 42, 150]
-      }
-    };
-
-    const { doFetch } = childrenMock.mock.calls[0][0];
-    doFetch().then(afterFetchInfo => {
-      expect(afterFetchInfo).toMatchObject(expectedAfterFetch);
-    });
 
     setTimeout(() => {
       expect(afterFetchMock).toHaveBeenCalledTimes(1);
       expect(afterFetchMock).toBeCalledWith(
-        expect.objectContaining(expectedAfterFetch)
+        expect.objectContaining({
+          url: '/test/succeeds/third',
+          error: null,
+          failed: false,
+          didUnmount: false,
+          data: {
+            sandwiches: [1, 42, 150],
+          },
+        })
       );
       done();
     }, networkTimeout);
@@ -428,7 +352,7 @@ describe('cache strategies', () => {
 
           expect(onResponseMock).toBeCalledWith(
             expect.objectContaining({
-              message: 'Response for "meepmeep" not found in cache.'
+              message: 'Response for "meepmeep" not found in cache.',
             }),
             null
           );
@@ -469,8 +393,8 @@ describe('cache strategies', () => {
             error: null,
             didUnmount: false,
             data: {
-              books: [1, 42, 150]
-            }
+              books: [1, 42, 150],
+            },
           })
         );
         expect(onResponseMock).toHaveBeenCalledTimes(1);
@@ -481,8 +405,8 @@ describe('cache strategies', () => {
             status: 200,
             statusText: 'OK',
             data: {
-              books: [1, 42, 150]
-            }
+              books: [1, 42, 150],
+            },
           })
         );
 
@@ -510,7 +434,7 @@ describe('cache strategies', () => {
           expect(onResponseMock2).toHaveBeenCalledTimes(1);
           expect(onResponseMock2).toBeCalledWith(
             expect.objectContaining({
-              message: 'Response for "meepmeep" not found in cache.'
+              message: 'Response for "meepmeep" not found in cache.',
             }),
             null
           );
@@ -550,8 +474,8 @@ describe('cache strategies', () => {
             failed: false,
             didUnmount: false,
             data: {
-              books: [1, 42, 150]
-            }
+              books: [1, 42, 150],
+            },
           })
         );
         expect(onResponseMock).toHaveBeenCalledTimes(1);
@@ -562,8 +486,8 @@ describe('cache strategies', () => {
             status: 200,
             statusText: 'OK',
             data: {
-              books: [1, 42, 150]
-            }
+              books: [1, 42, 150],
+            },
           })
         );
 
@@ -595,8 +519,8 @@ describe('cache strategies', () => {
               status: 200,
               statusText: 'OK',
               data: {
-                books: [1, 42, 150]
-              }
+                books: [1, 42, 150],
+              },
             })
           );
           done();
@@ -638,8 +562,8 @@ describe('cache strategies', () => {
             failed: false,
             didUnmount: false,
             data: {
-              books: [1, 42, 150]
-            }
+              books: [1, 42, 150],
+            },
           })
         );
         expect(onResponseMock).toHaveBeenCalledTimes(1);
@@ -650,8 +574,8 @@ describe('cache strategies', () => {
             status: 200,
             statusText: 'OK',
             data: {
-              books: [1, 42, 150]
-            }
+              books: [1, 42, 150],
+            },
           })
         );
 
@@ -686,8 +610,8 @@ describe('cache strategies', () => {
               status: 200,
               statusText: 'OK',
               data: {
-                books: [1, 42, 150]
-              }
+                books: [1, 42, 150],
+              },
             })
           );
           done();
@@ -724,7 +648,7 @@ describe('cache strategies', () => {
         expect(beforeFetchMock).toHaveBeenCalledTimes(1);
         expect(beforeFetchMock).toBeCalledWith(
           expect.objectContaining({
-            url: '/test/succeeds/cache-first'
+            url: '/test/succeeds/cache-first',
           })
         );
 
@@ -736,8 +660,8 @@ describe('cache strategies', () => {
             failed: false,
             didUnmount: false,
             data: {
-              books: [1, 42, 150]
-            }
+              books: [1, 42, 150],
+            },
           })
         );
         expect(onResponseMock).toHaveBeenCalledTimes(1);
@@ -748,8 +672,8 @@ describe('cache strategies', () => {
             status: 200,
             statusText: 'OK',
             data: {
-              books: [1, 42, 150]
-            }
+              books: [1, 42, 150],
+            },
           })
         );
 
@@ -778,8 +702,8 @@ describe('cache strategies', () => {
               status: 200,
               statusText: 'OK',
               data: {
-                books: [1, 42, 150]
-              }
+                books: [1, 42, 150],
+              },
             })
           );
           done();
@@ -816,7 +740,7 @@ describe('cache strategies', () => {
         expect(beforeFetchMock).toHaveBeenCalledTimes(1);
         expect(beforeFetchMock).toBeCalledWith(
           expect.objectContaining({
-            url: '/test/succeeds/network-only'
+            url: '/test/succeeds/network-only',
           })
         );
         expect(afterFetchMock).toHaveBeenCalledTimes(1);
@@ -827,8 +751,8 @@ describe('cache strategies', () => {
             failed: false,
             didUnmount: false,
             data: {
-              books: [1, 42, 150]
-            }
+              books: [1, 42, 150],
+            },
           })
         );
         expect(onResponseMock).toHaveBeenCalledTimes(1);
@@ -839,8 +763,8 @@ describe('cache strategies', () => {
             status: 200,
             statusText: 'OK',
             data: {
-              books: [1, 42, 150]
-            }
+              books: [1, 42, 150],
+            },
           })
         );
 
@@ -863,7 +787,7 @@ describe('cache strategies', () => {
           expect(beforeFetchMock2).toHaveBeenCalledTimes(1);
           expect(beforeFetchMock2).toBeCalledWith(
             expect.objectContaining({
-              url: '/test/succeeds/network-only'
+              url: '/test/succeeds/network-only',
             })
           );
           expect(afterFetchMock2).toHaveBeenCalledTimes(1);
@@ -874,8 +798,8 @@ describe('cache strategies', () => {
               failed: false,
               didUnmount: false,
               data: {
-                books: [1, 42, 150]
-              }
+                books: [1, 42, 150],
+              },
             })
           );
           expect(onResponseMock2).toHaveBeenCalledTimes(1);
@@ -886,8 +810,8 @@ describe('cache strategies', () => {
               status: 200,
               statusText: 'OK',
               data: {
-                books: [1, 42, 150]
-              }
+                books: [1, 42, 150],
+              },
             })
           );
           done();
@@ -918,7 +842,7 @@ describe('cache strategies', () => {
         expect(beforeFetchMock).toHaveBeenCalledTimes(1);
         expect(beforeFetchMock).toBeCalledWith(
           expect.objectContaining({
-            url: '/test/succeeds'
+            url: '/test/succeeds',
           })
         );
         expect(afterFetchMock).toHaveBeenCalledTimes(1);
@@ -929,8 +853,8 @@ describe('cache strategies', () => {
             failed: false,
             didUnmount: false,
             data: {
-              books: [1, 42, 150]
-            }
+              books: [1, 42, 150],
+            },
           })
         );
         expect(onResponseMock).toHaveBeenCalledTimes(1);
@@ -941,8 +865,8 @@ describe('cache strategies', () => {
             status: 200,
             statusText: 'OK',
             data: {
-              books: [1, 42, 150]
-            }
+              books: [1, 42, 150],
+            },
           })
         );
 
@@ -965,7 +889,7 @@ describe('cache strategies', () => {
           expect(beforeFetchMock2).toHaveBeenCalledTimes(1);
           expect(beforeFetchMock2).toBeCalledWith(
             expect.objectContaining({
-              url: '/test/succeeds'
+              url: '/test/succeeds',
             })
           );
           expect(afterFetchMock2).toHaveBeenCalledTimes(1);
@@ -976,8 +900,8 @@ describe('cache strategies', () => {
               failed: false,
               didUnmount: false,
               data: {
-                books: [1, 42, 150]
-              }
+                books: [1, 42, 150],
+              },
             })
           );
           // Two calls: the first is for the cache, and the second is
@@ -1008,7 +932,7 @@ describe('cache strategies', () => {
         expect(beforeFetchMock).toHaveBeenCalledTimes(1);
         expect(beforeFetchMock).toBeCalledWith(
           expect.objectContaining({
-            url: '/test/variable'
+            url: '/test/variable',
           })
         );
         expect(afterFetchMock).toHaveBeenCalledTimes(1);
@@ -1019,8 +943,8 @@ describe('cache strategies', () => {
             failed: false,
             didUnmount: false,
             data: {
-              books: [1, 42, 150]
-            }
+              books: [1, 42, 150],
+            },
           })
         );
         expect(onResponseMock).toHaveBeenCalledTimes(1);
@@ -1031,8 +955,8 @@ describe('cache strategies', () => {
             status: 200,
             statusText: 'OK',
             data: {
-              books: [1, 42, 150]
-            }
+              books: [1, 42, 150],
+            },
           })
         );
 
@@ -1057,7 +981,7 @@ describe('cache strategies', () => {
           expect(beforeFetchMock2).toHaveBeenCalledTimes(1);
           expect(beforeFetchMock2).toBeCalledWith(
             expect.objectContaining({
-              url: '/test/variable'
+              url: '/test/variable',
             })
           );
           expect(afterFetchMock2).toHaveBeenCalledTimes(1);
@@ -1067,8 +991,8 @@ describe('cache strategies', () => {
               didUnmount: false,
               failed: true,
               data: {
-                books: [1, 42, 150]
-              }
+                books: [1, 42, 150],
+              },
             })
           );
           expect(afterFetchMock2.mock.calls[0][0]).toHaveProperty(
@@ -1091,7 +1015,7 @@ describe('unsuccessful requests', () => {
       '/test/fails',
       new Promise((resolve, reject) => {
         reject({
-          message: 'Network error'
+          message: 'Network error',
         });
       })
     );
@@ -1108,7 +1032,7 @@ describe('unsuccessful requests', () => {
         expect.objectContaining({
           url: '/test/fails',
           failed: true,
-          didUnmount: false
+          didUnmount: false,
         })
       );
       expect(afterFetchMock.mock.calls[0][0]).toHaveProperty(
@@ -1221,7 +1145,7 @@ describe('request deduplication', () => {
       '/test/fails/dedupe-false',
       new Promise((resolve, reject) => {
         reject({
-          message: 'Network error'
+          message: 'Network error',
         });
       })
     );
@@ -1247,7 +1171,7 @@ describe('request deduplication', () => {
         expect.objectContaining({
           url: '/test/fails/dedupe-false',
           didUnmount: false,
-          failed: true
+          failed: true,
         })
       );
       expect(afterFetchMock.mock.calls[0][0]).toHaveProperty(
@@ -1311,7 +1235,7 @@ describe('request cancellation', () => {
     );
 
     wrapper.setProps({
-      url: '/test/hangs/double-request'
+      url: '/test/hangs/double-request',
     });
 
     expect(afterFetchMock).toHaveBeenCalledTimes(1);
@@ -1346,7 +1270,7 @@ describe('request cancellation', () => {
     expect(afterFetchMock).toBeCalledWith(
       expect.objectContaining({
         url: '/test/hangs',
-        didUnmount: true
+        didUnmount: true,
       })
     );
   });
@@ -1504,7 +1428,7 @@ describe('laziness', () => {
     );
 
     wrapper.setProps({
-      url: '/test/hangs/double-request2'
+      url: '/test/hangs/double-request2',
     });
 
     expect(fetchMock.calls('/test/hangs').length).toBe(0);

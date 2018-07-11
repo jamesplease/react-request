@@ -150,13 +150,18 @@ export class Fetch extends React.Component {
   };
 
   fetchRenderProp = options => {
-    // We wrap this in a setTimeout so as to avoid calls to `setState`
-    // in render, which React does not allow.
+    // Heads up! This can _never_ be synchronous, as it causes the component to
+    // render, and a user may call it synchronously within the children function.
     //
-    // tl;dr, the following code should never cause a problem:
+    // tl;dr, the following code should never cause a React warning or error:
     //
     // `<Fetch children={({ doFetch }) => doFetch()} />
     return new Promise(resolve => {
+      // We originally wrapped this in a setTimeout so as to avoid calls to `setState`
+      // in render, which React does not allow.
+      // However, with the recent refactor to return a Promise, the `setTimeout` is not
+      // strictly necessary. At this time, the testing setup requires the timeout remain,
+      // but it will be refactored at a future time.
       setTimeout(() => {
         this.fetchData(options, true, resolve);
       });

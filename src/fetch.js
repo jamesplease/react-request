@@ -37,7 +37,7 @@ export class Fetch extends React.Component {
           data,
           requestKey,
           error,
-          doFetch: this.fetchRenderProp
+          doFetch: this.fetchRenderProp,
         }) || null
       );
     }
@@ -51,14 +51,14 @@ export class Fetch extends React.Component {
         props.requestKey ||
         getRequestKey({
           ...props,
-          method: props.method.toUpperCase()
+          method: props.method.toUpperCase(),
         }),
       requestName: props.requestName,
       fetching: false,
       response: null,
       data: null,
       error: null,
-      url: props.url
+      url: props.url,
     };
   }
 
@@ -112,18 +112,18 @@ export class Fetch extends React.Component {
       this.props.requestKey ||
       getRequestKey({
         ...this.props,
-        method: this.props.method.toUpperCase()
+        method: this.props.method.toUpperCase(),
       });
     const prevRequestKey =
       prevProps.requestKey ||
       getRequestKey({
         ...prevProps,
-        method: prevProps.method.toUpperCase()
+        method: prevProps.method.toUpperCase(),
       });
 
     if (currentRequestKey !== prevRequestKey && !this.isLazy()) {
       this.fetchData({
-        requestKey: currentRequestKey
+        requestKey: currentRequestKey,
       });
     }
   }
@@ -144,7 +144,7 @@ export class Fetch extends React.Component {
       this.onResponseReceived({
         ...this.responseReceivedInfo,
         error: abortError,
-        hittingNetwork: true
+        hittingNetwork: true,
       });
     }
   };
@@ -160,7 +160,7 @@ export class Fetch extends React.Component {
       setTimeout(() => {
         this.fetchData(options, true, resolve);
       });
-    })
+    });
   };
 
   // When a subsequent request is made, it is important that the correct
@@ -183,7 +183,7 @@ export class Fetch extends React.Component {
       return getRequestKey({
         url,
         body,
-        method: method.toUpperCase()
+        method: method.toUpperCase(),
       });
     }
 
@@ -199,7 +199,7 @@ export class Fetch extends React.Component {
       return getRequestKey({
         url,
         body,
-        method: method.toUpperCase()
+        method: method.toUpperCase(),
       });
     }
   };
@@ -228,7 +228,7 @@ export class Fetch extends React.Component {
       referrerPolicy,
       integrity,
       keepalive,
-      signal
+      signal,
     } = requestOptions;
 
     const uppercaseMethod = method.toUpperCase();
@@ -246,14 +246,14 @@ export class Fetch extends React.Component {
       referrerPolicy,
       integrity,
       keepalive,
-      signal
+      signal,
     };
 
     const responseReceivedInfo = {
       url,
       init,
       requestKey,
-      responseType
+      responseType,
     };
 
     // This is necessary because `options` may have overridden the props.
@@ -274,7 +274,7 @@ export class Fetch extends React.Component {
           ...responseReceivedInfo,
           response: cachedResponse,
           hittingNetwork: false,
-          stillFetching: fetchPolicy === 'cache-and-network'
+          stillFetching: fetchPolicy === 'cache-and-network',
         });
 
         if (fetchPolicy === 'cache-first' || fetchPolicy === 'cache-only') {
@@ -287,7 +287,7 @@ export class Fetch extends React.Component {
         this.onResponseReceived({
           ...responseReceivedInfo,
           error: cacheError,
-          hittingNetwork: false
+          hittingNetwork: false,
         });
         return Promise.resolve(cacheError);
       }
@@ -298,7 +298,7 @@ export class Fetch extends React.Component {
       url,
       error: null,
       failed: false,
-      fetching: true
+      fetching: true,
     });
     const hittingNetwork = !isRequestInFlight(requestKey) || !dedupe;
 
@@ -306,7 +306,7 @@ export class Fetch extends React.Component {
       beforeFetch({
         url,
         init,
-        requestKey
+        requestKey,
       });
     }
     return fetchDedupe(url, init, { requestKey, responseType, dedupe }).then(
@@ -316,29 +316,25 @@ export class Fetch extends React.Component {
         }
 
         if (!this.hasHandledNetworkResponse) {
-          this.onResponseReceived(
-            {
-              ...responseReceivedInfo,
-              response: res,
-              hittingNetwork
-            },
-            resolve
-          );
+          this.onResponseReceived({
+            ...responseReceivedInfo,
+            response: res,
+            hittingNetwork,
+            resolve,
+          });
         }
 
         return res;
       },
       error => {
         if (!this.hasHandledNetworkResponse) {
-          this.onResponseReceived(
-            {
-              ...responseReceivedInfo,
-              error,
-              cachedResponse,
-              hittingNetwork
-            },
-            resolve
-          );
+          this.onResponseReceived({
+            ...responseReceivedInfo,
+            error,
+            cachedResponse,
+            hittingNetwork,
+            resolve,
+          });
         }
 
         return error;
@@ -346,7 +342,7 @@ export class Fetch extends React.Component {
     );
   };
 
-  onResponseReceived = (info, resolve) => {
+  onResponseReceived = info => {
     const {
       error = null,
       response = null,
@@ -355,7 +351,8 @@ export class Fetch extends React.Component {
       init,
       requestKey,
       cachedResponse,
-      stillFetching = false
+      stillFetching = false,
+      resolve,
     } = info;
 
     this.responseReceivedInfo = null;
@@ -393,7 +390,7 @@ export class Fetch extends React.Component {
       failed: Boolean(error || (response && !response.ok)),
       response,
       data,
-      didUnmount: Boolean(this.willUnmount)
+      didUnmount: Boolean(this.willUnmount),
     };
 
     if (typeof resolve === 'function') {
@@ -415,7 +412,7 @@ export class Fetch extends React.Component {
         error,
         response,
         fetching: stillFetching,
-        requestKey
+        requestKey,
       },
       () => this.props.onResponse(error, response)
     );
@@ -432,14 +429,14 @@ Fetch.propTypes = {
     'cache-first',
     'cache-and-network',
     'network-only',
-    'cache-only'
+    'cache-only',
   ]),
   onResponse: PropTypes.func,
   beforeFetch: PropTypes.func,
   afterFetch: PropTypes.func,
   responseType: PropTypes.oneOfType([
     PropTypes.func,
-    PropTypes.oneOf(['json', 'text', 'blob', 'arrayBuffer', 'formData'])
+    PropTypes.oneOf(['json', 'text', 'blob', 'arrayBuffer', 'formData']),
   ]),
   transformData: PropTypes.func,
   lazy: PropTypes.bool,
@@ -464,14 +461,14 @@ Fetch.propTypes = {
     'PATCH',
     'DELETE',
     'OPTIONS',
-    'HEAD'
+    'HEAD',
   ]),
   mode: PropTypes.oneOf([
     'same-origin',
     'cors',
     'no-cors',
     'navigate',
-    'websocket'
+    'websocket',
   ]),
   cache: PropTypes.oneOf([
     'default',
@@ -479,7 +476,7 @@ Fetch.propTypes = {
     'reload',
     'no-cache',
     'force-cache',
-    'only-if-cached'
+    'only-if-cached',
   ]),
   redirect: PropTypes.oneOf(['manual', 'follow', 'error']),
   referrer: PropTypes.string,
@@ -489,11 +486,11 @@ Fetch.propTypes = {
     'origin',
     'origin-when-cross-origin',
     'unsafe-url',
-    ''
+    '',
   ]),
   integrity: PropTypes.string,
   keepalive: PropTypes.bool,
-  signal: PropTypes.instanceOf(AbortSignalCtr)
+  signal: PropTypes.instanceOf(AbortSignalCtr),
 };
 
 Fetch.defaultProps = {
@@ -507,5 +504,5 @@ Fetch.defaultProps = {
   method: 'get',
   referrerPolicy: '',
   integrity: '',
-  referrer: 'about:client'
+  referrer: 'about:client',
 };

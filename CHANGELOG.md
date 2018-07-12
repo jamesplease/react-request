@@ -1,5 +1,11 @@
 # Changelog
 
+### v3.1.1 (2018/7/10)
+
+**Bug Fixes**
+
+- A race condition has been fixed.
+
 ### v3.1.0 (2018/7/10)
 
 **New Features**

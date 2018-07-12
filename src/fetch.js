@@ -136,7 +136,7 @@ export class Fetch extends React.Component {
   // When a request is already in flight, and a new one is
   // configured, then we need to "cancel" the previous one.
   cancelExistingRequest = reason => {
-    if (this.state.fetching && !this.hasHandledNetworkResponse) {
+    if (this.state.fetching && this._currentRequestKey !== null) {
       const abortError = new Error(reason);
       // This is an effort to mimic the error that is created when a
       // fetch is actually aborted using the AbortController API.
@@ -214,6 +214,8 @@ export class Fetch extends React.Component {
     const requestKey = this.getRequestKey(options);
     const requestOptions = Object.assign({}, this.props, options);
 
+    this._currentRequestKey = requestKey;
+
     const {
       url,
       body,
@@ -260,8 +262,6 @@ export class Fetch extends React.Component {
     // If the request config changes, we need to be able to accurately
     // cancel the in-flight request.
     this.responseReceivedInfo = responseReceivedInfo;
-
-    this.hasHandledNetworkResponse = false;
 
     const fetchPolicy = this.getFetchPolicy();
 
@@ -315,7 +315,7 @@ export class Fetch extends React.Component {
           responseCache[requestKey] = res;
         }
 
-        if (!this.hasHandledNetworkResponse) {
+        if (this._currentRequestKey === requestKey) {
           this.onResponseReceived({
             ...responseReceivedInfo,
             response: res,
@@ -327,7 +327,7 @@ export class Fetch extends React.Component {
         return res;
       },
       error => {
-        if (!this.hasHandledNetworkResponse) {
+        if (this._currentRequestKey === requestKey) {
           this.onResponseReceived({
             ...responseReceivedInfo,
             error,
@@ -358,7 +358,7 @@ export class Fetch extends React.Component {
     this.responseReceivedInfo = null;
 
     if (!stillFetching) {
-      this.hasHandledNetworkResponse = true;
+      this._currentRequestKey = null;
     }
 
     let data;

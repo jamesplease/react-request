@@ -12,7 +12,7 @@ class App extends Component {
           <Fetch
             url="https://jsonplaceholder.typicode.com/posts/1"
             method="delete"
-          />
+          />,
         ]}>
         {([readPostOne, readPostTwo, deletePostOne]) => (
           <div>

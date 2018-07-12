@@ -3,7 +3,10 @@ import fetchMock from 'fetch-mock';
 import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import {
-  successfulResponse, jsonResponse, jsonResponse2, jsonResponse3
+  successfulResponse,
+  jsonResponse,
+  jsonResponse2,
+  jsonResponse3,
 } from './responses';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -12,9 +15,9 @@ Enzyme.configure({ adapter: new Adapter() });
 // an error.
 global.AbortSignal = function() {};
 
-var hangingPromise = global.hangingPromise = function() {
+var hangingPromise = (global.hangingPromise = function() {
   return new Promise(() => {});
-}
+});
 
 fetchMock.get('/test/hangs', hangingPromise());
 fetchMock.get('/test/hangs/1', hangingPromise());

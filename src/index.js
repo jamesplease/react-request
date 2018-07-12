@@ -3,7 +3,7 @@ import {
   fetchDedupe,
   getRequestKey,
   clearRequestCache,
-  isRequestInFlight
+  isRequestInFlight,
 } from 'fetch-dedupe';
 
 export {
@@ -12,5 +12,5 @@ export {
   getRequestKey,
   isRequestInFlight,
   clearRequestCache,
-  clearResponseCache
+  clearResponseCache,
 };

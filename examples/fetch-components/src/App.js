@@ -12,7 +12,7 @@ class App extends Component {
         components={[
           <ReadPost postId="1" />,
           <UpdatePost postId="1" />,
-          <DeletePost postId="1" />
+          <DeletePost postId="1" />,
         ]}>
         {([readPost, updatePost, deletePost]) => (
           <div>
@@ -30,8 +30,8 @@ class App extends Component {
                 onClick={() =>
                   updatePost.doFetch({
                     body: JSON.stringify({
-                      title: 'hello'
-                    })
+                      title: 'hello',
+                    }),
                   })
                 }
                 disabled={

@@ -46,11 +46,11 @@ describe('same-component subsequent requests with caching (gh-151)', () => {
                   requestKey: '1',
                   fetching: false,
                   data: {
-                    books: [1, 42, 150]
+                    books: [1, 42, 150],
                   },
                   error: null,
                   failed: false,
-                  url: '/test/succeeds/json-one'
+                  url: '/test/succeeds/json-one',
                 })
               );
             } else if (renderCount === 2) {
@@ -59,11 +59,11 @@ describe('same-component subsequent requests with caching (gh-151)', () => {
                   requestKey: '2',
                   fetching: true,
                   data: {
-                    books: [1, 42, 150]
+                    books: [1, 42, 150],
                   },
                   error: null,
                   failed: false,
-                  url: '/test/succeeds/json-two'
+                  url: '/test/succeeds/json-two',
                 })
               );
             } else if (renderCount === 3) {
@@ -72,11 +72,11 @@ describe('same-component subsequent requests with caching (gh-151)', () => {
                   requestKey: '2',
                   fetching: false,
                   data: {
-                    authors: [22, 13]
+                    authors: [22, 13],
                   },
                   error: null,
                   failed: false,
-                  url: '/test/succeeds/json-two'
+                  url: '/test/succeeds/json-two',
                 })
               );
             } else if (renderCount > 3) {
@@ -100,8 +100,8 @@ describe('same-component subsequent requests with caching (gh-151)', () => {
           failed: false,
           didUnmount: false,
           data: {
-            books: [1, 42, 150]
-          }
+            books: [1, 42, 150],
+          },
         })
       );
       expect(onResponseMock).toHaveBeenCalledTimes(1);
@@ -112,15 +112,15 @@ describe('same-component subsequent requests with caching (gh-151)', () => {
           status: 200,
           statusText: 'OK',
           data: {
-            books: [1, 42, 150]
-          }
+            books: [1, 42, 150],
+          },
         })
       );
 
       run = 2;
       wrapper.setProps({
         url: '/test/succeeds/json-two',
-        requestKey: '2'
+        requestKey: '2',
       });
 
       // We do a network timeout here to ensure that the `expect` within
@@ -146,108 +146,119 @@ describe('same-component subsequent requests with caching (gh-151)', () => {
         beforeFetch={beforeFetchMock}
         afterFetch={afterFetchMock}
         onResponse={onResponseMock}>
-        {(options) => {
+        {options => {
           renderCount++;
           if (run === 1) {
             if (renderCount === 1) {
-              expect(options).toEqual(expect.objectContaining({
-                fetching: false,
-                data: null,
-                error: null,
-                failed: false,
-                response: null,
-                requestName: 'anonymousRequest',
-                url: '/test/succeeds/json-one'
-              }));
+              expect(options).toEqual(
+                expect.objectContaining({
+                  fetching: false,
+                  data: null,
+                  error: null,
+                  failed: false,
+                  response: null,
+                  requestName: 'anonymousRequest',
+                  url: '/test/succeeds/json-one',
+                })
+              );
             } else if (renderCount === 2) {
-              expect(options).toEqual(expect.objectContaining({
-                fetching: true,
-                data: null,
-                error: null,
-                failed: false,
-                response: null,
-                requestName: 'anonymousRequest',
-                url: '/test/succeeds/json-one'
-              }));
+              expect(options).toEqual(
+                expect.objectContaining({
+                  fetching: true,
+                  data: null,
+                  error: null,
+                  failed: false,
+                  response: null,
+                  requestName: 'anonymousRequest',
+                  url: '/test/succeeds/json-one',
+                })
+              );
             } else if (renderCount === 3) {
-              expect(options).toEqual(expect.objectContaining({
-                fetching: false,
-                data: {
-                  books: [1, 42, 150]
-                },
-                error: null,
-                failed: false,
-                requestName: 'anonymousRequest',
-                url: '/test/succeeds/json-one'
-              }));
+              expect(options).toEqual(
+                expect.objectContaining({
+                  fetching: false,
+                  data: {
+                    books: [1, 42, 150],
+                  },
+                  error: null,
+                  failed: false,
+                  requestName: 'anonymousRequest',
+                  url: '/test/succeeds/json-one',
+                })
+              );
             } else if (renderCount > 3) {
               done.fail();
             }
-          }
-          
-          else if (run === 2) {
+          } else if (run === 2) {
             if (renderCount === 1) {
-              expect(options).toEqual(expect.objectContaining({
-                fetching: false,
-                data: {
-                  books: [1, 42, 150]
-                },
-                error: null,
-                failed: false,
-                requestName: 'anonymousRequest',
-                url: '/test/succeeds/json-one'
-              }));
+              expect(options).toEqual(
+                expect.objectContaining({
+                  fetching: false,
+                  data: {
+                    books: [1, 42, 150],
+                  },
+                  error: null,
+                  failed: false,
+                  requestName: 'anonymousRequest',
+                  url: '/test/succeeds/json-one',
+                })
+              );
             } else if (renderCount === 2) {
-              expect(options).toEqual(expect.objectContaining({
-                fetching: true,
-                data: {
-                  books: [1, 42, 150]
-                },
-                error: null,
-                failed: false,
-                requestName: 'anonymousRequest',
-                url: '/test/succeeds/json-two'
-              }));
+              expect(options).toEqual(
+                expect.objectContaining({
+                  fetching: true,
+                  data: {
+                    books: [1, 42, 150],
+                  },
+                  error: null,
+                  failed: false,
+                  requestName: 'anonymousRequest',
+                  url: '/test/succeeds/json-two',
+                })
+              );
             } else if (renderCount === 3) {
-              expect(options).toEqual(expect.objectContaining({
-                fetching: false,
-                data: {
-                  authors: [22, 13]
-                },
-                error: null,
-                failed: false,
-                requestName: 'anonymousRequest',
-                url: '/test/succeeds/json-two'
-              }));
+              expect(options).toEqual(
+                expect.objectContaining({
+                  fetching: false,
+                  data: {
+                    authors: [22, 13],
+                  },
+                  error: null,
+                  failed: false,
+                  requestName: 'anonymousRequest',
+                  url: '/test/succeeds/json-two',
+                })
+              );
             } else if (renderCount > 3) {
               done.fail();
             }
-          }
-
-          else if (run === 3) {
+          } else if (run === 3) {
             if (renderCount === 1) {
-              expect(options).toEqual(expect.objectContaining({
-                fetching: false,
-                data: {
-                  authors: [22, 13]
-                },
-                error: null,
-                failed: false,
-                requestName: 'anonymousRequest',
-                url: '/test/succeeds/json-two'
-              }));
-            }
-            else if (renderCount === 2) {
-              expect(options).toEqual(expect.objectContaining({
-                fetching: false,
-                data: {
-                  books: [1, 42, 150]
-                },
-                error: null,
-                failed: false,
-                requestName: 'anonymousRequest',
-                url: '/test/succeeds/json-one'
-              }));
+              expect(options).toEqual(
+                expect.objectContaining({
+                  fetching: false,
+                  data: {
+                    authors: [22, 13],
+                  },
+                  error: null,
+                  failed: false,
+                  requestName: 'anonymousRequest',
+                  url: '/test/succeeds/json-two',
+                })
+              );
+            } else if (renderCount === 2) {
+              expect(options).toEqual(
+                expect.objectContaining({
+                  fetching: false,
+                  data: {
+                    books: [1, 42, 150],
+                  },
+                  error: null,
+                  failed: false,
+                  requestName: 'anonymousRequest',
+                  url: '/test/succeeds/json-one',
+                })
+              );
             } else if (renderCount > 2) {
               done.fail();
             }
@@ -269,8 +280,8 @@ describe('same-component subsequent requests with caching (gh-151)', () => {
           failed: false,
           didUnmount: false,
           data: {
-            books: [1, 42, 150]
-          }
+            books: [1, 42, 150],
+          },
         })
       );
       expect(onResponseMock).toHaveBeenCalledTimes(1);
@@ -281,22 +292,22 @@ describe('same-component subsequent requests with caching (gh-151)', () => {
           status: 200,
           statusText: 'OK',
           data: {
-            books: [1, 42, 150]
-          }
+            books: [1, 42, 150],
+          },
         })
       );
 
       run = 2;
       renderCount = 0;
       wrapper.setProps({
-        url: '/test/succeeds/json-two'
+        url: '/test/succeeds/json-two',
       });
 
       setTimeout(() => {
         run = 3;
         renderCount = 0;
         wrapper.setProps({
-          url: '/test/succeeds/json-one'
+          url: '/test/succeeds/json-one',
         });
 
         setTimeout(() => {

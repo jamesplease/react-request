@@ -34,13 +34,13 @@ class App extends Component {
   }
 
   state = {
-    fetchAgain: false
+    fetchAgain: false,
   };
 
   componentDidMount() {
     setTimeout(() => {
       this.setState({
-        fetchAgain: true
+        fetchAgain: true,
       });
     }, 2000);
   }

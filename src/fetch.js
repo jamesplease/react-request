@@ -214,6 +214,8 @@ export class Fetch extends React.Component {
     const requestKey = this.getRequestKey(options);
     const requestOptions = Object.assign({}, this.props, options);
 
+    this._currentRequestKey = requestKey;
+
     const {
       url,
       body,
@@ -315,7 +317,10 @@ export class Fetch extends React.Component {
           responseCache[requestKey] = res;
         }
 
-        if (!this.hasHandledNetworkResponse) {
+        if (
+          !this.hasHandledNetworkResponse &&
+          this._currentRequestKey === requestKey
+        ) {
           this.onResponseReceived({
             ...responseReceivedInfo,
             response: res,
@@ -359,6 +364,7 @@ export class Fetch extends React.Component {
 
     if (!stillFetching) {
       this.hasHandledNetworkResponse = true;
+      this._currentRequestKey = null;
     }
 
     let data;

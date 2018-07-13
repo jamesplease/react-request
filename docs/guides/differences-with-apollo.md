@@ -17,21 +17,16 @@ The reason for these omissions is that we believe that you can implement this fe
 application, or in a wrapping component, without too much extra work. If you disagree, open an issue –
 we may very well be wrong!
 
-### Higher-order Component vs Render Props
+### One component
 
-This library uses a render prop rather than a higher-order component (HoC). As of January 2018,
-React Apollo does not implement render prop components, although they are on that project's roadmap
-for a future release.
+React Apollo provides two components, one for Queries and the other for Mutations. React Request provides
+just the one. When working with HTTP without the GraphQL, it doesn't make as much sense to split out reads
+and writes from one another.
 
-Render prop components are more powerful than HoCs, so we currently do not intend to release
-an HoC. But you can build your own if you really want one!
+### Requesting on mount
 
-### No queries or mutations
-
-With GraphQL, whether a request is a query or a mutation determines whether the request is made
-when the component mounts. React Request looks at the HTTP method instead to determine if the
-request is likely a read request or a write request. This determines the value of the `lazy`
-prop, which is what determines whether the request is made on mount or not.
+With Apollo, whether or not the request is made when the component mounts depends on if it is a mutation or
+a query. React Request looks at the HTTP method instead to determine if the request is _likely_ a read request or a write request.
 
 ### No Data Normalization
 

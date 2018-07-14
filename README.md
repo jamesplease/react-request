@@ -49,6 +49,9 @@ yarn add react-request
 - [Getting Started](#getting-started)
 - [API](#api)
   - [\<Fetch/\>](#fetch-)
+    - [props](#props)
+    - [Arguments passed to the render prop](#children)
+    - [Using `doFetch`](#using-dofetch)
   - [fetchDedupe()](#fetchdedupe-input--init--dedupeoptions-)
   - [getRequestKey()](#getrequestkey-url-method-body-responsetype-)
   - [isRequestInFlight()](#isrequestinflight-requestkey-)
@@ -152,28 +155,51 @@ to learn more.
 
 #### `<Fetch />`
 
-A component for making a single HTTP request. It accepts every value of `init` and `input`
+A component for making a single HTTP request. This is the export from this library that you will use
+most frequently.
+
+```jsx
+import { Fetch } from 'react-request';
+```
+
+##### Props
+
+The `<Fetch/>` components accepts every value of `init` and `input`
 from the
 [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch)
 API as a prop, in addition to a few other things.
 
-The props that come from the `fetch()` method are:
+The complete list of props is:
 
-- `url`
-- `method`: defaults to `"GET"`
-- `body`
-- `credentials`
-- `headers`
-- `mode`
-- `cache`
-- `redirect`
-- `referrer`: defaults to `"about:client"`
-- `referrerPolicy`: defaults to `""`
-- `integrity`: defaults to `""`
-- `keepalive`
-- `signal`
+| Prop                            | Default value    | Description                                                                                                                                                                                                                                |
+| ------------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| url                             |                  | From [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch). The URL to send the request to                                                                                                         |
+| method                          | `'GET'`          | From [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch). The HTTP method to use                                                                                                                 |
+| body                            |                  | From [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch). The request body to send along with the request                                                                                        |
+| credentials                     |                  | From [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch). The request credentials you want to use for the request: `omit`, `same-origin`, or `include.`                                          |
+| headers                         |                  | From [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch). Headers to send along with the request                                                                                                 |
+| [children](#children)           |                  | A function that is called with a single argument containing information about the request. Learn more.                                                                                                                                     |
+| [lazy](#lazy)                   | _Varies_         | Whether or not the request is made when the component mounts.                                                                                                                                                                              |
+| [beforeFetch](#beforefetch)     |                  | A function called before a network request is made.                                                                                                                                                                                        |
+| [afterFetch](#afterfetch)       |                  | A function that is only called after a network request is made.                                                                                                                                                                            |
+| [onResponse](#onresponse)       |                  | A function called anytime a response is received, whether from the network or cache.                                                                                                                                                       |
+| [transformData](#transformdata) |                  | A function that is called with the body of the response, allowing you to transform it.                                                                                                                                                     |
+| [responseType](#responsetype)   | `'json'`         | Whether or not the request is made when the component mounts.                                                                                                                                                                              |
+| [requestName](#requestname)     |                  | A name to give this request, which can be useful for debugging.                                                                                                                                                                            |
+| [fetchPolicy](#fetchpolicy)     |                  | The cache strategy to use.                                                                                                                                                                                                                 |
+| [cacheResponse](#cacheresponse) | _Varies_         | Whether or not to cache the response for this request.                                                                                                                                                                                     |
+| [dedupe](#dedupe)               | `true`           | Whether or not to dedupe this request.                                                                                                                                                                                                     |
+| [requestKey](#requestkey)       | _Generated_      | A key that is used for deduplication and response caching.                                                                                                                                                                                 |
+| mode                            |                  | From [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch). The mode you want to use for the request                                                                                               |
+| cache                           |                  | From [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch). The browser's cache mode you want to use for the request                                                                               |
+| redirect                        |                  | From [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch). The redirect mode to use                                                                                                               |
+| referrer                        | `'about:client'` | From [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch). The referrer to use for the request                                                                                                    |
+| referrerPolicy                  | `''`             | From [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch). Specifies the value of the referer HTTP header.                                                                                        |
+| integrity                       | `''`             | From [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch). Contains the [subresource integrity](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity) value of the request |
+| keepalive                       |                  | From [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch). Can be used to allow the request to outlive the page                                                                                   |
+| signal                          |                  | From [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch). An AbortSignal object instance                                                                                                         |
 
-To learn more about the valid options for these props, refer to the
+To learn more about the valid options for the props that come from `fetch`, refer to the
 [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch)
 documentation.
 
@@ -201,21 +227,19 @@ In addition to the `fetch()` props, there are a number of other useful props.
 The [render prop](https://cdb.reacttraining.com/use-a-render-prop-50de598f11ce) of this component.
 It is called with one argument, `result`, an object with the following keys:
 
-- `fetching`: A Boolean representing whether or not a request is currently in flight for this component
-- `failed`: A Boolean representing whether or not the request failed for any reason. This includes network
-  errors and status codes that are greater than or equal to`400`.
-- `error`: An error object representing a network error occurred. Note that HTTP "error" status codes do not
-  cause errors; only failed or aborted network requests do. For more, see the
-  ["Using Fetch" MDN guide](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Checking_that_the_fetch_was_successful).
-- `response`: An instance of [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response). The
-  [`body`](https://developer.mozilla.org/en-US/docs/Web/API/Body) will already be read, and made
-  available to you as `response.data`.
-- `data`: The data returned in `response`. This will be different from `response.data` if a
-  `transformData` prop was passed to `<Fetch/>`.
-- `doFetch`: A function that makes the HTTP request. See notes below.
-- `url`: The URL that was passed into `<Fetch />`.
-- `requestName`: The name of the request (see `requestName` below)
-- `requestKey`: The computed [request key](./docs/guides/request-keys.md)
+| Key         | Type     | Description                                                                                                                                                                                                                                                                                                             |
+| ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| fetching    | Boolean  | A Boolean representing whether or not a request is currently in flight for this component                                                                                                                                                                                                                               |
+| failed      | Boolean  | A Boolean representing whether or not the request failed for any reason. This includes network errors and status codes that are greater than or equal to`400`.                                                                                                                                                          |
+| error       | Object   | An error object representing a network error occurred. Note that HTTP "error" status codes do not cause errors; only failed or aborted network requests do. For more, see the ["Using Fetch" MDN guide](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Checking_that_the_fetch_was_successful). |
+| response    | Object   | An instance of [Response](https://developer.mozilla.org/en-US/docs/Web/API/Response). The [`body`](https://developer.mozilla.org/en-US/docs/Web/API/Body) will already be read, and made available to you as `response.data`.                                                                                           |
+| data        | Object   | The data returned in `response`. This will be different from `response.data` if a `transformData` prop was passed to `<Fetch/>`.                                                                                                                                                                                        |
+| doFetch     | Function | A function that allows you to manually make the HTTP request. [Read more.](#using-dofetch)                                                                                                                                                                                                                              |
+| url         | String   | The URL that was passed as a prop to `<Fetch />`                                                                                                                                                                                                                                                                        |
+| requestName | String   | The name of the request (see `requestName` below)                                                                                                                                                                                                                                                                       |
+| requestKey  | String   | The [request key](./docs/guides/request-keys.md) of the request                                                                                                                                                                                                                                                         |
+
+###### Using doFetch
 
 There are three common use cases for the `doFetch` prop:
 
@@ -231,6 +255,20 @@ component's state.
 
 `doFetch` returns a Promise that **always** resolves. It resolves to the same argument that the
 [`afterFetch`](#afterFetch) prop receives.
+
+In the following example, we demonstrate how you can modify the request by passing options to `doFetch`.
+
+```jsx
+<Fetch {...props}>
+  {({ doFetch }) => (
+    // You can pass options to `doFetch` to customize the request. All of the props from `fetch()`, such as `url`,
+    // `body`, and so on, are supported.
+    <button onClick={() => doFetch({ body: this.getResponseBody() })}>
+      Perform Action
+    </button>
+  )}
+</Fetch>
+```
 
 ##### `lazy`
 

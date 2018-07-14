@@ -111,7 +111,7 @@ class App extends Component {
 ```
 
 Need to make multiple requests? You can use any tool that you would like that
-allows you to "compose" render prop components together. This example
+allows you to "compose" [render prop components](https://reactjs.org/docs/render-props.html) together. This example
 uses [React Composer](https://github.com/jamesplease/react-composer):
 
 ```jsx
@@ -222,9 +222,9 @@ The following example demonstrates some of the most commonly-used props that com
 
 In addition to the `fetch()` props, there are a number of other useful props.
 
-##### `children`
+##### `props.children`
 
-The [render prop](https://cdb.reacttraining.com/use-a-render-prop-50de598f11ce) of this component.
+`children` is the [render prop](https://reactjs.org/docs/render-props.html) of this component.
 It is called with one argument, `result`, an object with the following keys:
 
 | Key         | Type     | Description                                                                                                                                                                                                                                                                                                             |
@@ -270,7 +270,7 @@ In the following example, we demonstrate how you can modify the request by passi
 </Fetch>
 ```
 
-##### `lazy`
+##### `props.lazy`
 
 Whether or not the request will be called when the component mounts. The default value
 is based on the request method that you use.
@@ -288,7 +288,7 @@ is based on the request method that you use.
 </Fetch>
 ```
 
-##### `beforeFetch`
+##### `props.beforeFetch`
 
 A function that is called just before a network request is initiated. It is called
 with one argument, an object with the following keys:
@@ -304,7 +304,7 @@ as [Redux](https://github.com/reactjs/redux/).
 
 > Note: This function is not called when the component reads from the cache.
 
-##### `afterFetch`
+##### `props.afterFetch`
 
 A function that is called anytime that a network response is received. It is called
 with one argument, an object with the following keys:
@@ -325,7 +325,7 @@ as [Redux](https://github.com/reactjs/redux/).
 
 > Note: This function is not called when the component reads from the cache.
 
-##### `onResponse`
+##### `props.onResponse`
 
 A function that is called every time a response is received, whether that
 response is from the cache or from a network request. Receives two arguments:
@@ -347,7 +347,7 @@ response is from the cache or from a network request. Receives two arguments:
 </Fetch>
 ```
 
-##### `transformData`
+##### `props.transformData`
 
 A function that is called with the data returned from the response. You can use this
 hook to transform the data before it is passed into `children`.
@@ -372,9 +372,9 @@ hook to transform the data before it is passed into `children`.
 ```
 
 > Note: `transformData` does not modify the value of `response.data`. The transformed data is
-> made available to you in the render prop argument under the `data` key.
+> made available to you in the [render prop argument](#children) under the `data` key.
 
-##### `responseType`
+##### `props.responseType`
 
 The content type of the response body. Defaults to `"json"` unless the response has a 204 status code,
 in which case it will be `"text"` instead. Valid values are any of the methods on
@@ -408,7 +408,7 @@ about the response, such as its status code.
 If the response body cannot be parsed as the `responseType` that you specify, then `data` will
 be set to `null`.
 
-##### `requestName`
+##### `props.requestName`
 
 A name to give this request, which can help with debugging purposes. The request name is
 analogous to a function name in JavaScript. Although we could use anonymous functions
@@ -420,7 +420,7 @@ everywhere, we tend to give them names to help humans read and debug the code.
 
 > Note: This feature is analogous to the [operation name](http://graphql.org/learn/queries/#operation-name) in GraphQL.
 
-##### `fetchPolicy`
+##### `props.fetchPolicy`
 
 This determines how the request interacts with the cache. Valid options are:
 
@@ -441,7 +441,7 @@ The default value of this prop is based on the value of the `method` prop that y
 > This prop behaves identically to the Apollo prop
 > [with the same name](https://www.apollographql.com/docs/react/basics/queries.html#graphql-config-options-fetchPolicy).
 
-##### `cacheResponse`
+##### `props.cacheResponse`
 
 Whether or not the response will be cached. The default value is based on the value of the `method` prop that you pass
 to `<Fetch/>`.
@@ -453,13 +453,13 @@ to `<Fetch/>`.
 
 For documentation on this prop, refer to the [response caching guide](./docs/guides/response-caching.md).
 
-##### `dedupe`
+##### `props.dedupe`
 
 A Boolean value representing whether or not the request should be
 [deduplicated](./docs/guides/request-deduplication.md).
 Defaults to `true`.
 
-##### `requestKey`
+##### `props.requestKey`
 
 A string that is used to control the request deduplication and response caching features. By default,
 a key is generated for you. Specifying a custom key is an advanced feature that you may not need.
@@ -469,14 +469,15 @@ guide.
 
 ---
 
-The rest of the API documentation describes the other named exports from the `react-request` package.
+The rest of the API documentation describes the other named exports from the `react-request` package. Typically,
+you won't need to use these, but they are available should you need them.
 
 #### `fetchDedupe( input [, init] [, dedupeOptions] )`
 
 This is the `fetchDedupe` export from the [Fetch Dedupe](https://github.com/jamesplease/fetch-dedupe)
 library. Fetch Dedupe powers the request deduplication in React Request.
 
-If, for whatever reason, you need to make a standalone HTTP request outside of the
+Whenever you need to make a standalone HTTP request outside of the
 `<Fetch />` component, then you can use this with confidence that you won't send a
 duplicate request.
 
@@ -484,7 +485,8 @@ For more, refer to [the documentation of fetch-dedupe](https://github.com/jamesp
 
 #### `getRequestKey({ url, method, body, responseType })`
 
-Generates a request key. All of the values are optional.
+Generates a request key. All of the values are optional. You typically never need to use this, as request
+keys are generated automatically for you when you use React Request or Fetch Dedupe.
 
 This method comes from [`fetch-dedupe`](https://github.com/jamesplease/fetch-dedupe).
 

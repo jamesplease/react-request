@@ -54,7 +54,7 @@ export class Fetch extends React.Component {
           method: props.method.toUpperCase(),
         }),
       requestName: props.requestName,
-      fetching: false,
+      fetching: !this.isLazy(),
       response: null,
       data: null,
       error: null,

@@ -46,8 +46,8 @@ yarn add react-request
 
 ### Documentation
 
-- [Getting Started](#getting-started)
-- [API](#api)
+- [**Getting Started**](#getting-started)
+- [**API**](#api)
   - [\<Fetch/\>](#fetch-)
     - [props](#props)
     - [Arguments passed to the render prop](#propschildren)
@@ -57,7 +57,7 @@ yarn add react-request
   - [isRequestInFlight()](#isrequestinflight-requestkey-)
   - [clearRequestCache()](#clearrequestcache)
   - [clearResponseCache()](#clearresponsecache)
-- [Guides ⇗](./docs/guides/INDEX.md)
+- [**Guides ⇗**](./docs/guides/INDEX.md)
   - [Response Caching ⇗](./docs/guides/response-caching.md)
   - [Request Deduplication ⇗](./docs/guides/request-deduplication.md)
   - [Request Keys ⇗](./docs/guides/request-keys.md)
@@ -67,10 +67,10 @@ yarn add react-request
   - [Differences with `fetch()` ⇗](./docs/guides/differences-with-fetch.md)
   - [Differences with React Apollo ⇗](./docs/guides/differences-with-apollo.md)
   - [Integration with Other Technologies ⇗](./docs/guides/integration-with-other-technologies.md)
-- [Examples ⇗](./docs/examples.md)
-- [FAQ ⇗](./docs/FAQ.md)
-- [Roadmap ⇗](./ROADMAP.md)
-- [Acknowledgements](#acknowledgements)
+- [**Examples ⇗**](./docs/examples.md)
+- [**FAQ ⇗**](./docs/FAQ.md)
+- [**Roadmap ⇗**](./ROADMAP.md)
+- [**Acknowledgements**](#acknowledgements)
 
 ### Getting Started
 

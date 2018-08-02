@@ -3,4 +3,5 @@ module.exports = {
   collectCoverageFrom: ['src/**/*.{js,jsx}', '!**/node_modules/**'],
   coverageDirectory: 'coverage',
   setupTestFrameworkScriptFile: './test/setup.js',
+  testURL: 'http://localhost/',
 };

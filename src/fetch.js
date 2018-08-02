@@ -420,7 +420,8 @@ export class Fetch extends React.Component {
 }
 
 const globalObj = typeof self !== 'undefined' ? self : this;
-const AbortSignalCtr = globalObj.AbortSignal || function() {};
+const AbortSignalCtr =
+  globalObj !== undefined ? globalObj.AbortSignal : function() {};
 
 Fetch.propTypes = {
   children: PropTypes.func,

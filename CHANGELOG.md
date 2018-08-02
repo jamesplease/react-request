@@ -1,5 +1,11 @@
 # Changelog
 
+### v3.1.2 (2018/8/2)
+
+**Bug Fixes**
+
+- Fixes a bug that can occur in React Native environments
+
 ### v3.1.1 (2018/7/10)
 
 **Bug Fixes**

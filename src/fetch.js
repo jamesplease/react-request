@@ -141,7 +141,7 @@ export class Fetch extends React.Component {
     const { persistStore } = this.props;
     const persistedCache = await persistStore.getItem(persistKey);
     if (persistedCache) {
-      responseCache = persistedCache;
+      responseCache = JSON.parse(persistedCache);
       this.setState({
         hydrated: true,
       });
@@ -150,7 +150,7 @@ export class Fetch extends React.Component {
 
   persistCache = async () => {
     const { persistStore } = this.props;
-    await persistStore.setItem(persistKey, responseCache);
+    await persistStore.setItem(persistKey, JSON.stringify(responseCache));
   };
 
   // When a request is already in flight, and a new one is

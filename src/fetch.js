@@ -336,7 +336,7 @@ export class Fetch extends React.Component {
         }
 
         if (this.props.persistStore) {
-          await this.hydrateCache();
+          await this.persistCache();
         }
 
         if (this._currentRequestKey === requestKey) {

@@ -70,6 +70,7 @@
     "eslint-plugin-react": "^7.6.1",
     "fetch-mock": "^6.0.0",
     "in-publish": "^2.0.0",
+    "isomorphic-fetch": "^2.2.1",
     "jest": "^22.1.4",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",

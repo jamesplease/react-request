@@ -7,6 +7,8 @@ import { getRequestKey, fetchDedupe, isRequestInFlight } from 'fetch-dedupe';
 // The value of each key is a Response instance
 let responseCache = {};
 
+const persistKey = 'REACT_REQUEST_RESPONSE_CACHE';
+
 // The docs state that this is not safe to use in an
 // application. That's just because I am not writing tests,
 // nor designing the API, around folks clearing the cache.
@@ -59,6 +61,7 @@ export class Fetch extends React.Component {
       data: null,
       error: null,
       url: props.url,
+      hydrated: false,
     };
   }
 
@@ -98,11 +101,12 @@ export class Fetch extends React.Component {
     }
   };
 
-  componentDidMount() {
+  componentDidMount = async () => {
+    this.props.persistStore && (await this.hydrateCache());
     if (!this.isLazy()) {
       this.fetchData();
     }
-  }
+  };
 
   // Because we use `componentDidUpdate` to determine if we should fetch
   // again, there will be at least one render when you receive your new
@@ -132,6 +136,22 @@ export class Fetch extends React.Component {
     this.willUnmount = true;
     this.cancelExistingRequest('Component unmounted');
   }
+
+  hydrateCache = async () => {
+    const { persistStore } = this.props;
+    const persistedCache = await persistStore.getItem(persistKey);
+    if (persistedCache) {
+      responseCache = persistedCache;
+      this.setState({
+        hydrated: true,
+      });
+    }
+  };
+
+  persistCache = async () => {
+    const { persistStore } = this.props;
+    await persistStore.setItem(persistKey, responseCache);
+  };
 
   // When a request is already in flight, and a new one is
   // configured, then we need to "cancel" the previous one.
@@ -310,9 +330,13 @@ export class Fetch extends React.Component {
       });
     }
     return fetchDedupe(url, init, { requestKey, responseType, dedupe }).then(
-      res => {
+      async res => {
         if (shouldCacheResponse) {
           responseCache[requestKey] = res;
+        }
+
+        if (this.props.persistStore) {
+          await this.hydrateCache();
         }
 
         if (this._currentRequestKey === requestKey) {
@@ -492,6 +516,7 @@ Fetch.propTypes = {
   integrity: PropTypes.string,
   keepalive: PropTypes.bool,
   signal: PropTypes.instanceOf(AbortSignalCtr),
+  persistStore: PropTypes.object,
 };
 
 Fetch.defaultProps = {

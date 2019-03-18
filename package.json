@@ -14,7 +14,8 @@
     "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
     "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
     "build:umd": "cross-env NODE_ENV=development BABEL_ENV=build rollup -c -i src/index.js -o dist/react-request.js",
-    "build:umd:min": "cross-env NODE_ENV=production BABEL_ENV=buildProd rollup -c -i src/index.js -o dist/react-request.min.js"
+    "build:umd:min": "cross-env NODE_ENV=production BABEL_ENV=buildProd rollup -c -i src/index.js -o dist/react-request.min.js",
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",

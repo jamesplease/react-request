@@ -201,7 +201,7 @@ The complete list of props is:
 | integrity                            | `''`             | From [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch). Contains the [subresource integrity](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity) value of the request |
 | keepalive                            |                  | From [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch). Can be used to allow the request to outlive the page                                                                                   |
 | signal                               |                  | From [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch). An AbortSignal object instance                                                                                                         |
-| persistStore                         |                  | Persist the cache. Works with react-native AsyncStorage and window.localStorage, but any implementation exposing setItem and getItem can be used. The cache is hydrated on mount, and persisted on each new request.                       |
+| persistStore                         |                  | Object used to persist the cache. Works with react-native AsyncStorage and window.localStorage, but any implementation exposing setItem and getItem can be used. The cache is hydrated on mount, and persisted on each new request.        |
 
 
 To learn more about the valid options for the props that come from `fetch`, refer to the

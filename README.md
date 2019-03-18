@@ -46,31 +46,34 @@ yarn add react-request
 
 ### Documentation
 
-- [**Getting Started**](#getting-started)
-- [**API**](#api)
-  - [\<Fetch/\>](#fetch-)
-    - [props](#props)
-    - [Arguments passed to the render prop](#propschildren)
-    - [Using `doFetch`](#using-dofetch)
-  - [fetchDedupe()](#fetchdedupe-input--init--dedupeoptions-)
-  - [getRequestKey()](#getrequestkey-url-method-body-responsetype-)
-  - [isRequestInFlight()](#isrequestinflight-requestkey-)
-  - [clearRequestCache()](#clearrequestcache)
-  - [clearResponseCache()](#clearresponsecache)
-- [**Guides ⇗**](./docs/guides/INDEX.md)
-  - [Response Caching ⇗](./docs/guides/response-caching.md)
-  - [Request Deduplication ⇗](./docs/guides/request-deduplication.md)
-  - [Request Keys ⇗](./docs/guides/request-keys.md)
-  - [Best Practices ⇗](./docs/guides/best-practices.md)
-  - [Using the `lazy` Prop ⇗](./docs/guides/using-the-lazy-prop.md)
-  - [Aborting ⇗](./docs/guides/aborting.md)
-  - [Differences with `fetch()` ⇗](./docs/guides/differences-with-fetch.md)
-  - [Differences with React Apollo ⇗](./docs/guides/differences-with-apollo.md)
-  - [Integration with Other Technologies ⇗](./docs/guides/integration-with-other-technologies.md)
-- [**Examples ⇗**](./docs/examples.md)
-- [**FAQ ⇗**](./docs/FAQ.md)
-- [**Roadmap ⇗**](./ROADMAP.md)
-- [**Acknowledgements**](#acknowledgements)
+- [React Request](#react-request)
+    - [Motivation](#motivation)
+    - [Features](#features)
+    - [Installation](#installation)
+    - [Documentation](#documentation)
+    - [Getting Started](#getting-started)
+    - [API](#api)
+      - [`<Fetch />`](#fetch)
+        - [Props](#props)
+        - [`props.children`](#propschildren)
+          - [Using doFetch](#using-dofetch)
+        - [`props.lazy`](#propslazy)
+        - [`props.beforeFetch`](#propsbeforefetch)
+        - [`props.afterFetch`](#propsafterfetch)
+        - [`props.onResponse`](#propsonresponse)
+        - [`props.transformData`](#propstransformdata)
+        - [`props.responseType`](#propsresponsetype)
+        - [`props.requestName`](#propsrequestname)
+        - [`props.fetchPolicy`](#propsfetchpolicy)
+        - [`props.cacheResponse`](#propscacheresponse)
+        - [`props.dedupe`](#propsdedupe)
+        - [`props.requestKey`](#propsrequestkey)
+      - [`fetchDedupe( input [, init] [, dedupeOptions] )`](#fetchdedupe-input--init--dedupeoptions)
+      - [`getRequestKey({ url, method, body, responseType })`](#getrequestkey-url-method-body-responsetype)
+      - [`isRequestInFlight( requestKey )`](#isrequestinflight-requestkey)
+      - [`clearRequestCache()`](#clearrequestcache)
+      - [`clearResponseCache()`](#clearresponsecache)
+    - [Acknowledgements](#acknowledgements)
 
 ### Getting Started
 
@@ -198,6 +201,8 @@ The complete list of props is:
 | integrity                            | `''`             | From [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch). Contains the [subresource integrity](https://developer.mozilla.org/en-US/docs/Web/Security/Subresource_Integrity) value of the request |
 | keepalive                            |                  | From [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch). Can be used to allow the request to outlive the page                                                                                   |
 | signal                               |                  | From [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch). An AbortSignal object instance                                                                                                         |
+| persistStore                         |                  | Persist the cache. Works with AsyncStorage, but accepts any object that exposes setItem and getItem promises. The cache will be hydrated on mount, and persisted on each new request.                                                      |
+
 
 To learn more about the valid options for the props that come from `fetch`, refer to the
 [`fetch()`](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch)

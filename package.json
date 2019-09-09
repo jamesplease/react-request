@@ -11,10 +11,10 @@
     "lint": "eslint src test",
     "prepublish": "in-publish && npm run build || not-in-publish",
     "build": "npm run clean && npm run build:umd && npm run build:umd:min && npm run build:es && npm run build:commonjs",
-    "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
-    "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
-    "build:umd": "cross-env NODE_ENV=development BABEL_ENV=build rollup -c -i src/index.js -o dist/react-request.js",
-    "build:umd:min": "cross-env NODE_ENV=production BABEL_ENV=buildProd rollup -c -i src/index.js -o dist/react-request.min.js"
+    "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib --scripts-prepend-node-path",
+    "build:es": "cross-env BABEL_ENV=es babel src --out-dir es --scripts-prepend-node-path",
+    "build:umd": "cross-env NODE_ENV=development BABEL_ENV=build rollup -c -i src/index.js -o dist/react-request.js --scripts-prepend-node-path",
+    "build:umd:min": "cross-env NODE_ENV=production BABEL_ENV=buildProd rollup -c -i src/index.js -o dist/react-request.min.js --scripts-prepend-node-path"
   },
   "repository": {
     "type": "git",

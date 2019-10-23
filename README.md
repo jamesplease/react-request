@@ -27,7 +27,7 @@ requests in React, and its deduping and caching features are a delight to use.
 ✓ Uses the native [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) API  
 ✓ Smart [deduping of requests](./docs/guides/request-deduplication.md)  
 ✓ Customizable [response caching](./docs/guides/response-caching.md)  
-✓ Provides hooks to integrate with external stores (such as [Redux](https://github.com/reactjs/redux))  
+✓ Integrates with external stores (such as [Redux](https://github.com/reactjs/redux))  
 ✓ Reasonable footprint (~2kb gzipped)
 
 ### Installation

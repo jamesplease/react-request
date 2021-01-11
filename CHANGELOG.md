@@ -1,5 +1,9 @@
 # Changelog
 
+### v3.2.0 (2021/1/11)
+
+- React 17 is now included in peer dependencies.
+
 ### v3.1.2 (2018/8/2)
 
 **Bug Fixes**
